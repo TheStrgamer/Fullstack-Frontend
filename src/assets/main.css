@@ -18,7 +18,7 @@ body {
   top: 0px;
 }
 .navbar a {
-  color: var(--text-light);
+  color: var(--button-text);
   text-decoration: none;
   padding: 10px;
   min-width: 100px;
@@ -44,11 +44,11 @@ body {
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid #a1a1a1;
+  border: 1px solid var(--primary);
   height: 25px;
 }
 
 .input-form-flex button {
-  background-color: #555;
-  color: white;
+  background-color: var(--button);
+  color: var(--button-text);
 }
