@@ -29,3 +29,24 @@ body {
 .main {
   margin-top: 50px;
 }
+
+.input-form-flex {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  width: 100%;
+  max-width: 500px;
+  height: 200px;
+}
+.input-form-flex input, .input-form-flex button {
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #a1a1a1;
+  height: 25px;
+}
+
+.input-form-flex button {
+  background-color: #555;
+  color: white;
+}
