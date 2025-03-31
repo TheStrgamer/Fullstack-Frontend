@@ -158,27 +158,5 @@ export const useItemStore = defineStore("item", {
       if (item.lat !== undefined) this.latitude = item.lat;
       if (item.long !== undefined) this.longitude = item.long;
     }
-  },
-  getters: {
-    // Computed properties
-    isForSale: (state) => state.sale_status === "for_sale",
-    isSold: (state) => state.sale_status === "sold",
-    isPending: (state) => state.sale_status === "pending",
-    formattedPrice: (state) => `$${state.price.toFixed(2)}`,
-    coordinates: (state) => ({ lat: state.latitude, lng: state.longitude }),
-    hasLocation: (state) => state.latitude !== 0 && state.longitude !== 0,
-    hasImage: (state) => !!state.itemImageURL,
-    itemDetails: (state) => ({
-      id: state.itemId,
-      title: state.title,
-      status: state.sale_status,
-      price: state.price,
-      category: state.category,
-      condition: state.condition,
-      size: state.size,
-      description: state.full_description,
-      image: state.itemImageURL,
-      coordinates: { lat: state.latitude, lng: state.longitude }
-    })
   }
 });
