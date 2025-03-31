@@ -6,7 +6,9 @@ import Register from '../components/RegisterComponent.vue'
 <template>
   <Navbar />
   <main class="main">
-    <Register />
+    <div class="centered-content-box">
+      <Register />
+    </div>
   </main>
 </template>
 

@@ -6,7 +6,9 @@ import Login from '../components/LoginComponent.vue'
 <template>
   <Navbar />
   <main class="main">
-    <Login />
+    <div class="centered-content-box">
+        <Login />
+    </div>
   </main>
 </template>
 

@@ -38,7 +38,7 @@ body {
   margin: 10px;
   width: 100%;
   max-width: 500px;
-  height: 200px;
+  height: 400px;
 }
 .input-form-flex input, .input-form-flex button {
   margin: 5px;
@@ -51,4 +51,12 @@ body {
 .input-form-flex button {
   background-color: var(--button);
   color: var(--button-text);
+}
+
+.centered-content-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
