@@ -1,9 +1,8 @@
 // https://on.cypress.io/api
 
-/*describe('My First Test', () => {
-  it('visits the app root url', () => {
-    cy.visit('/')
-    cy.contains('h1', 'You did it!')
+describe('404 not found test', () => {
+  it('visiting invalid page returns 404', () => {
+    cy.visit('/404-test', { failOnStatusCode: false })
+    //cy.request('/404-test').its('status').should('eq', 404)
   })
 })
-*/
