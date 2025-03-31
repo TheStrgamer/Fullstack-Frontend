@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/Main.vue'
 import NotFound from '../views/NotFound.vue'
+import ItemMaximized from '../views/ItemMaximized.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,11 @@ const router = createRouter({
     //   component: Example, 
     //   meta: { requiresLogin: true } 
     // },
+    {
+      path: "/Item/:id",
+      name: "Item",
+      component: ItemMaximized,
+    },
     { 
       path: "/:pathMatch(.*)*", 
       component: NotFound 
