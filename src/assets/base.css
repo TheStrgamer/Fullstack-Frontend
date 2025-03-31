@@ -1,39 +1,22 @@
 /* TODO add our own color scheme */
 
+/* Color palette */
 :root {
+  --primary: #4A6B4F;
+  --secondary: #8B6F4E;
+  --background: #F3F1EB;
+  --accent: #A3B18A;
+
+
   --white: #ffffff;
-  --white-soft: #f8f8f8;
-
   --black: #181818;
-  --black-soft: #222222;
-  --black-mute: #282828;
-
 }
 
+/* Item colors */
 :root {
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
+  --text: var(--black);
+  --button: var(--primary);
+  --button-text: var(--white);
 
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-  }
-}
