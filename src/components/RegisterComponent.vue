@@ -1,8 +1,8 @@
 <template>
     <form @submit.prevent="onLogin" class = "input-form-flex">
 
-        <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="firstName" />
-        <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="lastName" />
+        <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="first name" />
+        <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="last name" />
         <input v-model="email" type="text" id="email" name="email" placeholder="email" />
         <input v-model="phonenumber" type="text" id="phonenumber" name="phonenumber" placeholder="phonenumber" />
         <input v-model="password" type="password" id="password" name="password" placeholder="password" />
