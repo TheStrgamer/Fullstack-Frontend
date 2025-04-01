@@ -31,3 +31,8 @@ body {
   margin-top: 40px;
   background-color: var(--background);
 }
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
+}
