@@ -1,14 +1,26 @@
 <template>
-  <router-link to="/" class="no-link-style">
+  <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
-      <img id="minimized-item-picture" src="https://media.snl.no/media/283790/article_topimage_buss.jpg">
-      <h3 id="item-header">sdfkjalødfkslaølkjdføsalkdfs</h3>
-      <p id="item-prize">100kr</p>
+      <img id="minimized-item-picture" :src="item.imageUrl" :alt="item.title">
+      <h3 id="item-header">{{ item.title }}</h3>
+      <p id="item-prize">{{ item.price }}</p>
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
+defineProps({
+  item: {
+    type: Object,
+    required: true,
+    default: () => ({
+      id: '',
+      title: '',
+      price: '',
+      imageUrl: ''
+    })
+  }
+});
 </script>
 
 <style>
