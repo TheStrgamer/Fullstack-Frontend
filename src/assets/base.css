@@ -1,11 +1,16 @@
 /* TODO add our own color scheme */
 
-/* Color palette */
+/* Color palette 
+* primary: hovedfarge, bruk til knapper, lagre-knapper og overskrift
+* secondary: bruk til avbryt/tilbake-knapper
+* background: bakgrunnsfarge
+* accent: bruk til å ramme inn innhold(f. eks. nav-bar)
+ */
 :root {
   --primary: #4A6B4F;
-  --secondary: #8B6F4E;
-  --background: #F3F1EB;
-  --accent: #A3B18A;
+  --secondary: #B49572;
+  --background: #f6f4e8;
+  --accent: #C3D1AC;
 
 
   --white: #ffffff;
