@@ -18,7 +18,7 @@ body {
   top: 0px;
 }
 .navbar a {
-  color: var(--button-text);
+  color: var(--text-light);
   text-decoration: none;
   padding: 10px;
   min-width: 100px;
@@ -59,4 +59,9 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+.no-link-style {
+  text-decoration: none;
+  color: inherit;
 }
