@@ -1,3 +1,4 @@
+import { fetchItemFromAPI } from '@/services/itemService'
 import { defineStore } from "pinia";
 import type { Pinia } from "pinia";
 
@@ -157,6 +158,16 @@ export const useItemStore = defineStore("item", {
       if (item.updated !== undefined) this.updated_at = item.updated;
       if (item.lat !== undefined) this.latitude = item.lat;
       if (item.long !== undefined) this.longitude = item.long;
+    },
+
+    fetchItem(itemId: string) {
+      fetchItemFromAPI(itemId)
+        .then((item) => {
+          this.setItem(item);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
   }
 });
