@@ -1,4 +1,4 @@
-import { fetchItemFromAPI } from '@/services/itemService'
+import { fetchItemFromAPI } from '../services/itemService.ts'
 import { defineStore } from "pinia";
 import type { Pinia } from "pinia";
 
@@ -162,10 +162,10 @@ export const useItemStore = defineStore("item", {
 
     fetchItem(itemId: string) {
       fetchItemFromAPI(itemId)
-        .then((item) => {
+        .then((item: any) => {
           this.setItem(item);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.error(error);
         });
     }
