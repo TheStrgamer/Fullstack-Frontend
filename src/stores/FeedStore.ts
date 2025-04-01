@@ -10,5 +10,9 @@ export const useFeedStore = defineStore("feed", {
     async fetchRecommendedItems(count: number) {
       this.recommendedItems = await fetchRecommendedItems(count);
     },
+
+    getRecommendedItems() {
+      return this.recommendedItems;
+    },
   },
 });
