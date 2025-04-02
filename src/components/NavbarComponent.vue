@@ -32,3 +32,7 @@ function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
 </script>
+
+<style>
+@import '../assets/navbar.css';
+</style>
