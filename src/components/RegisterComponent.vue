@@ -1,5 +1,6 @@
 <template>
     <form @submit.prevent="onRegister" class = "input-form-flex">
+        <p id="responseMessage">{{ responseMessage }}</p>
         <div>
             <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="first name" />
             <p class="error-message">{{ firstNameErrorMessage }}</p>
@@ -43,6 +44,7 @@
                 emailErrorMessage: '',
                 passwordErrorMessage: '',
                 phonenumberErrorMessage: '',
+                responseMessage: '',
             }
         },
             
@@ -129,7 +131,17 @@
             return isValid;
             },
 
+            setResponseMessage(message: string, isError: boolean) {
+                this.responseMessage = message;
+                if (isError) {
+                    document.getElementById('responseMessage')?.classList.add('error-message');
+                } else {
+                    document.getElementById('responseMessage')?.classList.remove('error-message');
+                }
+            },
+
             async onRegister() {
+                this.setResponseMessage('', false);
                 if (!this.verifyForm()) {
                     console.log('Invalid form');
                     return;
@@ -143,14 +155,43 @@
                         surname: this.lastName,
                         phonenumber: this.phonenumber
                     });
-                    if (response.data === 0) {
-                        console.log('User registered successfully');
-                        this.$router.push('/login');
+                    console.log('User registered successfully');
+                    this.$router.push('/login');
+                    
+                } catch (error: unknown) {
+                    if (axios.isAxiosError(error)) {
+                        if (error.response) {
+                            const { status, data } = error.response;
+                            switch (status) {
+                                case 400:
+                                    this.setResponseMessage('Invalid parameters', true);
+                                    break;
+
+                                case 409:
+                                    if (data === "Email is already in use") {
+                                        this.emailErrorMessage = 'Email is already in use';
+                                    } else if (data === "Phone number is already in use") {
+                                        this.phonenumberErrorMessage = 'Phone number is already in use';
+                                    } else {
+                                        this.setResponseMessage('Conflict error occurred', true);
+                                    }
+                                    break;
+                                default:
+                                    console.error(`Error: ${status} - ${data}`);
+                                    break;
+                            }
+                        } 
+                        else if (error.request) {
+                            this.setResponseMessage('No response from the server. Please check your connection.', true);
+                        }
+                        else {
+                            console.error(`Request error: ${error.message}`);
+                            this.setResponseMessage('An error occurred. Please try again later.', true);
+                        }
                     } else {
-                        console.log('User registration failed');                        
+                        console.error("An unexpected error occurred:", error);
+                        this.setResponseMessage('An unexpected error occurred. Please try again later.', true);
                     }
-                } catch (error) {
-                    console.error(error);
                 }
             },
         },
