@@ -164,8 +164,22 @@ body {
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid var(--primary);
   height: 25px;
+}
+
+.input-form-flex .error-message {
+  margin-left: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+  font-size: 15px;
+  color: var(--invalid);
+}
+.input-form-flex div {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  height: 60px;
 }
 
 .input-form-flex button {
@@ -179,6 +193,10 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+}
+
+.invalid-field {
+  border: 2px solid var(--invalid);  
 }
 
 /* Tablet styles (768 px and up) */

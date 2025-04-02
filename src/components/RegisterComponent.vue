@@ -1,11 +1,25 @@
 <template>
     <form @submit.prevent="onRegister" class = "input-form-flex">
-
-        <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="first name" />
-        <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="last name" />
-        <input v-model="email" type="text" id="email" name="email" placeholder="email" />
-        <input v-model="phonenumber" type="text" id="phonenumber" name="phonenumber" placeholder="phonenumber" />
-        <input v-model="password" type="password" id="password" name="password" placeholder="password" />
+        <div>
+            <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="first name" />
+            <p class="error-message">{{ firstNameErrorMessage }}</p>
+        </div>
+        <div>
+            <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="last name" />
+            <p class="error-message">{{ lastNameErrorMessage }}</p>
+        </div>
+        <div>
+            <input v-model="email" type="text" id="email" name="email" placeholder="email" />
+            <p class="error-message">{{ emailErrorMessage }}</p>
+        </div>
+        <div>
+            <input v-model="phonenumber" type="text" id="phonenumber" name="phonenumber" placeholder="phonenumber" />
+            <p class="error-message">{{ phonenumberErrorMessage }}</p>
+        </div>
+        <div>
+            <input v-model="password" type="password" id="password" name="password" placeholder="password" />
+            <p class="error-message">{{ passwordErrorMessage }}</p>
+        </div>
         <button type="submit" >Register</button>
         <p>Already have an account? <router-link to="/login">Login</router-link></p>
     </form>
@@ -23,10 +37,103 @@
                 email: '',
                 password: '',
                 phonenumber: '',
+
+                firstNameErrorMessage: '',
+                lastNameErrorMessage: '',
+                emailErrorMessage: '',
+                passwordErrorMessage: '',
+                phonenumberErrorMessage: '',
             }
         },
+            
+
         methods: {
+            verifyEmail() {
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                return emailPattern.test(this.email);
+            },
+            verifyPassword() {
+                return this.password.length >= 3;
+            },
+            verifyStringNotEmpty(str: string) {
+                return str.trim() !== '';
+            },
+            verifyPhoneNumber() {
+                const phonePattern = /^\d{8}$/; //TODO change to work with country codes
+                return phonePattern.test(this.phonenumber);
+            },
+            verifyField(field: string, id: string) {
+                let fieldValid = false;
+                switch (field) {
+                    case 'email':
+                        fieldValid = this.verifyEmail();
+                        if (!fieldValid) {
+                            this.emailErrorMessage = 'Please enter a valid email';
+                        } else {
+                            this.emailErrorMessage = '';
+                        }
+                        break;
+                    case 'password':
+                        fieldValid = this.verifyPassword();
+                        if (!fieldValid) {
+                            this.passwordErrorMessage = 'Password must be at least 3 characters long';
+                        } else {
+                            this.passwordErrorMessage = '';
+                        }
+                        break;
+                    case 'phonenumber':
+                        fieldValid = this.verifyPhoneNumber();
+                        if (!fieldValid) {
+                            this.phonenumberErrorMessage = 'Phone number must be 8 digits long';
+                        } else {
+                            this.phonenumberErrorMessage = '';
+                        }
+                        break;
+                    case 'firstName':
+                        fieldValid = this.verifyStringNotEmpty(this.firstName);
+                        if (!fieldValid) {
+                            this.firstNameErrorMessage = 'First name cannot be empty';
+                        } else {
+                            this.firstNameErrorMessage = '';
+                        }
+                        break;
+                    case 'lastName':
+                        fieldValid = this.verifyStringNotEmpty(this.lastName);
+                        if (!fieldValid) {
+                            this.lastNameErrorMessage = 'Last name cannot be empty';
+                        } else {
+                            this.lastNameErrorMessage = '';
+                        }
+                        break;
+                    default:
+                        break;
+                    
+                }
+                const element = document.getElementById(id);
+                if (element) {
+                    if (fieldValid) {
+                        element.classList.remove('invalid-field');
+                    } else {
+                        element.classList.add('invalid-field');
+                    }
+                }
+                return fieldValid;
+            },
+            verifyForm() {
+                let isValid = true;
+                isValid = this.verifyField('firstName', 'firstName') && isValid;
+                isValid = this.verifyField('lastName', 'lastName') && isValid;
+                isValid = this.verifyField('email', 'email') && isValid;
+                isValid = this.verifyField('phonenumber', 'phonenumber') && isValid;
+                isValid = this.verifyField('password', 'password') && isValid;
+            return isValid;
+            },
+
             async onRegister() {
+                if (!this.verifyForm()) {
+                    console.log('Invalid form');
+                    return;
+                }
                 console.log('registered with first name: ', this.firstName, 'last name: ', this.lastName, 'email: ', this.email, 'password: ', this.password, 'phonenumber: ', this.phonenumber)
                 try {
                     const response = await axios.post('http://localhost:8080/api/users/register', {
