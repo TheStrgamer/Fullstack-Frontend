@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
-      <img id="minimized-item-picture" :src="item.imageUrl" :alt="item.title">
+      <img id="minimized-item-picture" src="https://t4.ftcdn.net/jpg/02/90/84/47/360_F_290844781_V4hoIL3E291xvY5nEL7NCaWIoCIQxHfI.jpg" :alt="item.title">
       <h3 id="item-header">{{ item.title }}</h3>
       <p id="item-prize">{{ item.price }}</p>
     </div>

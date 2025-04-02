@@ -1,9 +1,9 @@
 <template>
   <div class="item main">
-    <img id="image" :src="itemStore.itemImageURL" />
+    <img id="image" src="https://t4.ftcdn.net/jpg/02/90/84/47/360_F_290844781_V4hoIL3E291xvY5nEL7NCaWIoCIQxHfI.jpg" />
     <h1 id="title">{{}}</h1>
     <div class="details">
-      <p id="category">Kategori: {{ itemStore.getCategory() }}</p>
+      <p id="category">Kategori: {{ itemStore.getCategoryName() }}</p>
       <p id="condition">Tilstand: {{ itemStore.getCondition() }}</p>
       <p id="price">Pris: {{ itemStore.getPrice() }} kr</p>
       <p id="size">Størrelse: {{ itemStore.getSize() }}</p>
