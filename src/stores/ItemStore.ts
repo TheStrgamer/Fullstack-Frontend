@@ -11,8 +11,8 @@ export const useItemStore = defineStore("item", {
     price: 0.0,
     full_description: "",
     brief_description: "",
-    category: "",
-    condition: "",
+    category: Object,
+    condition: Object,
     size: "",
     itemImageURL: "",
     created_at: "",
@@ -40,10 +40,10 @@ export const useItemStore = defineStore("item", {
     setBriefDescription(description: string) {
       this.brief_description = description;
     },
-    setCategory(category: string) {
+    setCategory(category: any) {
       this.category = category;
     },
-    setCondition(condition: string) {
+    setCondition(condition: any) {
       this.condition = condition;
     },
     setSize(size: string) {
@@ -84,11 +84,11 @@ export const useItemStore = defineStore("item", {
     getBriefDescription() {
       return this.brief_description;
     },
-    getCategory() {
-      return this.category;
+    getCategoryName() {
+      return this.category.name;
     },
     getCondition() {
-      return this.condition;
+      return this.condition.name;
     },
     getSize() {
       return this.size;
@@ -117,8 +117,8 @@ export const useItemStore = defineStore("item", {
       this.price = 0.0;
       this.full_description = "";
       this.brief_description = "";
-      this.category = "";
-      this.condition = "";
+      this.category = Object;
+      this.condition = Object;
       this.size = "";
       this.itemImageURL = "";
       this.created_at = "";
@@ -135,14 +135,14 @@ export const useItemStore = defineStore("item", {
       price?: number;
       full_description?: string;
       brief_description?: string;
-      category?: string;
-      condition?: string;
+      category?: any;
+      condition?: any;
       size?: string;
       itemImageURL?: string;
-      created?: string;
-      updated?: string;
-      lat?: number;
-      long?: number;
+      created_at?: string;
+      updated_at?: string;
+      latitude?: number;
+      longitude?: number;
     }) {
       if (item.itemId !== undefined) this.itemId = item.itemId;
       if (item.title !== undefined) this.title = item.title;
@@ -154,10 +154,10 @@ export const useItemStore = defineStore("item", {
       if (item.condition !== undefined) this.condition = item.condition;
       if (item.size !== undefined) this.size = item.size;
       if (item.itemImageURL !== undefined) this.itemImageURL = item.itemImageURL;
-      if (item.created !== undefined) this.created_at = item.created;
-      if (item.updated !== undefined) this.updated_at = item.updated;
-      if (item.lat !== undefined) this.latitude = item.lat;
-      if (item.long !== undefined) this.longitude = item.long;
+      if (item.created_at !== undefined) this.created_at = item.created_at;
+      if (item.updated_at !== undefined) this.updated_at = item.updated_at;
+      if (item.latitude !== undefined) this.latitude = item.latitude;
+      if (item.longitude !== undefined) this.longitude = item.longitude;
     },
 
     fetchItem(itemId: string) {
