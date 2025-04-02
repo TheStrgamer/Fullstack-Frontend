@@ -35,6 +35,7 @@ import axios from 'axios';
                     }
 
                     console.log('Login successful:', response.data);
+                    localStorage.setItem("token", response.data);
                     router.push('/');
                     
                 } catch (error) {
