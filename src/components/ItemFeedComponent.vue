@@ -13,7 +13,12 @@ import { ref, onMounted } from 'vue';
 import { useFeedStore } from '../stores/FeedStore.ts';
 import ItemCardMinimized from './ItemCardMinimized.vue';
 
-const feedItems = ref([]);
+// Define an interface for feed items
+interface FeedItem {
+  id: string | number;
+}
+
+const feedItems = ref<FeedItem[]>([]);
 
 onMounted(async () => {
   const feedStore = useFeedStore();
