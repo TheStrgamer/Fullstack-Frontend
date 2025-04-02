@@ -11,13 +11,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useFeedStore } from '../stores/FeedStore.ts';
-import ItemCardMinimized from './path-to-your-ItemCardMinimized.vue';
+import ItemCardMinimized from './ItemCardMinimized.vue';
 
 const feedItems = ref([]);
 
 onMounted(async () => {
   const feedStore = useFeedStore();
-  await feedStore.fetchRecommendedItems();
+  await feedStore.fetchRecommendedItems(10);
   feedItems.value = feedStore.getRecommendedItems();
 });
 </script>
