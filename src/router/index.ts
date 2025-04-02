@@ -28,7 +28,7 @@ const router = createRouter({
     //   meta: { requiresLogin: true } 
     // },
     {
-      path: "/Item/:id",
+      path: "/Item",
       name: "Item",
       component: ItemMaximized,
     },
