@@ -52,20 +52,20 @@ const route = useRoute()
 const itemId = route.query.id as string
 const itemStore = useItemStore()
 
-onMounted(() => {
-  itemStore.fetchItem(itemId)
+// onMounted(() => {
+//   itemStore.fetchItem(itemId)
 
-  // Dummy flerbilder (du kan hente fra store senere)
-  images.value = [
-    itemStore.getItemImageURL,
-    'https://picsum.photos/seed/alt1/500/400',
-    'https://picsum.photos/seed/alt2/500/400',
-  ]
-})
+//   // Dummy flerbilder (du kan hente fra store senere)
+//   images.value = [
+//     itemStore.getItemImageURL,
+//     'https://picsum.photos/seed/alt1/500/400',
+//     'https://picsum.photos/seed/alt2/500/400',
+//   ]
+// })
 
-const statusClass = computed(() => {
-  return itemStore.getSaleStatus.toLowerCase() === 'solgt' ? 'sold' : 'forsale'
-})
+// const statusClass = computed(() => {
+//   return itemStore.getSaleStatus.toLowerCase() === 'solgt' ? 'sold' : 'forsale'
+// })
 
 // Bildekarusell
 const images = ref<string[]>([])
