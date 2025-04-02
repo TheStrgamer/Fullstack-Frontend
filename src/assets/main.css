@@ -13,12 +13,11 @@ body {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  padding: 10px;
+  padding: 10px 20px;
   margin: 0 auto;
   background-color: var(--accent);
   color: var(--text-light);
   display: flex;
-  width: calc(100% - 20px);
   height: auto;
   z-index: 1000;
   top: 0px;
@@ -26,7 +25,7 @@ body {
   border-top-right-radius: 8px;
   gap: 10px;
   max-width: 100%;
-  position: relative;
+  position: sticky; /* does this make the navbar stay at the top? idk */
 }
 
 .navbar a {
@@ -49,6 +48,10 @@ body {
   min-width: 100px;
   text-align: center;
   display: inline-block;
+}
+
+.nav-links {
+  display: none;;
 }
 
 /* Hamburger knapp */
@@ -182,6 +185,36 @@ body {
 }
 
 /* Tablet styles (768 px and up) */
+@media (min-width: 768px) {
+  .menu-toggle {
+    display: none; /* Hide hamburger on larger screens */
+  }
 
+  .mobile-menu {
+    display: none; /* Hide sliding menu entirely */
+  }
+
+  .navbar {
+    flex-wrap: nowrap;
+    padding: 10px 20px;
+  }
+
+  .navbar .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-left: auto; /* Push to the right */
+  }
+
+  .nav-links router-link {
+    background-color: var(--primary);
+    color: var(--button-text);
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 8px;
+    min-width: 100px;
+    text-align: center;
+  }
+}
 
 /* Desktop styles (1024 px and up) */
