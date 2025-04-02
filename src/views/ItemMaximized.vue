@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import Navbar from '../components/NavbarComponent.vue'
-import ItemFeedComponent from '@/components/ItemFeedComponent.vue'
+import ItemComponentMaximized from '@/components/ItemComponentMaximized.vue'
 </script>
 
 <template>
   <Navbar />
   <main class="main">
-    <ItemFeedComponent/>
+    <ItemComponentMaximized />
   </main>
 </template>
