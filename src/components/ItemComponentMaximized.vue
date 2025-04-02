@@ -3,7 +3,7 @@
     <!-- Kategori + Salgsstatus -->
     <div class="item-header-bar">
       <span class="item-category">{{ itemStore.getCategoryName() }}</span>
-      <span :class="['item-status', statusClass]">
+      <span :class="['item-status'/* ,statusClass*/]">
         {{ itemStore.getSaleStatus() }}
       </span>
     </div>
