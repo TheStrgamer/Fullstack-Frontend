@@ -1,26 +1,50 @@
 <template>
-  <div class="item main">
-    <img id="image" src="https://t4.ftcdn.net/jpg/02/90/84/47/360_F_290844781_V4hoIL3E291xvY5nEL7NCaWIoCIQxHfI.jpg" />
-    <h1 id="title">{{}}</h1>
-    <div class="details">
-      <p id="category">Kategori: {{ itemStore.getCategoryName() }}</p>
-      <p id="condition">Tilstand: {{ itemStore.getCondition() }}</p>
-      <p id="price">Pris: {{ itemStore.getPrice() }} kr</p>
-      <p id="size">Størrelse: {{ itemStore.getSize() }}</p>
+  <div class="item-maximized">
+    <!-- Kategori + Salgsstatus -->
+    <div class="item-header-bar">
+      <span class="item-category">{{ itemStore.getCategoryName() }}</span>
+      <span :class="['item-status'/* ,statusClass*/]">
+        {{ itemStore.getSaleStatus() }}
+      </span>
     </div>
-    <p id="description">
-      {{ itemStore.getFullDescription() }}
+
+    <!-- Bildekarusell -->
+    <div class="image-carousel">
+      <button class="carousel-btn left" @click="prevImage" v-if="images.length > 1">&#10094;</button>
+      <img :src="images[currentImageIndex]" :alt="itemStore.getTitle" class="item-image" />
+      <button class="carousel-btn right" @click="nextImage" v-if="images.length > 1">&#10095;</button>
+    </div>
+
+    <!-- Tittel + Pris -->
+    <div class="item-info-row">
+      <h1 class="item-title">{{ itemStore.getTitle() }}</h1>
+      <span class="item-price-pill">{{ itemStore.getPrice() }} kr</span>
+    </div>
+
+    <!-- Tilstand + Størrelse -->
+    <div class="item-info-row">
+      <p class="item-subinfo">Tilstand: {{ itemStore.getCondition() }}</p>
+      <p class="item-subinfo">Størrelse: {{ itemStore.getSize() }}</p>
+    </div>
+
+    <!-- Beskrivelse -->
+    <p class="item-description">{{ itemStore.getFullDescription() }}</p>
+
+    <!-- Lokasjon -->
+    <p class="item-location">
+      Posisjon: {{ itemStore.getLatitude() }}, {{ itemStore.getLongitude() }}
     </p>
-    <p id="location">Posisjon: {{ itemStore.getLatitude() }}, {{ itemStore.getLongitude() }}</p>
-    <div class="dates">
-      <p id="created">Created: {{ itemStore.getCreatedAt() }}</p>
-      <p id="updated">Updated: {{ itemStore.getUpdatedAt() }}</p>
+
+    <!-- Datoer -->
+    <div class="item-dates">
+      <p>Opprettet: {{ itemStore.getCreatedAt() }}</p>
+      <p>Oppdatert: {{ itemStore.getUpdatedAt() }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, onMounted } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useItemStore } from '../stores/ItemStore.ts'
 
@@ -28,41 +52,36 @@ const route = useRoute()
 const itemId = route.query.id as string
 const itemStore = useItemStore()
 
-onMounted(() => {
-  itemStore.fetchItem(itemId)
-})
+// onMounted(() => {
+//   itemStore.fetchItem(itemId)
+
+//   // Dummy flerbilder (du kan hente fra store senere)
+//   images.value = [
+//     itemStore.getItemImageURL,
+//     'https://picsum.photos/seed/alt1/500/400',
+//     'https://picsum.photos/seed/alt2/500/400',
+//   ]
+// })
+
+// const statusClass = computed(() => {
+//   return itemStore.getSaleStatus.toLowerCase() === 'solgt' ? 'sold' : 'forsale'
+// })
+
+// Bildekarusell
+const images = ref<string[]>([])
+const currentImageIndex = ref(0)
+
+function nextImage() {
+  currentImageIndex.value = (currentImageIndex.value + 1) % images.value.length
+}
+
+function prevImage() {
+  currentImageIndex.value =
+    (currentImageIndex.value - 1 + images.value.length) % images.value.length
+}
 </script>
 
+
 <style>
-.item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 20px;
-  width: 100%;
-  height: 100%;
-  background-color: #f0f0f0;
-}
-
-#image {
-  max-width: 60%;
-  max-height: 500px;
-  object-fit: cover;
-}
-
-.details {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 60%;
-}
-
-.dates {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 15%;
-}
+@import '../assets/ItemComponentMaximized.css';
 </style>

@@ -1,14 +1,20 @@
 <template>
   <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
-      <img id="minimized-item-picture" src="https://t4.ftcdn.net/jpg/02/90/84/47/360_F_290844781_V4hoIL3E291xvY5nEL7NCaWIoCIQxHfI.jpg" :alt="item.title">
-      <h3 id="item-header">{{ item.title }}</h3>
-      <p id="item-prize">{{ item.price }}</p>
+      <img class="item-image" :src="item.imageUrl" :alt="item.title" />
+      
+      <div class="item-info-row">
+        <h3 class="item-title">{{ item.title }}</h3>
+        <span class="item-price-pill">{{ item.price }} kr</span>
+      </div>
+      
+      <p class="item-description">{{ item.brief_description }}</p>
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
+
 defineProps({
   item: {
     type: Object,
@@ -17,31 +23,13 @@ defineProps({
       id: '',
       title: '',
       price: '',
-      imageUrl: ''
+      imageUrl: '',
+      brief_description: ''
     })
   }
 });
 </script>
 
 <style>
-.item-card-minimized {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  max-width: 300px;
-  max-height: 40%;
-  background-color: #f0f0f0;
-  border-radius: 10px;
-  padding: 10px;
-  margin: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-#minimized-item-picture {
-  max-width: 100%;
-  max-height: 200px;
-  border-radius: 10px;
-}
+@import '../assets/ItemCardMinimized.css';
 </style>

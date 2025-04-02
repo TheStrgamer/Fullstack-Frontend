@@ -1,0 +1,65 @@
+@import './base.css';
+
+.item-card-minimized {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--accent);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: var(--text);
+  }
+  
+  .item-image {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    margin-bottom: 10px;
+  }
+  
+  .item-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  
+  .item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  
+  /* Price pill styled like navbar Home button */
+  .item-price-pill {
+    background-color: var(--primary);
+    color: var(--button-text);
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  
+  /* Description below the row */
+  .item-description {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+    padding-top: 6px;
+    word-wrap: break-word;
+  }
+  
+  /* Remove default link look */
+  .no-link-style {
+    text-decoration: none;
+    color: inherit;
+  }  
+  
