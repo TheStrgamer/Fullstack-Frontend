@@ -1,6 +1,6 @@
 <template>
     <form @submit.prevent="onLogin" class = "input-form-flex">
-
+        <p id="responseMessage">{{ responseMessage }}</p>
         <div>
             <input v-model="email" type="text" id="email" name="email" placeholder="email" />
             <p class="error-message">{{ emailErrorMessage }}</p>
@@ -27,6 +27,8 @@
 
                 emailErrorMessage: '',
                 passwordErrorMessage: '',
+                responseMessage: '',
+
             }
         },
         methods: {
@@ -76,7 +78,21 @@
                 isValid = this.verifyField('password', 'password') && isValid;
             return isValid;
             },
+            setResponseMessage(message: string, isError: boolean) {
+                this.responseMessage = message;
+                if (isError) {
+                    document.getElementById('responseMessage')?.classList.add('error-message');
+                } else {
+                    document.getElementById('responseMessage')?.classList.remove('error-message');
+                }
+            },
+            resetMessages() {
+                this.emailErrorMessage = '';
+                this.passwordErrorMessage = '';
+                this.setResponseMessage('', false);
+            },
             async onLogin() {
+                this.resetMessages();
                 if (!this.verifyForm()) {
                     return;
                 }
@@ -87,17 +103,35 @@
                         password: this.password
                     });
 
-                    if(!response) {
-                        console.log(response);
-                        throw new Error("Login Failed!");
-                    }
-
                     console.log('Login successful:', response.data);
-
                     router.push('/');
                     
-                } catch (error) {
-                    console.error('Login error:', error);
+                } catch (error: unknown) {
+                    if (axios.isAxiosError(error)) {
+                        if (error.response) {
+                            switch (error.response.status) {
+                            case 400:
+                                this.setResponseMessage('Please enter a valid email and password.', true);
+                                break;
+                            case 401:
+                                this.passwordErrorMessage = 'Incorrect password';
+                                break;
+                            case 404:
+                                this.emailErrorMessage = 'No user with given email';
+                                break;
+                            default:
+                                console.error(`Error: ${error.response.status} - ${error.response.data}`);
+                                this.setResponseMessage('An unexpected error occurred. Please try again later.', true);
+                                break;
+                            }
+                        } else {
+                            console.error("Network or request error", error);
+                            this.setResponseMessage('Network error.', true);
+                        }
+                    } else {
+                        console.error("An unexpected error occurred:", error);
+                        this.setResponseMessage('An unexpected error occurred. Please try again later.', true);
+                    }
                 }
                 
             },
