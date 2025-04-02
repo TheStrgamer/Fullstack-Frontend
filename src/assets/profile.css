@@ -1,0 +1,13 @@
+@import './base.css';
+
+.profilePicture {
+    width: 256px;
+
+
+}
+.content_box {
+    display: flex;
+    flex-direction: column;
+    /* transform: translateX(-200px); */
+    align-items: baseline;
+}

@@ -3,6 +3,7 @@ import HomeView from '../views/Main.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
+import Profile from '../views/Profile.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 
 const router = createRouter({
@@ -20,6 +21,10 @@ const router = createRouter({
     {
      path: "/register",
      component: Register
+    },
+    {
+      path: "/profile",
+      component: Profile
     },
 
     // { 
