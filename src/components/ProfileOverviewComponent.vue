@@ -1,80 +1,47 @@
 <script setup lang="ts">
-    import { ref, onMounted } from 'vue';
-    import axios from 'axios';
-    import { copyFileSync } from 'fs';
-
-    const token = localStorage.getItem("token");
-
-    console.log("token: ", token);
-
-    onMounted(() => {
-        console.log("Page loaded");
-        displayProfileInfo();
-    });
-
-    let img = ref('');
-    let fullname = ref('');
-    let email = ref('');
-    let phonenumber = ref('');
-
-    async function displayProfileInfo() {
-        const userInfo = await getProfileInfo();
-
-        fullname.value = `${userInfo?.data.firstname} ${userInfo?.data.surname}`;
-        email.value = userInfo?.data.email;
-        phonenumber.value = userInfo?.data.phonenumber;
-    }
-
-    async function handleEditProfileClick() {
-        console.log("Edit profile");
-    }
-
-    async function getProfileInfo() {
-        try {
-            // const response = await axios.post("http://localhost:8080/api/users/my_account", 
-            // {},
-            // {
-            //     headers: {
-            //         Authorization: `Bearer ${token}`,
-            //     }
-            // }
-            // );
-
-            const response = await axios.get("http://localhost:8080/api/users", {
-                params: {
-                    email: 'test@test'
-                }
-            });
-
-            console.log(response);
-            return response;
-        } catch (error) {
-            console.error("Error loading profile: ", error);
-        }
-    }
-
-    
+import ProfileLinkCard from './ProfileLinkCard.vue';
 
 </script>
 
-
 <template>
-    <div class="content_box">
-        <h1>Din Profil</h1> <br>
-        <img class="profilePicture" src="../assets/defaultImage.jpg" alt="No image Found">
-        <p>{{ fullname }}</p>
-        <p> {{ email }}</p>
-        <p>{{ phonenumber }}</p>
+    <div class="profile">
+        <div class="profile-simple">
+            <h1>Your Profile</h1>
+        </div>
+        
+        <div class="profile-tools">
+            <!-- priofile linking buttons -->
+            <div class="profile_content_box">
+                <!-- My Account Button -->
+                <ProfileLinkCard 
+                    to="/profile/my_account" 
+                    icon_path="/icons/settings.svg"
+                    title="My Account" 
+                    description="View your account information" 
+                    color="#2196f3"
+                />
 
-        <button @click="handleEditProfileClick">Edit Profile</button>
+                <!-- My Ads Button -->
+                <ProfileLinkCard 
+                    to="/profile/my_ads" 
+                    icon_path="/icons/ads.svg"
+                    title="My Ads" 
+                    description="View your active ads" 
+                    color="#9c27b0"
+                />
+
+                <!-- My Favorite Ads -->
+                <ProfileLinkCard 
+                    to="/profile/my_favorites" 
+                    icon_path="/icons/ads.svg"
+                    title="My Favorites" 
+                    description="View your favorited ads" 
+                    color="#9c27b0"
+                />
+            </div>
+        </div>
     </div>
     
-
-
 </template>
 
-
-<style>
-@import '../assets/profile.css';
-</style>
-  
+<style>@import '../assets/profile.css' </style>

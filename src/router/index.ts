@@ -4,6 +4,7 @@ import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
 import Profile from '../views/Profile.vue'
+import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 
 const router = createRouter({
@@ -25,6 +26,10 @@ const router = createRouter({
     {
       path: "/profile",
       component: Profile
+    },
+    {
+      path: "/profile/my_account",
+      component: MyAccount
     },
 
     // { 
