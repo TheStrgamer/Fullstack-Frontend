@@ -1,14 +1,13 @@
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import axios from 'axios';
 import LoginComponent from '@/components/LoginComponent.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import axios from 'axios'
+
+
+vi.mock('axios'); // for mock api responses
 
 describe('LoginComponent', () => {
-  let wrapper: any;
-
-  beforeEach(() => {
-    wrapper = mount(LoginComponent);
-  });
 
   it('form renders correct fields', () => {
     expect(wrapper.find('form').exists()).toBe(true);
@@ -22,10 +21,9 @@ describe('LoginComponent', () => {
   });
 
   it('link to register page exists', () => {
-    const link = wrapper.find('router-link[to="/register"]');
-    expect(link.exists()).toBe(true);
-    expect(link.text()).toBe('Register');
-    expect(link.attributes('to')).toBe('/register');
+    expect(wrapper.find('a').exists()).toBe(true);
+    expect(wrapper.find('a').text()).toBe('Register');
+    expect(wrapper.find('a').attributes('href')).toBe('/register');
   });  
 
   it('email field gives valid feedback when input is wrong', async () => {
@@ -58,5 +56,25 @@ describe('LoginComponent', () => {
     await wrapper.setData({ password: '1234' });
     await wrapper.vm.verifyField('password', 'password');
     expect(wrapper.vm.passwordErrorMessage).toBe('');
+  });
+});
+
+describe('LoginComponent with mock API', () => {
+  beforeEach(() => {
+  });
+  it('shows error message on failed login', async () => {
+    //TODO mock api response and test
+  });
+
+  it('shows correct error message when no user found with email', async () => {
+    //TODO mock api response and test
+  });
+
+  it('shows general error message when status 500 received', async () => {
+    //TODO mock api response and test
+  });
+
+  it('shows network error message when request fails', async () => {
+    //TODO mock api response and test
   });
 });
