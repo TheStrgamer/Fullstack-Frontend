@@ -7,5 +7,6 @@ describe('Navbar', () => {
   it('renders properly', () => {
     const wrapper = mount(Navbar)
     expect(wrapper.text()).toContain('Home')
+    expect(wrapper.text()).toContain('Login')
   })
 })
