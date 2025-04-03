@@ -12,12 +12,15 @@
         <button type="submit" >Login</button>
         <p>Don't have an account? <router-link to="/register">Register</router-link></p>
     </form>
-  </template>
+</template>
 
 
 <script lang="ts">
     import router from '@/router';
+    import { useUserStore } from '@/stores/UserStore';
+    import { defineComponent, ref, onMounted } from 'vue';
     import axios from 'axios';
+
     export default {
         name: 'RegisterComponent',
         data() {
@@ -98,12 +101,10 @@
                 }
                 console.log('login with email:', this.email, ' password:', this.password);
                 try {
-                    const response = await axios.post('http://localhost:8080/api/users/login', {
-                        email: this.email,
-                        password: this.password
-                    });
+                    const userStore = useUserStore();
+                    await userStore.getTokenAndSaveInStore(this.email, this.password);
 
-                    console.log('Login successful:', response.data);
+                    console.log('Login successful:', userStore.jwtToken);
                     router.push('/');
                     
                 } catch (error: unknown) {
@@ -138,4 +139,3 @@
         }
     }
 </script>
-  
