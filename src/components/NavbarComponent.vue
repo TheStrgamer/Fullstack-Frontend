@@ -11,20 +11,26 @@
     <nav class="mobile-menu">
       <router-link to="/example" @click="isMenuOpen = false">Example</router-link>
       <router-link to="/example" @click="isMenuOpen = false">Example</router-link>
-      <router-link to="/login" @click="isMenuOpen = false">Login</router-link>
+      <router-link v-if="!isLoggedIn" to="/login" @click="isMenuOpen = false">Login</router-link>
+      <router-link v-else to="/logout" @click="isMenuOpen = false">Log out</router-link>
     </nav>
 
     <!-- Desktop/tablet nav links (always visible on larger screens) -->
     <nav class="nav-links">
       <router-link to="/example">Example</router-link>
       <router-link to="/example">Example</router-link>
-      <router-link to="/login">Login</router-link>
+      <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
+      <router-link v-else to="/logout">Log out</router-link>
     </nav>
   </header>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useUserStore } from '@/stores/UserStore';
+
+let isLoggedIn = useUserStore().isAuthenticated();
+console.log(isLoggedIn);
 
 const isMenuOpen = ref(false);
 

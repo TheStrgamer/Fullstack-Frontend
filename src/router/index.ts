@@ -19,6 +19,16 @@ const router = createRouter({
       component: Login
     },
     {
+      path: "/logout",
+      name: "logout",
+      component: HomeView,
+      beforeEnter: (to, from, next) => {
+        useUserStore().logout();
+        window.location.reload();
+        next({ name: 'home' });
+      }
+    },
+    {
      path: "/register",
      component: Register
     },
