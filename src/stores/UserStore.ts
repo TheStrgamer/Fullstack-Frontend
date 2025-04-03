@@ -14,14 +14,14 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await getJwtToken(email, password); // { token, expiresAt }
 
-        if (response && response.token) {
+        if (response) {
           console.log('JWT Token received successfully');
-          this.jwtToken = response.token;
-          this.expiresAt = response.expiresAt;
+          this.jwtToken = response;
+          //this.expiresAt = Date.now() + 1000 * 60 * 15;
           this.email = email;
 
           sessionStorage.setItem('jwtToken', this.jwtToken);
-          sessionStorage.setItem('expiresAt', String(this.expiresAt));
+         // sessionStorage.setItem('expiresAt', String(this.expiresAt));
           sessionStorage.setItem('email', this.email);
 
           return true;
@@ -38,14 +38,14 @@ export const useUserStore = defineStore('user', {
     logout() {
       console.log('Logging out');
       this.jwtToken = '';
-      this.expiresAt = 0;
+      //this.expiresAt = 0;
       this.email = '';
       sessionStorage.removeItem('jwtToken');
-      sessionStorage.removeItem('expiresAt');
+      //sessionStorage.removeItem('expiresAt');
       sessionStorage.removeItem('email');
       router.push('/login');
     },
-
+/*
     isTokenExpired() {
       const currentTime = Date.now();
 
@@ -78,11 +78,11 @@ export const useUserStore = defineStore('user', {
         // If refresh token isn't available or failed, log the user out
         this.logout();
       }
-    },
+    },*/
 
     // Getter method for checking auth state
     isAuthenticated() {
-      return !!this.jwtToken && !this.isTokenExpired();
+      return !!this.jwtToken/* && !this.isTokenExpired()*/;
     }
   }
 });
