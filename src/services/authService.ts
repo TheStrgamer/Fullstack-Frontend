@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-export async function getJwtToken(email: string, password: string): Promise<string> {
+interface TokenResponse {
+  token: string;
+  expiration: number;
+}
+
+export async function getJwtToken(email: string, password: string): Promise<TokenResponse> {
   try {
     const response = await axios.post('http://localhost:8080/api/users/login', {
       email: email,
