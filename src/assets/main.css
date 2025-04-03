@@ -18,7 +18,7 @@ body {
   margin: 10px;
   width: 100%;
   max-width: 500px;
-  height: 400px;
+  height: 600px;
 }
 .input-form-flex input, .input-form-flex button {
   margin: 5px;
@@ -39,7 +39,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0px;
-  height: 60px;
+  height: 65px;
 }
 
 .input-form-flex button {

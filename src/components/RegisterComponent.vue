@@ -21,6 +21,9 @@
             <input v-model="password" type="password" id="password" name="password" placeholder="password" />
             <p class="error-message">{{ passwordErrorMessage }}</p>
         </div>
+        <div>
+            <input v-model="passwordConfirm" type="password" id="passwordConfirm" name="passwordConfirm" placeholder="confirm password" />
+        </div>
         <button type="submit" >Register</button>
         <p>Already have an account? <router-link to="/login">Login</router-link></p>
     </form>
@@ -37,6 +40,7 @@
                 lastName: '',
                 email: '',
                 password: '',
+                passwordConfirm: '',
                 phonenumber: '',
 
                 firstNameErrorMessage: '',
@@ -56,6 +60,9 @@
             },
             verifyPassword() {
                 return this.password.length >= 3;
+            },
+            verifyPasswordsMatch() {
+                return this.password === this.passwordConfirm;
             },
             verifyStringNotEmpty(str: string) {
                 return str.trim() !== '';
@@ -80,7 +87,12 @@
                         if (!fieldValid) {
                             this.passwordErrorMessage = 'Password must be at least 3 characters long';
                         } else {
-                            this.passwordErrorMessage = '';
+                            fieldValid = this.verifyPasswordsMatch();
+                            if (!fieldValid) {
+                                this.passwordErrorMessage = 'Passwords do not match';
+                            } else {
+                                this.passwordErrorMessage = '';
+                            }
                         }
                         break;
                     case 'phonenumber':
@@ -157,7 +169,7 @@
                     });
                     console.log('User registered successfully');
                     this.$router.push('/login');
-                    
+
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
                         if (error.response) {
