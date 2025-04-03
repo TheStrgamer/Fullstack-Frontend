@@ -17,5 +17,5 @@ import ItemFeedComponent from '@/components/ItemFeedComponent.vue'
 </template>
 
 <style>
-@import '../assets/Main.css';
+@import '../assets/main.css';
 </style>
