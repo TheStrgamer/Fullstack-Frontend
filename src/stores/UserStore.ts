@@ -21,7 +21,7 @@ export const useUserStore = defineStore('user', {
           this.email = email;
 
           sessionStorage.setItem('jwtToken', this.jwtToken);
-          sessionStorage.setItem('expiresAt', String(this.expiresAt));
+          sessionStorage.setItem('expiresAt', String(this.expiresAt)); // TODO: maybe remove this line
           sessionStorage.setItem('email', this.email);
 
           return true;
