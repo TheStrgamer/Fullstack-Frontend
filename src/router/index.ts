@@ -23,8 +23,7 @@ const router = createRouter({
       name: "logout",
       component: HomeView,
       beforeEnter: (to, from, next) => {
-        useUserStore().logout();
-        window.location.reload();
+        logout();
         next({ name: 'home' });
       }
     },
@@ -33,7 +32,8 @@ const router = createRouter({
      component: Register
     },
 
-    { 
+    { //TODO This is only to test if requiresLogin works, remove it later
+      // If any route requires login, implement it the same way as this please
       path: "/requirelogin", 
       component: HomeView, 
       meta: { requiresLogin: true } 
@@ -59,5 +59,10 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
+function logout() {
+  useUserStore().logout();
+  window.location.reload();
+}
 
 export default router
