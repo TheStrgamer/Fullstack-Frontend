@@ -11,6 +11,23 @@ body {
   margin-top: 40px;
   background-color: var(--background);
 }
+.main-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet og opp: legg kategori på siden */
+@media (min-width: 768px) {
+  .main-layout {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .main-content {
+    flex: 1;
+    padding: 10px;
+  }
+}
 
 .input-form-flex {
   display: flex;
@@ -18,14 +35,28 @@ body {
   margin: 10px;
   width: 100%;
   max-width: 500px;
-  height: 400px;
+  height: 600px;
 }
 .input-form-flex input, .input-form-flex button {
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid var(--primary);
   height: 25px;
+}
+
+.input-form-flex .error-message {
+  margin-left: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+  font-size: 15px;
+  color: var(--invalid);
+}
+.input-form-flex div {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  height: 65px;
 }
 
 .input-form-flex button {
@@ -40,3 +71,12 @@ body {
   height: 100%;
   width: 100%;
 }
+
+.invalid-field {
+  border: 2px solid var(--invalid);  
+}
+
+/* Tablet styles (768 px and up) */
+
+
+/* Desktop styles (1024 px and up) */
