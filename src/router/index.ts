@@ -4,6 +4,7 @@ import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import CreateItem from '@/views/CreateItem.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +32,11 @@ const router = createRouter({
       path: "/Item",
       name: "Item",
       component: ItemMaximized,
+    },
+    {
+      path: "/createlisting",
+      name: "CreateListing",
+      component: CreateItem,
     },
     {
       path: "/:pathMatch(.*)*", 
