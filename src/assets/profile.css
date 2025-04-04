@@ -1,0 +1,129 @@
+@import './base.css';
+
+.profilePicture {
+    width: 256px;
+
+
+}
+.profile_content_box {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    /* transform: translateX(-200px); */
+    align-items: baseline;
+
+    flex-wrap: wrap;
+}
+
+.profile-link-card {
+    border: solid var(--primary) 2px;
+    border-radius: 5%;
+
+    display: flex;
+    flex-direction: column;
+
+    flex-grow: auto;
+
+    min-width: 300px;
+    min-height: 180px;
+
+    margin: 10px;
+
+    background: var(--primary);
+
+    text-decoration: none;   
+    color: inherit;          
+    display: block;
+}
+
+.profile-link-card .card-content {
+
+}
+
+
+
+
+
+.my-account-page-container {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.profile-picture-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-picture-edit .profile-edit-btn {
+    width: 150px;
+    height: 30px;
+}
+
+
+
+
+
+
+.form-buttons .submit-btn {
+    background-color: var(--primary);
+}
+
+.form-buttons .submit-btn:disabled {
+    background-color: var(--invalid);
+    /* font-weight: bold; */
+}
+
+.form-buttons .cancel-btn {
+    background-color: var(--secondary);
+}
+
+
+
+
+
+
+@media (min-width: 768px) {
+    .profile_content_box {
+        flex-direction: row;
+        margin: 0 auto;
+    }
+
+    .information-edit .label-field {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 500px;
+    }
+      
+    .information-edit label {
+    flex: 1;
+    text-align: left;
+    padding-right: 1rem;
+    }
+      
+    .information-edit input {
+        flex: 2;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .form-buttons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+      
+    .form-buttons button {
+        width: 50%;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+    }      
+}

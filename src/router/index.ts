@@ -3,6 +3,8 @@ import HomeView from '../views/Main.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
+import Profile from '../views/Profile.vue'
+import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 
@@ -30,6 +32,16 @@ const router = createRouter({
     {
      path: "/register",
      component: Register
+    },
+    {
+      path: "/profile",
+      component: Profile,
+      meta: { requiresLogin: true } 
+    },
+    {
+      path: "/profile/my_account",
+      component: MyAccount,
+      meta: { requiresLogin: true } 
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
