@@ -11,8 +11,8 @@ export const useItemStore = defineStore("item", {
     price: 0.0,
     full_description: "",
     brief_description: "",
-    category: Object,
-    condition: Object,
+    categoryName: "",
+    conditionName: "",
     size: "",
     itemImageURL: "",
     created_at: "",
@@ -40,11 +40,11 @@ export const useItemStore = defineStore("item", {
     setBriefDescription(description: string) {
       this.brief_description = description;
     },
-    setCategory(category: any) {
-      this.category = category;
+    setCategory(category: string) {
+      this.categoryName = category;
     },
-    setCondition(condition: any) {
-      this.condition = condition;
+    setCondition(condition: string) {
+      this.conditionName = condition;
     },
     setSize(size: string) {
       this.size = size;
@@ -85,10 +85,10 @@ export const useItemStore = defineStore("item", {
       return this.brief_description;
     },
     getCategoryName() {
-      return this.category.name;
+      return this.categoryName;
     },
     getCondition() {
-      return this.condition.name;
+      return this.conditionName;
     },
     getSize() {
       return this.size;
@@ -97,9 +97,11 @@ export const useItemStore = defineStore("item", {
       return this.itemImageURL;
     },
     getCreatedAt() {
+      console.log("Created at:", this.created_at);
       return this.created_at;
     },
     getUpdatedAt() {
+      console.log("Updated at:", this.updated_at);
       return this.updated_at;
     },
     getLatitude() {
@@ -117,8 +119,8 @@ export const useItemStore = defineStore("item", {
       this.price = 0.0;
       this.full_description = "";
       this.brief_description = "";
-      this.category = Object;
-      this.condition = Object;
+      this.categoryName = "";
+      this.conditionName = "";
       this.size = "";
       this.itemImageURL = "";
       this.created_at = "";
@@ -135,8 +137,8 @@ export const useItemStore = defineStore("item", {
       price?: number;
       full_description?: string;
       brief_description?: string;
-      category?: any;
-      condition?: any;
+      categoryName?: any;
+      conditionName?: any;
       size?: string;
       itemImageURL?: string;
       created_at?: string;
@@ -150,14 +152,26 @@ export const useItemStore = defineStore("item", {
       if (item.price !== undefined) this.price = item.price;
       if (item.full_description !== undefined) this.full_description = item.full_description;
       if (item.brief_description !== undefined) this.brief_description = item.brief_description;
-      if (item.category !== undefined) this.category = item.category;
-      if (item.condition !== undefined) this.condition = item.condition;
+      if (item.categoryName !== undefined) this.categoryName = item.categoryName;
+      if (item.conditionName !== undefined) this.conditionName = item.conditionName;
       if (item.size !== undefined) this.size = item.size;
       if (item.itemImageURL !== undefined) this.itemImageURL = item.itemImageURL;
       if (item.created_at !== undefined) this.created_at = item.created_at;
       if (item.updated_at !== undefined) this.updated_at = item.updated_at;
       if (item.latitude !== undefined) this.latitude = item.latitude;
       if (item.longitude !== undefined) this.longitude = item.longitude;
+    },
+
+    // Create a new item
+    createItemListing(item: any) {
+      console.log("Creating item:", item);
+      itemServices().createItem(item)
+        .then((response: any) => {
+          console.log("Item created successfully:", response);
+        })
+        .catch((error: any) => {
+          console.error("Error creating item:", error);
+        });
     },
 
     fetchItem(itemId: string) {

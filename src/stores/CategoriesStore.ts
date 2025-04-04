@@ -1,12 +1,19 @@
 import { itemServices } from '../services/itemService.ts'
 import { defineStore } from "pinia";
 
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  parent_category: number | null;
+}
+
 export const useCategoriesStore = defineStore("categories", {
   state: () => ({
-    categories: [],
+    categories: [] as Category[],
   }),
   actions: {
-    async fetchCategories(count: number) {
+    async fetchCategories() {
       this.categories = await itemServices().fetchCategoriesFromAPI();
     },
 
