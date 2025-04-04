@@ -6,7 +6,9 @@ import Register from '@/views/Register.vue'
 import Profile from '../views/Profile.vue'
 import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import CreateItem from '@/views/CreateItem.vue'
 import { useUserStore } from '../stores/UserStore.ts'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -54,6 +56,11 @@ const router = createRouter({
       path: "/Item",
       name: "Item",
       component: ItemMaximized,
+    },
+    {
+      path: "/createlisting",
+      name: "CreateListing",
+      component: CreateItem,
     },
     {
       path: "/:pathMatch(.*)*", 
