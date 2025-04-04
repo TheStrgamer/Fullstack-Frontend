@@ -1,5 +1,8 @@
 <template>
   <div id="Item-Feed">
+    <div v-if="feedItems.length === 0">
+      <p style="text-align: center;">Ingen annonser å vise for øyeblikket.</p>
+    </div>
     <ItemCardMinimized
       v-for="item in feedItems"
       :key="item.id"
@@ -23,7 +26,7 @@ const feedItems = ref<FeedItem[]>([]);
 onMounted(async () => {
   const feedStore = useFeedStore();
   await feedStore.fetchRecommendedItems(10);
-  feedItems.value = feedStore.getRecommendedItems();
+  feedItems.value = feedStore.getRecommendedItems;
 });
 </script>
 
