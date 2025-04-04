@@ -40,6 +40,7 @@ describe('Navbar', () => {
       global: {
         plugins: [
           createTestingPinia({
+            createSpy: vi.fn,
             initialState: {
               UserStore: {
                 isAuthenticated: true,
