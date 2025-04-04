@@ -1,14 +1,15 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createMemoryHistory } from 'vue-router'
 import Navbar from '../NavbarComponent.vue'
+import ts from 'typescript'
 
 let router: ReturnType<typeof createRouter>
 
 beforeEach(async () => {
   router = createRouter({
-    history: createWebHistory(),
+    history: createMemoryHistory(),
     routes: [],
   })
   await router.isReady()
