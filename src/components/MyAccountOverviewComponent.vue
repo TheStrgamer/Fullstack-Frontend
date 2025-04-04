@@ -52,6 +52,13 @@
                     </div>
                     <div>
                         <div class="label-field">
+                            <label for="email">Email</label>
+                            <input v-model="inputEmail" type="text" id="email" name="email" />
+                        </div>
+                        <p class="error-message">{{ emailErrorMessage }}</p>
+                    </div>
+                    <div>
+                        <div class="label-field">
                             <label for="phonenumber">Phonenumber</label>
                             <input v-model="inputPhonenumber" type="text" id="phonenumber" name="phonenumber" />
                         </div>
@@ -74,11 +81,9 @@
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, onMounted, computed } from 'vue';
     import axios from 'axios';
     import CustomButton from './CustomButton.vue';
-    import { onMounted } from 'vue';
-    import { computed } from 'vue';
     import { useUserStore} from '../stores/UserStore'
 
     // edit toggle
@@ -99,6 +104,7 @@
     // input values
     const inputFirstName = ref('');
     const inputLastName = ref('');
+    const inputEmail = ref('');
     const inputPhonenumber = ref('');
 
     // error messages
@@ -138,6 +144,7 @@
             // Populate inputs with current values
             inputFirstName.value = firstName.value;
             inputLastName.value = lastName.value;
+            inputEmail.value = email.value;
             inputPhonenumber.value = phonenumber.value;
         }
     }
@@ -160,20 +167,20 @@
 
     // validation functions
     const canSaveChanges = computed(() => {
-        return phonenumberIsValid(inputPhonenumber.value) && fullNameIsValud(inputFirstName.value, inputLastName.value);
+        return emailIsValid(inputEmail.value) && phonenumberIsValid(inputPhonenumber.value) && fullNameIsValud(inputFirstName.value, inputLastName.value);
     });
 
-    // function emailIsValid(email) {
-    //     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    //     return emailPattern.test(email);
-    // }
+    function emailIsValid(email: string) {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailPattern.test(email);
+    }
 
-    function phonenumberIsValid(phonenumber) {
+    function phonenumberIsValid(phonenumber: string) {
         if (phonenumber.length === 8) return true;
         return false;
     }
 
-    function fullNameIsValud(firstName, lastName) {
+    function fullNameIsValud(firstName: string, lastName: string) {
         if(firstName.length !== 0 && lastName.length !== 0) return true;
         return false;
     }
@@ -185,6 +192,7 @@
             {
                 firstname: inputFirstName.value,
                 surname: inputLastName.value,
+                email: inputEmail.value,
                 phonenumber: inputPhonenumber.value
             },
             {

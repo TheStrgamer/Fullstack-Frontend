@@ -35,11 +35,13 @@ const router = createRouter({
     },
     {
       path: "/profile",
-      component: Profile
+      component: Profile,
+      meta: { requiresLogin: true } 
     },
     {
       path: "/profile/my_account",
-      component: MyAccount
+      component: MyAccount,
+      meta: { requiresLogin: true } 
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
