@@ -46,6 +46,7 @@ export const useUserStore = defineStore('user', {
       router.push('/login');
     },
 
+    //TODO: when you check token, maybe check with backend as well in case user changes their local variables
     isTokenExpired() {
       const currentTime = Date.now();
 
