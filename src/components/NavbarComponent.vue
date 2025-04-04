@@ -26,11 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
 
-let isLoggedIn = useUserStore().isAuthenticated();
-console.log(isLoggedIn);
+const userStore = useUserStore();
+const isLoggedIn = computed(() => userStore.isAuthenticated());
 
 const isMenuOpen = ref(false);
 
