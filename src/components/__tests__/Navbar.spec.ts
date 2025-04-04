@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createMemoryHistory } from 'vue-router'
@@ -19,6 +19,7 @@ describe('Navbar', () => {
       global: {
         plugins: [
           createTestingPinia({
+            createSpy: vi.fn,
             initialState: {
               UserStore: {
                 isAuthenticated: false,
