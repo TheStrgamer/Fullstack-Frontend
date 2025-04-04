@@ -39,9 +39,6 @@
     let query = newVal;
     let response;
 
-    const norwayLat = 64.5731537;
-    const norwayLon = 11.5280364;
-
     try {
       response = await sendApiRequest(query);
       const validResults = response.data.features.filter(f => f.properties.name);
@@ -50,8 +47,18 @@
         console.log('No valid name in suggestions, retrying without house number');
         let newquery = query.replace(/\d+/g, '').trim();
         const fallbackResponse = await sendApiRequest(newquery);
-
-        suggestions.value = fallbackResponse.data.features;
+        
+        // This adds the removed numbers back to the name
+        const patchedResults = fallbackResponse.data.features.map(feature => {
+            return {
+            ...feature,
+            properties: {
+                ...feature.properties,
+                name: query,
+            },
+            };
+        });
+        suggestions.value = patchedResults.filter(f => f.properties.name);
       } else {
         suggestions.value = validResults.length > 0 ? validResults : response.data.features;
       }
