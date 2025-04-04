@@ -1,0 +1,30 @@
+  .favorites-page {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .favorites-title {
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--primary);
+  }
+  
+  .favorites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  /* Mobile-first – optional tweaks */
+  @media (min-width: 768px) {
+    .favorites-page {
+      padding: 40px;
+    }
+  
+    .favorites-title {
+      font-size: 2rem;
+    }
+  }

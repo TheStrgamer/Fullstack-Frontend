@@ -6,6 +6,7 @@ import Register from '@/views/Register.vue'
 import Profile from '../views/Profile.vue'
 import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import { useUserStore } from '../stores/UserStore.ts'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +21,15 @@ const router = createRouter({
       component: Login
     },
     {
+      path: "/logout",
+      name: "logout",
+      component: HomeView,
+      beforeEnter: (to, from, next) => {
+        logout();
+        next({ name: 'home' });
+      }
+    },
+    {
      path: "/register",
      component: Register
     },
@@ -32,11 +42,12 @@ const router = createRouter({
       component: MyAccount
     },
 
-    // { 
-    //   path: "/requirelogin", 
-    //   component: Example, 
-    //   meta: { requiresLogin: true } 
-    // },
+    { //TODO This is only to test if requiresLogin works, remove it later
+      // If any route requires login, implement it the same way as this please
+      path: "/requirelogin", 
+      component: HomeView, 
+      meta: { requiresLogin: true } 
+    },
     {
       path: "/Item",
       name: "Item",
@@ -51,12 +62,17 @@ const router = createRouter({
 
 // For routes that require the user to be logged in
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = true; //TODO add logic to check if user is authenticated
-  if (to.meta.requiresLogin && !isAuthenticated) {
+  if (to.meta.requiresLogin && !useUserStore().isAuthenticated()) {
+    console.warn("User is not authenticated, redirecting to login");
     next("/login");
   } else {
     next();
   }
 });
+
+function logout() {
+  useUserStore().logout();
+  window.location.reload();
+}
 
 export default router

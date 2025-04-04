@@ -79,13 +79,15 @@
     import CustomButton from './CustomButton.vue';
     import { onMounted } from 'vue';
     import { computed } from 'vue';
+    import { useUserStore} from '../stores/UserStore'
 
     // edit toggle
     const editToggle = ref(false);
     // const editToggle = ref(true);
 
     // token
-    const token = localStorage.getItem("token");
+    const userStore = useUserStore();
+    const token = userStore.jwtToken;
 
     // user values
     const firstName = ref('');
