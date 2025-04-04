@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
 
-<router-link :to="to" class="profile-link-card" :style="{ backgroundColor: color || '#4caf50' }">
+<router-link :to="to" class="profile-link-card">
     <div class="card-content">
       <img :src="icon_path" alt="icon" class="card-icon" />
       <div class="card-text">

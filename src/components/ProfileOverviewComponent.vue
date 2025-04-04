@@ -17,8 +17,7 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     to="/profile/my_account" 
                     icon_path="/icons/settings.svg"
                     title="My Account" 
-                    description="View your account information" 
-                    color="#2196f3"
+                    description="View your account information"
                 />
 
                 <!-- My Ads Button -->
@@ -26,8 +25,7 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     to="/profile/my_ads" 
                     icon_path="/icons/ads.svg"
                     title="My Ads" 
-                    description="View your active ads" 
-                    color="#9c27b0"
+                    description="View your active ads"
                 />
 
                 <!-- My Favorite Ads -->
@@ -35,8 +33,7 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     to="/profile/my_favorites" 
                     icon_path="/icons/ads.svg"
                     title="My Favorites" 
-                    description="View your favorited ads" 
-                    color="#9c27b0"
+                    description="View your favorited ads"
                 />
             </div>
         </div>
