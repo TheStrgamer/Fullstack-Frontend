@@ -3,16 +3,14 @@ import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import { createRouter, createMemoryHistory } from 'vue-router'
 import Navbar from '../NavbarComponent.vue'
-import ts from 'typescript'
 
 let router: ReturnType<typeof createRouter>
 
-beforeEach(async () => {
+beforeEach(() => {
   router = createRouter({
     history: createMemoryHistory(),
     routes: [],
   })
-  await router.isReady()
 })
 
 describe('Navbar', () => {
