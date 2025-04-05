@@ -3,7 +3,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     overflow: hidden;
-    height: 80vh;
+    height: 89vh;
 
 }
 .messages-list {
@@ -11,7 +11,6 @@
     flex-direction: column;
     align-items: center;
     max-height: 100%;
-    padding: 10px;
     flex-grow: 1;
     border-left: 4px solid var(--secondary);
     height: 95%;
@@ -60,6 +59,17 @@
     padding: 12px;
     width: 90%;
     display: flex;
+}
+
+.chat-list-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    height: 50px;
 }
   
 .chat-list-item-text {
@@ -176,10 +186,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 95%;
     padding: 10px;
-    background-color: var(--accent);
-    border-radius: 5px 5px 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    height: 50px;
 }
   
 .message-list-header .message-list-title {

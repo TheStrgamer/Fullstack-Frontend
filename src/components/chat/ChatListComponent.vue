@@ -1,14 +1,16 @@
 <template>
     <div class="chat-list" :class="{ 'take-whole-width': isMobile }">
-        <h2 class="chat-list-title">Chat</h2>
-          <ChatListItem
-            v-for="chat in chats"
-            :key="chat.id"
-            :user="chat"
-            :lastMessage="chat.lastMessage"
-            :timestamp="chat.timestamp"
-            @click="onChatClick(chat.id)"
-          />
+        <div class="chat-list-header">
+            <h2 class="chat-list-title">Your chats</h2>
+        </div>
+        <ChatListItem
+          v-for="chat in chats"
+          :key="chat.id"
+          :user="chat"
+          :lastMessage="chat.lastMessage"
+          :timestamp="chat.timestamp"
+          @click="onChatClick(chat.id)"
+        />
     </div>
 </template>
   
