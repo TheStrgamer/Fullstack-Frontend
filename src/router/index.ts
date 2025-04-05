@@ -4,6 +4,7 @@ import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import ChatView from '@/views/ChatView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 
 const router = createRouter({
@@ -42,6 +43,12 @@ const router = createRouter({
       path: "/Item",
       name: "Item",
       component: ItemMaximized,
+    },
+    {
+      path: "/chats",
+      name: "chats",
+      component: ChatView,
+      meta: { requiresLogin: true }
     },
     {
       path: "/:pathMatch(.*)*", 
