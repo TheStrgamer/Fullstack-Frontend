@@ -51,18 +51,14 @@
 
 
 /* For chat list items */
-.chat-list-item {
-    background-color: var(--background);
-    margin: 8px 0;
-    padding: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
   
 .chat-list-item-content {
     display: flex;
     align-items: center;
+    background-color: var(--background);
+    margin: 8px 0;
+    padding: 12px;
+    display: flex;
 }
   
 .chat-list-item-text {
@@ -81,11 +77,11 @@
     margin: 4px 0 0 0;
 }
   
-  .chat-list-item:hover {
+  .chat-list-item-content:hover {
     background-color: var(--white);
 }
   
-.chat-list-item:hover .timestamp {
+.chat-list-item.content:hover .timestamp {
     color: var(--primary);
 }
 
@@ -158,8 +154,8 @@
     display: flex;
     align-items: center;
     border: 2px solid red;
-    position: relative;
-    bottom: 400;
+    margin-top: auto;
+
 }
 .message-list-footer input {
     width: 80%;

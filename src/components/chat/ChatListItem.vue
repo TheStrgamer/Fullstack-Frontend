@@ -1,14 +1,13 @@
 <template>
-    <div class="chat-list-item">
-        <div class="chat-list-item-content">
-            <img :src="user.avatar" alt="User Avatar" class="avatar" v-if="user.avatar!=''" />
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieyaZb-hSOtWnc6wha3QQlMLL8_cfvr2WIQ&s" alt="Default Avatar" class="avatar" v-else />
-            <div class="chat-list-item-text">
-                <h3>{{ user.name }}</h3>
-                <p>{{ lastMessage }}</p>
-            </div>
+    <div class="chat-list-item-content" @click="$emit('click')">
+        <img :src="user.avatar" alt="User Avatar" class="avatar" v-if="user.avatar!=''" />
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieyaZb-hSOtWnc6wha3QQlMLL8_cfvr2WIQ&s" alt="Default Avatar" class="avatar" v-else />
+        <div class="chat-list-item-text">
+            <h3>{{ user.name }}
+                <span class="timestamp">{{ timestamp }}</span>
+            </h3>
+            <p>{{ lastMessage }}</p>
         </div>
-        <span class="timestamp">{{ timestamp }}</span>
     </div>
 </template>
 
@@ -27,6 +26,12 @@
       timestamp: {
         type: String,
         default: '',
+      },
+    },
+    emits: ['click'],
+    methods: {
+      onClick() {
+        this.$emit('click', this.user.id);
       },
     },
   };

@@ -8,12 +8,13 @@
             :user="chat"
             :lastMessage="chat.lastMessage"
             :timestamp="chat.timestamp"
+            @click="onChatClick(chat.id)"
           />
         </div>
-    </div>    
+    </div>
 </template>
   
-  <script lang="ts">
+<script lang="ts">
   import ChatListItem from '@/components/chat/ChatListItem.vue';
   
   interface Chat {
@@ -34,9 +35,15 @@
         type: Array as () => Chat[],
         required: true
       }
+    },
+    emits: ['clicked'],
+    methods: {
+      onChatClick(id: number) {
+        this.$emit('clicked', id);
+      }
     }
   }
-  </script>
+</script>
   
 <style scoped>
     @import '@/assets/chat.css';

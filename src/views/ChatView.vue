@@ -1,21 +1,25 @@
 <template>
-    <Navbar />
-    <div class="chat-page">
-      <ChatListComponent :chats="createMockData()" />
-      <ChatComponent :messages="messages" />
-    </div>
-  </template>
+  <Navbar />
+  <div class="chat-page">
+    <ChatListComponent :chats="createMockData()" @clicked="swapMessages" />
+    <ChatComponent :messages="messages" />
+  </div>
+</template>
   
-  <script setup lang="ts">
+<script setup lang="ts">
   import { ref } from 'vue';
   import Navbar from '@/components/NavbarComponent.vue';
   import ChatComponent from '@/components/chat/MessagesListComponent.vue';
   import ChatListComponent from '@/components/chat/ChatListComponent.vue';
-    import { computed } from 'vue';
+  import { computed } from 'vue';
   
   let chatId = ref(1);
 
   const messages = computed(() => getChatData(chatId.value));
+
+  function swapMessages(id: number) {
+    chatId.value = id;
+  }
 
   
   function createMockData() {
@@ -53,7 +57,9 @@
       case 2:
         return [
         { id:3, senderName: 'Lo Po Bia Traumeri', message: 'I want to buy your son?', timestamp: '2023-10-01 12:05', avatar: '', sentByMe: false },
-        { id:4, senderName: 'Me', message: 'What are you talking about?', timestamp: '2023-10-01 12:06', avatar: '', sentByMe: true }
+        { id:4, senderName: 'Me', message: 'What are you talking about?', timestamp: '2023-10-01 12:06', avatar: '', sentByMe: true },
+        { id:7, senderName: 'Lo Po Bia Traumeri', message: 'Give him to me, and i will make use of him in my army', timestamp: '2023-10-01 12:09', avatar: '', sentByMe: false },
+
       ];
       case 3:
         return [
@@ -66,9 +72,9 @@
     };
   
   }
-  </script>
+</script>
   
-  <style>
-    @import '@/assets/chat.css';
-  </style>
+<style>
+  @import '@/assets/chat.css';
+</style>
   
