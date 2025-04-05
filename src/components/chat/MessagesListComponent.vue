@@ -1,6 +1,9 @@
 <template>
     <div class="messages-list">
-        <h2 class="message-list-title">{{ name }}</h2>
+        <div class="message-list-header">
+          <button v-if="isMobile" class="back-button" @click="$emit('return')"> < </button>
+          <h2 class="message-list-title">{{ name }}</h2>
+        </div>
         <div class="message-list-items">
           <ChatMessage
             v-for="message in messages"
@@ -8,6 +11,8 @@
             :user="message"
             :message="message.message"
             :timestamp="message.timestamp"
+            :avatar="message.sentByMe ? myAvatar : avatar"
+            :name="message.sentByMe ? 'You' : name"
           />
         </div>
         <div class="message-list-footer">
@@ -22,8 +27,6 @@
   interface Message {
     id: number;
     sentByMe: boolean;
-    senderName: string;
-    avatar: string;
     message: string;
     timestamp: string;
   }
@@ -41,6 +44,18 @@
       name: {
         type: String,
         default: 'Chat'
+      },
+      avatar: {
+        type: String,
+        default: ''
+      },
+      myAvatar: {
+        type: String,
+        default: ''
+      },
+      isMobile: {
+        type: Boolean,
+        default: false
       }
     },
   }

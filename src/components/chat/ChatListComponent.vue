@@ -1,7 +1,6 @@
 <template>
-    <div class="chat-list">
+    <div class="chat-list" :class="{ 'take-whole-width': isMobile }">
         <h2 class="chat-list-title">Chat</h2>
-        <div class="chat-list-items">
           <ChatListItem
             v-for="chat in chats"
             :key="chat.id"
@@ -10,7 +9,6 @@
             :timestamp="chat.timestamp"
             @click="onChatClick(chat.id)"
           />
-        </div>
     </div>
 </template>
   
@@ -34,6 +32,10 @@
       chats: {
         type: Array as () => Chat[],
         required: true
+      },
+      isMobile: {
+        type: Boolean,
+        default: false
       }
     },
     emits: ['clicked'],
