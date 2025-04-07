@@ -1,18 +1,22 @@
 <template>
-  <div class="item-maximized">
+  <div v-if="itemLoaded" class="item-maximized">
     <!-- Kategori + Salgsstatus -->
     <div class="item-header-bar">
       <span class="item-category">{{ itemStore.getCategoryName() }}</span>
-      <span :class="['item-status'/* ,statusClass*/]">
-        {{ itemStore.getSaleStatus() }}
+      <span :class="['item-status', statusClass]">
+        {{ getSaleStatusText(itemStore.getSaleStatus()) }}
       </span>
     </div>
 
     <!-- Bildekarusell -->
-    <div class="image-carousel">
+    <div class="image-carousel" v-if="images.length > 0">
       <button class="carousel-btn left" @click="prevImage" v-if="images.length > 1">&#10094;</button>
-      <img :src="images[currentImageIndex]" :alt="itemStore.getTitle" class="item-image" />
+      <img :src="images[currentImageIndex]" :alt="itemStore.getTitle()" class="item-image" />
       <button class="carousel-btn right" @click="nextImage" v-if="images.length > 1">&#10095;</button>
+    </div>
+    <div v-else class="image-placeholder">
+      <img :src="itemStore.getItemImageURL()" :alt="itemStore.getTitle()" class="item-image" v-if="itemStore.getItemImageURL()" />
+      <p v-else>Ingen bilder tilgjengelig</p>
     </div>
 
     <!-- Tittel + Pris -->
@@ -24,7 +28,7 @@
     <!-- Tilstand + Størrelse -->
     <div class="item-info-row">
       <p class="item-subinfo">Tilstand: {{ itemStore.getCondition() }}</p>
-      <p class="item-subinfo">Størrelse: {{ itemStore.getSize() }}</p>
+      <p class="item-subinfo" v-if="itemStore.getSize()">Størrelse: {{ itemStore.getSize() }}</p>
     </div>
 
     <!-- Beskrivelse -->
@@ -37,9 +41,13 @@
 
     <!-- Datoer -->
     <div class="item-dates">
-      <p>Opprettet: {{ itemStore.getCreatedAt() }}</p>
-      <p>Oppdatert: {{ itemStore.getUpdatedAt() }}</p>
+      <p>Opprettet: {{ formatDate(itemStore.getCreatedAt()) }}</p>
+      <p>Oppdatert: {{ formatDate(itemStore.getUpdatedAt()) }}</p>
     </div>
+  </div>
+  <div v-else class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Laster inn produkt...</p>
   </div>
 </template>
 
@@ -51,25 +59,63 @@ import { useItemStore } from '../stores/ItemStore.ts'
 const route = useRoute()
 const itemId = route.query.id as string
 const itemStore = useItemStore()
-
-// onMounted(() => {
-//   itemStore.fetchItem(itemId)
-
-//   // Dummy flerbilder (du kan hente fra store senere)
-//   images.value = [
-//     itemStore.getItemImageURL,
-//     'https://picsum.photos/seed/alt1/500/400',
-//     'https://picsum.photos/seed/alt2/500/400',
-//   ]
-// })
-
-// const statusClass = computed(() => {
-//   return itemStore.getSaleStatus.toLowerCase() === 'solgt' ? 'sold' : 'forsale'
-// })
+const itemLoaded = ref(false)
 
 // Bildekarusell
 const images = ref<string[]>([])
 const currentImageIndex = ref(0)
+
+onMounted(async () => {
+  try {
+    await fetchItemData()
+  } catch (error) {
+    console.error('Failed to load item:', error)
+  }
+})
+
+async function fetchItemData() {
+  itemLoaded.value = false
+
+  await itemStore.fetchItem(itemId)
+
+  if (itemStore.getItemImageURL()) {
+    images.value = [itemStore.getItemImageURL()]
+  } else {
+    images.value = ['https://via.placeholder.com/500x400?text=No+Image+Available']
+  }
+
+  itemLoaded.value = true
+}
+
+const statusClass = computed(() => {
+  const status = itemStore.getSaleStatus()
+  if (typeof status === 'number') {
+    return status === 0 ? 'forsale' : 'sold'
+  }
+  return String(status).toLowerCase().includes('solgt') ? 'sold' : 'forsale'
+})
+
+function getSaleStatusText(status: string | number): string {
+  if (typeof status === 'number') {
+    return status === 0 ? 'Til salgs' : 'Solgt'
+  }
+  return status || 'Ukjent status'
+}
+
+function formatDate(dateString: string): string {
+  if (!dateString) return 'Ukjent dato'
+  try {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('no-NO', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  } catch (e) {
+    console.error('Error formatting date:', e)
+    return dateString
+  }
+}
 
 function nextImage() {
   currentImageIndex.value = (currentImageIndex.value + 1) % images.value.length
@@ -80,7 +126,6 @@ function prevImage() {
     (currentImageIndex.value - 1 + images.value.length) % images.value.length
 }
 </script>
-
 
 <style>
 @import '../assets/ItemComponentMaximized.css';

@@ -7,7 +7,9 @@ import GeoCoding from '@/components/GeoCodingComponent.vue'
 import Profile from '../views/Profile.vue'
 import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import CreateItem from '@/views/CreateItem.vue'
 import { useUserStore } from '../stores/UserStore.ts'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -63,6 +65,12 @@ const router = createRouter({
       component: ItemMaximized,
     },
     {
+      path: "/createlisting",
+      name: "CreateListing",
+      component: CreateItem,
+      meta: { requiresLogin: true } 
+    },
+    {
       path: "/:pathMatch(.*)*", 
       component: NotFound 
     },
@@ -78,6 +86,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 
 function logout() {
   useUserStore().logout();

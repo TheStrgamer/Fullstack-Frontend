@@ -13,6 +13,7 @@
     <!-- Mobile dropdown menu -->
     <nav class="mobile-menu">
       <router-link to="/example" @click="isMenuOpen = false">Example</router-link>
+      <router-link to="/createlisting" @click="isMenuOpen = false">Create listing</router-link>
       <router-link to="/profile" @click="isMenuOpen = false">Profile</router-link>
       <router-link v-if="!isLoggedIn" to="/login" @click="isMenuOpen = false">Login</router-link>
       <router-link v-else to="/logout" @click="isMenuOpen = false">Log out</router-link>
@@ -21,6 +22,7 @@
     <!-- Desktop/tablet nav links (always visible on larger screens) -->
     <nav class="nav-links">
       <router-link to="/example">Example</router-link>
+      <router-link to="/createlisting">Create Listing</router-link>
       <router-link to="/profile">Profile</router-link>
       <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
       <router-link v-else to="/logout">Log out</router-link>
