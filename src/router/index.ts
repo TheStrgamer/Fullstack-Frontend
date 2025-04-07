@@ -3,9 +3,14 @@ import HomeView from '../views/Main.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
+import GeoCoding from '@/components/GeoCodingComponent.vue'
+import Profile from '../views/Profile.vue'
+import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
+import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -20,6 +25,12 @@ const router = createRouter({
       component: Login
     },
     {
+      path: "/geocoding",
+      name: "geocoding",
+      component: GeoCoding,
+      
+    },
+    {
       path: "/logout",
       name: "logout",
       component: HomeView,
@@ -31,6 +42,16 @@ const router = createRouter({
     {
      path: "/register",
      component: Register
+    },
+    {
+      path: "/profile",
+      component: Profile,
+      meta: { requiresLogin: true } 
+    },
+    {
+      path: "/profile/my_account",
+      component: MyAccount,
+      meta: { requiresLogin: true } 
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
@@ -57,6 +78,12 @@ const router = createRouter({
       meta: { requiresLogin: true }
     },
     {
+      path: "/createlisting",
+      name: "CreateListing",
+      component: CreateItem,
+      meta: { requiresLogin: true } 
+    },
+    {
       path: "/:pathMatch(.*)*", 
       component: NotFound 
     },
@@ -72,6 +99,7 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
+
 
 function logout() {
   useUserStore().logout();
