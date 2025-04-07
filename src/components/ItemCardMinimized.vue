@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts">
+import { getUrlFromEndpoint } from '@/services/httpService';
+
 defineProps({
   item: {
     type: Object,
@@ -37,7 +39,7 @@ defineProps({
 function getImageUrl(imagePath: string) {
   if (!imagePath) return '/fallback.png';
   const cleanPath = imagePath.replace(/^\/+/, '');
-  return `http://localhost:8080/${cleanPath}`;
+  return getUrlFromEndpoint(cleanPath);
 }
 </script>
 

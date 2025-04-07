@@ -82,9 +82,9 @@
 
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
-    import axios from 'axios';
     import CustomButton from './CustomButton.vue';
     import { useUserStore} from '../stores/UserStore'
+    import { fetchDataWithAuth, postDataWithAuth } from '@/services/httpService';
 
     // edit toggle
     const editToggle = ref(false);
@@ -151,13 +151,7 @@
 
     async function getProfileInfo() {
         try {
-            const response = await axios.post("http://localhost:8080/api/users/my_account", 
-            {},
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const response = await postDataWithAuth("users/my_account", {});
             console.log(response.data);
             return response.data;
         } catch (error) {
@@ -188,18 +182,14 @@
     async function onEdit() {
         try {
             console.log("Editing profile");
-            const response = await axios.post("http://localhost:8080/api/users/update",
-            {
-                firstname: inputFirstName.value,
-                surname: inputLastName.value,
-                email: inputEmail.value,
-                phonenumber: inputPhonenumber.value
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const payload = {
+            firstname: inputFirstName.value,
+            surname: inputLastName.value,
+            email: inputEmail.value,
+            phonenumber: inputPhonenumber.value
+            };
+
+            const response = await postDataWithAuth("users/update", payload);
             if (response.status == 200) {
                 console.log("Updated user succesfully");
                 setUserValueFields();
