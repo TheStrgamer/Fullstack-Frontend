@@ -61,6 +61,7 @@ const router = createRouter({
       path: "/createlisting",
       name: "CreateListing",
       component: CreateItem,
+      meta: { requiresLogin: true } 
     },
     {
       path: "/:pathMatch(.*)*", 
