@@ -121,5 +121,15 @@
     font-size: 0.85rem;
     color: #999;
   }
+  .image-index-display {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: white;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
   
   

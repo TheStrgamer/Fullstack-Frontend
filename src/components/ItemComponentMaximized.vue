@@ -11,13 +11,16 @@
     <!-- Bildekarusell -->
     <div class="image-carousel" v-if="images.length > 0">
       <button class="carousel-btn left" @click="prevImage" v-if="images.length > 1">&#10094;</button>
+
       <img :src="images[currentImageIndex]" :alt="itemStore.getTitle()" class="item-image" />
+
       <button class="carousel-btn right" @click="nextImage" v-if="images.length > 1">&#10095;</button>
+
+      <div class="image-index-display">
+        Bilde {{ currentImageIndex + 1 }} av {{ images.length }}
+      </div>
     </div>
-    <div v-else class="image-placeholder">
-      <img :src="itemStore.getItemImageURL()" :alt="itemStore.getTitle()" class="item-image" v-if="itemStore.getItemImageURL()" />
-      <p v-else>Ingen bilder tilgjengelig</p>
-    </div>
+
 
     <!-- Tittel + Pris -->
     <div class="item-info-row">
@@ -74,17 +77,14 @@ onMounted(async () => {
 })
 
 async function fetchItemData() {
-  itemLoaded.value = false
+  itemLoaded.value = false;
 
-  await itemStore.fetchItem(itemId)
+  await itemStore.fetchItem(itemId);
 
-  if (itemStore.getItemImageURL()) {
-    images.value = [itemStore.getItemImageURL()]
-  } else {
-    images.value = ['https://via.placeholder.com/500x400?text=No+Image+Available']
-  }
+  const urls = itemStore.getImageUrls();
+  images.value = urls.length > 0 ? urls : ['/default-image.png'];
 
-  itemLoaded.value = true
+  itemLoaded.value = true;
 }
 
 const statusClass = computed(() => {

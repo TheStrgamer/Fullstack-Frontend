@@ -14,7 +14,7 @@ export const useItemStore = defineStore("item", {
     categoryName: "",
     conditionName: "",
     size: "",
-    itemImageURL: "",
+    imageUrls: [] as string[],
     created_at: "",
     updated_at: "",
     latitude: 0.0,
@@ -50,7 +50,7 @@ export const useItemStore = defineStore("item", {
       this.size = size;
     },
     setItemImageURL(url: string) {
-      this.itemImageURL = url;
+      this.imageUrls = url ? [url] : [];
     },
     setCreatedAt(date: string) {
       this.created_at = date;
@@ -93,8 +93,8 @@ export const useItemStore = defineStore("item", {
     getSize() {
       return this.size;
     },
-    getItemImageURL() {
-      return this.itemImageURL;
+    getImageUrls() {
+      return this.imageUrls;
     },
     getCreatedAt() {
       console.log("Created at:", this.created_at);
@@ -122,7 +122,7 @@ export const useItemStore = defineStore("item", {
       this.categoryName = "";
       this.conditionName = "";
       this.size = "";
-      this.itemImageURL = "";
+      this.imageUrls = [];
       this.created_at = "";
       this.updated_at = "";
       this.latitude = 0.0;
@@ -140,7 +140,7 @@ export const useItemStore = defineStore("item", {
       categoryName?: any;
       conditionName?: any;
       size?: string;
-      itemImageURL?: string;
+      imageUrls?: string[] | string;
       created_at?: string;
       updated_at?: string;
       latitude?: number;
@@ -155,7 +155,13 @@ export const useItemStore = defineStore("item", {
       if (item.categoryName !== undefined) this.categoryName = item.categoryName;
       if (item.conditionName !== undefined) this.conditionName = item.conditionName;
       if (item.size !== undefined) this.size = item.size;
-      if (item.itemImageURL !== undefined) this.itemImageURL = item.itemImageURL;
+      if (Array.isArray(item.imageUrls)) {
+        this.imageUrls = item.imageUrls;
+      } else if (typeof item.imageUrls === 'string' && item.imageUrls !== '') {
+        this.imageUrls = [item.imageUrls];
+      } else {
+        this.imageUrls = [];
+      }
       if (item.created_at !== undefined) this.created_at = item.created_at;
       if (item.updated_at !== undefined) this.updated_at = item.updated_at;
       if (item.latitude !== undefined) this.latitude = item.latitude;
@@ -177,6 +183,15 @@ export const useItemStore = defineStore("item", {
     fetchItem(itemId: string) {
         itemServices().fetchItemFromAPI(itemId)
         .then((item: any) => {
+          console.log("Fetched item from backend:", item);
+          // Sett itemImageURL til første bilde eller tom streng
+          if (item.images?.length > 0) {
+            item.itemImageURL = `http://localhost:8080/images/${item.images[0].filename}`;
+            item.imageUrls = item.images.map((img: any) => `http://localhost:8080/images/${img.filename}`);
+          } else {
+            item.itemImageURL = "";
+            item.imageUrls = []; // viktig!
+          }
           this.setItem(item);
         })
         .catch((error: any) => {
