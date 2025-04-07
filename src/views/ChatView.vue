@@ -12,6 +12,7 @@
   import MessageListComponent from '@/components/chat/MessagesListComponent.vue';
   import ChatListComponent from '@/components/chat/ChatListComponent.vue';
   import { fetchActiveChats, fetchConversation } from '@/services/chatService.ts';
+  import { useRoute } from 'vue-router';
   
   interface Chat {
     id: number;
@@ -32,15 +33,24 @@
     picture: string;
     messages: Message[];
   }
-  
-  let chatId = ref(0);
-  let chats = ref<Chat[]>([]);
+  const route = useRoute();
   let isOnMessageWindow = ref(false);
+
+  let chatId = ref(0);
+  
+  let chats = ref<Chat[]>([]);
   const isMobile = ref(window.innerWidth <= 850);
   const token = sessionStorage.getItem('jwtToken') || '';
   
   onMounted(async () => {
     try {
+      if (route.params.chatId) {
+        chatId.value = Number(route.params.chatId);
+        isOnMessageWindow.value = true;
+      } else {
+        chatId.value = 0;
+        isOnMessageWindow.value = false;
+      }   
       const token = sessionStorage.getItem('jwtToken') || '';
       chats.value = await fetchActiveChats(token);
       console.log('Fetched chats:', chats.value);

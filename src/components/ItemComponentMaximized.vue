@@ -40,13 +40,18 @@
       <p>Opprettet: {{ itemStore.getCreatedAt() }}</p>
       <p>Oppdatert: {{ itemStore.getUpdatedAt() }}</p>
     </div>
+    <button class="negotiate-button" @click="negotiate">
+      Negotiate
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue'
+import router from '@/router';
 import { useRoute } from 'vue-router'
 import { useItemStore } from '../stores/ItemStore.ts'
+import { startConversation } from '@/services/chatService.ts'
 
 const route = useRoute()
 const itemId = route.query.id as string
@@ -78,6 +83,22 @@ function nextImage() {
 function prevImage() {
   currentImageIndex.value =
     (currentImageIndex.value - 1 + images.value.length) % images.value.length
+}
+
+function negotiate() {
+  const token = sessionStorage.getItem('jwtToken') || ''
+  const listingId = Number(itemId)
+  startConversation(listingId, token)
+    .then((response) => {
+      console.log('Conversation started:', response, ". redirecting to chat")
+      router.push({
+        name: 'chat',
+        params: { chatId: response },
+      })
+    })
+    .catch((error) => {
+      console.error('Error starting conversation:', error)
+    })
 }
 </script>
 

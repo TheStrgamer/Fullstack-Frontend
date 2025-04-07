@@ -88,3 +88,18 @@ function formatTimestamp(datetimeStr: string): string {
     hour12: false,
   });
 }
+
+export async function startConversation(listingId: number, token: string) {
+    try {
+        const response = await axios.post(API_URL + `negotiation/chat/createFromListing/${listingId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+        throw error;
+    }
+}
+

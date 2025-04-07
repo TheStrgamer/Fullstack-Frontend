@@ -51,6 +51,12 @@ const router = createRouter({
       meta: { requiresLogin: true }
     },
     {
+      path: "/chats/:chatId",
+      name: "chat",
+      component: ChatView,
+      meta: { requiresLogin: true }
+    },
+    {
       path: "/:pathMatch(.*)*", 
       component: NotFound 
     },
