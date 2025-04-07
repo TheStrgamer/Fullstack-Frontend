@@ -181,7 +181,7 @@ export const useItemStore = defineStore("item", {
         })
         .catch((error: any) => {
           console.error(error);
-        });
+      });
     }
   }
 });
