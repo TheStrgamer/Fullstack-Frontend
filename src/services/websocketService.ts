@@ -16,7 +16,7 @@ export class WebSocketService {
       };
   
       this.socket.onmessage = (event) => {
-        console.log("Message received:", event.data);
+        //console.log("Message received:", event.data);
         const message = JSON.parse(event.data);
         this.messages.push(message);
         if (this.onMessageCallback) {
@@ -49,7 +49,6 @@ export class WebSocketService {
       }
     }
   
-    // Set callback for receiving messages
     onMessage(callback: (message: any) => void) {
       this.onMessageCallback = callback;
     }

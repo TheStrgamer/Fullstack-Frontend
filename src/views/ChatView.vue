@@ -2,7 +2,7 @@
   <Navbar />
   <div class="chat-page">
     <ChatListComponent v-if="renderChatList" :chats="chats" :isMobile="isMobile" @clicked="swapMessages" />
-    <MessageListComponent v-if="renderMessages" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :myAvatar="''" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList" />
+    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :myAvatar="''" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList" />
   </div>
 </template>
   
@@ -13,6 +13,7 @@
   import ChatListComponent from '@/components/chat/ChatListComponent.vue';
   import { fetchActiveChats, fetchConversation } from '@/services/chatService.ts';
   import { useRoute } from 'vue-router';
+  import  router  from '@/router';
   
   interface Chat {
     id: number;
@@ -53,7 +54,6 @@
       }   
       const token = sessionStorage.getItem('jwtToken') || '';
       chats.value = await fetchActiveChats(token);
-      console.log('Fetched chats:', chats.value);
     } catch (error) {
       console.warn('Using mock data due to fetch error');
       console.error(error);
@@ -71,7 +71,6 @@
   watch(chatId, async (newChatId) => {
     try {
       messages.value = await getChatData(newChatId);
-      console.log('Fetched new messages:', messages.value);
     } catch (error) {
       console.warn('Using mock data due to fetch error');
       console.error(error);
@@ -87,6 +86,7 @@
   }
   
   function openChatList() {
+    router.push({ name: 'chats' });
     chatId.value = 0;
     isOnMessageWindow.value = false;
   }

@@ -15,7 +15,7 @@
         :name="message.sentByMe ? 'You' : name"
       />
     </div>
-    <div class="message-list-footer">
+    <div class="message-list-footer" v-if ="chatId !== 0">
       <input 
         type="text" 
         placeholder="Type a message..." 
@@ -91,10 +91,14 @@ export default defineComponent({
     const messageInput = ref('');
     const wsService = new WebSocketService(`ws://localhost:8080/ws/chat/${props.chatId}?token=${props.token}`);
     onMounted(() => {
-      wsService.connect();
-      wsService.onMessage((newMessage: Message) => {
-        allmessages.value.push(newMessage);
-      });
+      if (props.chatId !== 0){
+        wsService.connect();
+        wsService.onMessage((newMessage: Message) => {
+          allmessages.value.push(newMessage);
+        });
+      } else {
+        console.warn('No chatId provided, WebSocket connection not established.');
+      }
     });
 
     function sendMessage() {
