@@ -3,6 +3,7 @@ import HomeView from '../views/Main.vue'
 import NotFound from '../views/NotFound.vue'
 import Login from '../views/Login.vue'
 import Register from '@/views/Register.vue'
+import GeoCoding from '@/components/GeoCodingComponent.vue'
 import Profile from '../views/Profile.vue'
 import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
@@ -19,6 +20,12 @@ const router = createRouter({
     {
       path: "/login",
       component: Login
+    },
+    {
+      path: "/geocoding",
+      name: "geocoding",
+      component: GeoCoding,
+      
     },
     {
       path: "/logout",
