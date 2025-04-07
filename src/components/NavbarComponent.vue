@@ -1,6 +1,9 @@
 <template>
   <header :class="['navbar', { open: isMenuOpen }]">
-    <router-link to="/" class="home-link">Home</router-link> 
+    <router-link to="/" class="logo-container">
+    <img src="/Logo-ferdig.png" alt="Logo" class="logo-icon" />
+    <img src="/Grønttorget-ferdig.png" alt="Grønttorget" class="logo-text" />
+    </router-link>
 
     <!-- Hamburger toggle (hidden on larger screens) -->
     <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu"> 

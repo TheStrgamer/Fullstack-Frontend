@@ -24,7 +24,7 @@
     position: sticky; /* does this make the navbar stay at the top? idk */
   }
   
-  .navbar a {
+  .navbar a:not(.logo-container) {
     color: var(--button-text);
     text-decoration: none;
     padding: 10px;
@@ -34,16 +34,35 @@
     border-radius: 8px;
   }
   
-  .home-link {
-    flex-shrink: 0;
-    color: var(--button-text);
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     text-decoration: none;
-    padding: 10px;
-    background-color: var(--button);
-    border-radius: 8px;
-    min-width: 100px;
-    text-align: center;
-    display: inline-block;
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .logo-container img {
+    display: block;
+  }
+  
+  .logo-icon {
+    height: 45px;
+  }
+  
+  .logo-text {
+    display: none !important; /* skjul tekst-logo på små skjermer */
+  }
+  
+  /* Vis tekst-logo fra tablet og opp */
+  @media (min-width: 768px) {
+    .logo-text {
+      display: block !important;
+      height: 35px;
+      margin-top: 10px;
+    }
   }
   
   .nav-links {
