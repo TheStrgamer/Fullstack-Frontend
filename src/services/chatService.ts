@@ -22,7 +22,7 @@ interface MessageList {
   messages: Message[];
 }
 
-export async function fetchActiveChats(token: string): Promise<Chat[]> {
+export async function fetchActiveChats(): Promise<Chat[]> {
   try {
     const response = await fetchDataWithAuth('negotiation/chat/my_chats');
 
@@ -46,7 +46,7 @@ export async function fetchActiveChats(token: string): Promise<Chat[]> {
   }
 }
 
-export async function fetchConversation(chatId: number, token: string): Promise<MessageList> {
+export async function fetchConversation(chatId: number): Promise<MessageList> {
   try {
     const response = await fetchDataWithAuth(`negotiation/chat/${chatId}`);
 
@@ -82,7 +82,7 @@ function formatTimestamp(datetimeStr: string): string {
   });
 }
 
-export async function startConversation(listingId: number, token: string) {
+export async function startConversation(listingId: number) {
     try {
         const response = await postDataWithAuth(`negotiation/chat/createFromListing/${listingId}`, {});
         return response.data;
