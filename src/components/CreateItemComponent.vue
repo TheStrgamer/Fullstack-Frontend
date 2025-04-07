@@ -1,32 +1,36 @@
 <template>
   <div>
     <h1 class="title">Create new listing</h1>
-    <form class="create-item-form" @submit="handleSubmit">
+    <form class="create-item-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="title">Title</label>
-        <input type="text" id="title" name="title" required />
+        <input v-model="listing.title" type="text" id="title" required />
       </div>
 
       <div class="form-group">
         <label for="brief_description">Brief description</label>
-        <textarea id="brief_description" name="brief_description" required></textarea>
+        <textarea v-model="listing.brief_description" id="brief_description" required></textarea>
       </div>
 
       <div class="form-group">
         <label for="full_description">Long Description</label>
-        <textarea id="full_description" name="full_description" required></textarea>
+        <textarea v-model="listing.full_description" id="full_description" required></textarea>
       </div>
 
       <div class="form-group">
         <label for="price">Price</label>
-        <input type="number" id="price" name="price" step="0.01" required />
+        <input v-model="listing.price" type="number" id="price" step="0.01" required />
       </div>
 
       <div class="form-group">
         <label for="category">Category</label>
-        <select id="category" name="category" required>
-          <option value="" disabled selected>Select a category</option>
-          <option v-for="category in categoriesStore.categories" :key="category.id" :value="category.id">
+        <select v-model="listing.category" required>
+          <option value="" disabled>Select a category</option>
+          <option
+            v-for="category in categoriesStore.categories"
+            :key="category.id"
+            :value="category.id.toString()"
+          >
             {{ category.name }}
           </option>
         </select>
@@ -34,9 +38,13 @@
 
       <div class="form-group">
         <label for="condition">Condition</label>
-        <select id="condition" name="condition" required>
-          <option value="" disabled selected>Select a condition</option>
-          <option v-for="condition in conditionStore.conditions" :key="condition.id" :value="condition.id">
+        <select v-model="listing.condition" required>
+          <option value="" disabled>Select a condition</option>
+          <option
+            v-for="condition in conditionStore.conditions"
+            :key="condition.id"
+            :value="condition.id.toString()"
+          >
             {{ condition.name }}
           </option>
         </select>
@@ -44,17 +52,14 @@
 
       <div class="form-group">
         <label for="size">Size (optional)</label>
-        <input type="text" id="size" name="size" />
+        <input v-model="listing.size" type="text" id="size" />
       </div>
 
       <div class="form-group">
-        <label for="latitude">Latitude</label>
-        <input type="text" id="latitude" name="latitude" />
-      </div>
-
-      <div class="form-group">
-        <label for="longitude">Longitude</label>
-        <input type="text" id="longitude" name="longitude" />
+        <label for="Address">Address</label>
+        <AutoCompleteAddressSearchComponent
+          v-model:address="listing.address"
+        />
       </div>
 
       <button type="submit">Submit</button>
@@ -62,17 +67,44 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { useCategoriesStore } from '@/stores/CategoriesStore.ts'
 import { useConditionStore } from '@/stores/ConditionStore.ts'
 import { useItemStore } from '@/stores/ItemStore.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive } from 'vue'
+import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
+import { addressToCoords }  from '@/services/geoCodingService'
 
 const categoriesStore = useCategoriesStore();
 const conditionStore = useConditionStore();
 const itemStore = useItemStore();
 const userStore = useUserStore();
+
+// Form Data
+const listing = reactive({
+  title: '',
+  brief_description: '',
+  full_description: '',
+  price: '',
+  category: '',
+  condition: '',
+  size: '',
+  address: '',
+})
+
+Object.assign(listing, {
+  title: '',
+  brief_description: '',
+  full_description: '',
+  price: '',
+  category: '',
+  condition: '',
+  size: '',
+  address: '',
+});
+
 
 onMounted(async () => {
   await categoriesStore.fetchCategories();
@@ -80,35 +112,40 @@ onMounted(async () => {
 });
 
 // Handle form submission
-const handleSubmit = async (event: Event) => {
-  event.preventDefault();
+const handleSubmit = async () => {
 
-  const form = event.target as HTMLFormElement;
-  const formData = new FormData(form);
+  // const category = categoriesStore.categories.find(cat => cat.id.toString() === category.value);
+  // const condition = conditionStore.conditions.find(cond => cond.id.toString() === condition.value);
+  const geoData = await addressToCoords(listing.address);
 
-  const categoryId = formData.get('category') as string;
-  const conditionId = formData.get('condition') as string;
+const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
+const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
 
-  const category = categoriesStore.categories.find(cat => cat.id.toString() === categoryId);
-  const condition = conditionStore.conditions.find(cond => cond.id.toString() === conditionId);
+
+  const selectedCategory = categoriesStore.categories.find(
+    (cat) => cat.id.toString() === listing.category
+  )
+  const selectedCondition = conditionStore.conditions.find(
+    (cond) => cond.id.toString() === listing.condition
+  )
 
   const itemData = {
-    title: formData.get('title') as string,
-    brief_description: formData.get('brief_description') as string,
-    full_description: formData.get('full_description') as string,
-    price: parseFloat(formData.get('price') as string) || 0,
-    category: category,
-    condition: condition,
-    size: formData.get('size') as string || "",
-    sale_status: "available",
-    latitude: parseFloat(formData.get('latitude') as string) || 0,
-    longitude: parseFloat(formData.get('longitude') as string) || 0,
-  };
+    title: listing.title,
+    brief_description: listing.brief_description,
+    full_description: listing.full_description,
+    price: parseFloat(listing.price || '0'),
+    category: selectedCategory,
+    condition: selectedCondition,
+    size: listing.size || '',
+    sale_status: 'available',
+    latitude: lat,
+    longitude: long
+  }
 
   try {
     itemStore.createItemListing(itemData);
 
-    form.reset();
+    // form.reset();
   } catch (error) {
     console.error('Failed to create item:', error);
   }

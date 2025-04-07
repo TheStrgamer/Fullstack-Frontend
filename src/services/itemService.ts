@@ -66,8 +66,8 @@ export function itemServices() {
       const response = await fetch("http://localhost:8080/api/listings/create", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${sessionStorage.getItem("jwtToken")}`,
+          "Authorization": `Bearer ${userStore.jwtToken}`,
+          "Content-Type": "application/json"
         },
         body: JSON.stringify(formattedItem),
       });
