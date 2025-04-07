@@ -7,10 +7,15 @@
 * accent: bruk til å ramme inn innhold(f. eks. nav-bar)
  */
 :root {
-  --primary: #4A6B4F;
-  --secondary: #B49572;
-  --background: #f6f4e8;
-  --accent: #C3D1AC;
+  --primary: #2E4732; /*(mørk skoggrønn – knapper, CTA)*/
+
+  --secondary: #B9956D; /*(varm brunbeige – avbryt, nøytrale handlinger)*/
+
+  --background: #F4F1E6; /*(kremfarget base)*/
+
+  --accent: #A3BA91; /*(salviegrønn – borders, hover, ikoner)*/
+
+  --text1: #1E1E1E; /*(dyp grå for kontrast)*/
 
 
   --white: #ffffff;
@@ -20,7 +25,7 @@
 
 /* Item colors */
 :root {
-  --text: var(--black);
+  --text: var(--text);
   --button: var(--primary);
   --button-text: var(--white);
 
