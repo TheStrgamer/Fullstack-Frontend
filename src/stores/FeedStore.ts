@@ -15,7 +15,7 @@ export const useFeedStore = defineStore("feed", {
       const userStore = useUserStore();
       try {
         if (userStore.isAuthenticated()) {
-          this.recommendedItems = await fetchRecommendedItems(count, userStore.jwtToken);
+          this.recommendedItems = await fetchRecommendedItems(count);
         } else {
           this.recommendedItems = await fetchRandomItems(count);
         }
