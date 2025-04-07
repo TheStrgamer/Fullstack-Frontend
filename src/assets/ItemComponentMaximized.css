@@ -90,7 +90,7 @@
   }
   
   .item-price-pill {
-    background-color: var(--primary);
+    background-color: var(--button);
     color: var(--button-text);
     padding: 6px 12px;
     border-radius: 8px;

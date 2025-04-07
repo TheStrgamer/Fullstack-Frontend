@@ -33,13 +33,13 @@
   .item-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--text);
+    color: var(--text1);
     margin: 0;
   }
   
   /* Price pill styled like navbar Home button */
   .item-price-pill {
-    background-color: var(--primary);
+    background-color: var(--button);
     color: var(--button-text);
     padding: 4px 10px;
     border-radius: 8px;
@@ -51,7 +51,7 @@
   /* Description below the row */
   .item-description {
     font-size: 0.95rem;
-    color: #555;
+    color: var(--text1);
     margin: 0;
     padding-top: 6px;
     word-wrap: break-word;
