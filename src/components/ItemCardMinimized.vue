@@ -1,20 +1,24 @@
 <template>
   <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
-      <img class="item-image" :src="item.imageUrl" :alt="item.title" />
-      
+      <img
+        v-if="item.imagePath"
+        class="item-image"
+        :src="getImageUrl(item.imagePath)"
+        :alt="item.title"
+      />
+
       <div class="item-info-row">
         <h3 class="item-title">{{ item.title }}</h3>
         <span class="item-price-pill">{{ item.price }} kr</span>
       </div>
-      
-      <p class="item-description">{{ item.brief_description }}</p>
+
+      <p class="item-description">{{ item.briefDescription }}</p>
     </div>
   </router-link>
 </template>
 
 <script setup lang="ts">
-
 defineProps({
   item: {
     type: Object,
@@ -23,11 +27,18 @@ defineProps({
       id: '',
       title: '',
       price: '',
-      imageUrl: '',
-      brief_description: ''
+      imagePath: '',
+      briefDescription: ''
     })
   }
 });
+
+// Genererer full URL til bildet
+function getImageUrl(imagePath: string) {
+  if (!imagePath) return '/fallback.png';
+  const cleanPath = imagePath.replace(/^\/+/, '');
+  return `http://localhost:8080/${cleanPath}`;
+}
 </script>
 
 <style>
