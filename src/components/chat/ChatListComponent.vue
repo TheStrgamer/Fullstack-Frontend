@@ -11,6 +11,7 @@
           :timestamp="chat.timestamp"
           @click="onChatClick(chat.id)"
         />
+        <h2 class="chat-list-title" v-if="chats.length === 0">You have no active chats</h2>
     </div>
 </template>
   
