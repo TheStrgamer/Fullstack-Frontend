@@ -54,9 +54,8 @@
       }   
       chats.value = await fetchActiveChats();
     } catch (error) {
-      console.warn('Using mock data due to fetch error');
-      console.error(error);
-      chats.value = mockChats();
+        
+      chats.value = []
     }
   });
   

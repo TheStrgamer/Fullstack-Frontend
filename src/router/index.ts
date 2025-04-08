@@ -9,7 +9,9 @@ import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
+import AdminPanelView from '@/views/AdminPanelView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
+import { isUserAdmin } from '../services/httpService.ts'
 
 
 const router = createRouter({
@@ -61,6 +63,12 @@ const router = createRouter({
       meta: { requiresLogin: true } 
     },
     {
+      path: "/admin",
+      name: "admin",
+      component: AdminPanelView,
+      meta: { requiresAdmin: true }
+    },
+    {
       path: "/Item",
       name: "Item",
       component: ItemMaximized,
@@ -91,11 +99,17 @@ const router = createRouter({
 })
 
 // For routes that require the user to be logged in
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresLogin && !useUserStore().isAuthenticated()) {
     console.warn("User is not authenticated, redirecting to login");
     next("/login");
-  } else {
+  } else if (to.meta.requiresAdmin && !await isUserAdmin()) {
+    console.warn("User is not admin, redirecting to home");
+    const url = "https://i.pinimg.com/originals/44/0f/ba/440fbafa6d3a0b4a673636037b937192.gif";
+    window.location.href = url;
+    next("/");
+  }
+   else {
     next();
   }
 });

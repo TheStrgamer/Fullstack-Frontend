@@ -109,3 +109,14 @@ async function logoutIfTokenInvalid() {
         userStore.logout();
     }
 }
+
+export async function isUserAdmin() {
+  try {
+    const response = await fetchDataWithAuth("admin/amIAdmin");
+    sessionStorage.setItem("isAdmin", response.data);
+    return response.data;
+  } catch (error) {
+    sessionStorage.setItem("isAdmin", "false");
+    return false;
+  }
+}
