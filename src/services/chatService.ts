@@ -1,5 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8080/api/';
+import { fetchDataWithAuth, postDataWithAuth } from './httpService';
+
 
 interface Chat {
   id: number;
@@ -21,13 +22,9 @@ interface MessageList {
   messages: Message[];
 }
 
-export async function fetchActiveChats(token: string): Promise<Chat[]> {
+export async function fetchActiveChats(): Promise<Chat[]> {
   try {
-    const response = await axios.get(API_URL + 'negotiation/chat/my_chats', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetchDataWithAuth('negotiation/chat/my_chats');
 
     return response.data.map((item: any) => ({
       id: item.id,
@@ -49,13 +46,9 @@ export async function fetchActiveChats(token: string): Promise<Chat[]> {
   }
 }
 
-export async function fetchConversation(chatId: number, token: string): Promise<MessageList> {
+export async function fetchConversation(chatId: number): Promise<MessageList> {
   try {
-    const response = await axios.get(API_URL + `negotiation/chat/${chatId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetchDataWithAuth(`negotiation/chat/${chatId}`);
 
     const chatData = response.data;
     const formattedMessages = chatData.messages.map((msg: any) => ({
@@ -89,13 +82,9 @@ function formatTimestamp(datetimeStr: string): string {
   });
 }
 
-export async function startConversation(listingId: number, token: string) {
+export async function startConversation(listingId: number) {
     try {
-        const response = await axios.post(API_URL + `negotiation/chat/createFromListing/${listingId}`, {}, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await postDataWithAuth(`negotiation/chat/createFromListing/${listingId}`, {});
         return response.data;
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);

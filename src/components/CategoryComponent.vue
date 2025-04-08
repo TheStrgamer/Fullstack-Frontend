@@ -1,18 +1,22 @@
 <template>
     <div class="category-wrapper">
+
       <button class="category-toggle" @click="toggleMenu" aria-label="Vis kategorier">
         ☰ Kategorier
       </button>
   
-      <ul class="category-list" v-show="menuOpen || isWideScreen">
-        <li v-for="category in categories" :key="category" @click="selectCategory(category)">
-          {{ category }}
-        </li>
+      <ul class="category-list" v-if="menuOpen || isWideScreen">
+        <FadeInComponent :duration="100 + 50*index" :direction="'top'" v-for="(category, index) in categories" :key="category">
+          <li @click="selectCategory(category)">
+            {{ category }}
+          </li>
+        </FadeInComponent>
       </ul>
     </div>
   </template>
   
   <script setup lang="ts">
+  import FadeInComponent from './FadeInComponent.vue'
   import { ref, onMounted } from 'vue'
   
   const menuOpen = ref(false)

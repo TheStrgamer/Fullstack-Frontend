@@ -90,9 +90,8 @@
 
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
-    import axios from 'axios';
     import CustomButton from './CustomButton.vue';
-    import { useUserStore} from '../stores/UserStore'
+    import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
 
     import defaultProfileImage from '@/assets/universal/images/defaultImage.jpg';
 
@@ -100,10 +99,6 @@
     // edit toggle
     const editToggle = ref(false);
     // const editToggle = ref(true);
-
-    // token
-    const userStore = useUserStore();
-    const token = userStore.jwtToken;
 
     // user values
     const imgFile = ref('');
@@ -172,13 +167,7 @@
         formData.append('image', imgFile.value);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/users/upload-profile-image', formData, {
-            headers: {
-                Authorization: `Bearer ${userStore.jwtToken}`,
-                'Content-Type': 'multipart/form-data',
-            },
-            });
-
+            const response = await postDataWithAuth("users/upload-profile-image", formData);
             if (response.status === 200) {
             console.log('Image uploaded successfully');
             // Optional: update profile picture preview
@@ -192,12 +181,8 @@
 
     async function getProfileInfo() {
         try {
-            const response = await axios.get(`http://localhost:8080/api/users/my_account`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
-            // console.log("responsedata", response.data);
+            const response = await fetchDataWithAuth("users/my_account");
+            console.log(response.data);
             return response.data;
         } catch (error) {
             console.error("Error loading profile: ", error);
@@ -227,18 +212,14 @@
     async function onEdit() {
         try {
             console.log("Editing profile");
-            const response = await axios.post("http://localhost:8080/api/users/update",
-            {
-                firstname: inputFirstName.value,
-                surname: inputLastName.value,
-                email: inputEmail.value,
-                phonenumber: inputPhonenumber.value
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
-            });
+            const payload = {
+            firstname: inputFirstName.value,
+            surname: inputLastName.value,
+            email: inputEmail.value,
+            phonenumber: inputPhonenumber.value
+            };
+
+            const response = await postDataWithAuth("users/update", payload);
             if (response.status == 200) {
                 console.log("Updated user succesfully");
                 setUserValueFields();
@@ -254,7 +235,7 @@
         if (!imagePath) return defaultProfileImage;
 
         const cleanPath = imagePath.replace(/^\/+/, '');
-        return `http://localhost:8080/${cleanPath}`;
+        return getUrlFromEndpoint(cleanPath);
     }
 
 

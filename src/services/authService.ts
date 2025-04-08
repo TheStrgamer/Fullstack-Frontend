@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { postDataWithoutAuth } from './httpService';
 
 interface TokenResponse {
   token: string;
@@ -7,7 +8,7 @@ interface TokenResponse {
 
 export async function getJwtToken(email: string, password: string): Promise<TokenResponse> {
   try {
-    const response = await axios.post('http://localhost:8080/api/users/login', {
+    const response = await postDataWithoutAuth('users/login', {
       email: email,
       password: password
     });

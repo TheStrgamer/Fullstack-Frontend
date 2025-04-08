@@ -1,45 +1,23 @@
 import { useUserStore } from '@/stores/UserStore.ts'
+import { fetchDataWithoutAuth, postDataWithAuth } from './httpService';
 
 export function itemServices() {
   const userStore = useUserStore();
 
   async function fetchItemFromAPI(itemId: string) {
-    const response = await fetch(`http://localhost:8080/api/listings/id/${itemId}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    if (!response.ok) {
-      throw new Error("Error fetching item");
-    }
-    return response.json();
+    const response = await fetchDataWithoutAuth(`listings/id/${itemId}`);
+
+    return response.data
   }
 
   async function fetchConditionsFromAPI() {
-    const response = await fetch("http://localhost:8080/api/listings/conditions", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    if (!response.ok) {
-      throw new Error("Error fetching conditions");
-    }
-    return response.json();
+    const response = await fetchDataWithoutAuth("listings/conditions");
+    return response.data;
   }
 
   async function fetchCategoriesFromAPI() {
-    const response = await fetch("http://localhost:8080/api/listings/categories", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      }
-    });
-    if (!response.ok) {
-      throw new Error("Error fetching categories");
-    }
-    return response.json();
+    const response = await fetchDataWithoutAuth("listings/categories");
+    return response.data;
   }
 
   async function createItem(item: any) {
@@ -62,22 +40,10 @@ export function itemServices() {
       };
 
       console.log("Sending formatted item to server:", formattedItem);
+      const response = await postDataWithAuth("listings/create", formattedItem);
 
-      const response = await fetch("http://localhost:8080/api/listings/create", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${userStore.jwtToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formattedItem),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Server error response:", errorText);
-        throw new Error(`Error creating item: ${response.status} - ${errorText}`);
-      }
-      return response.json();
+      return response.data;
+  
     } catch (error) {
       console.error("Error creating item:", error);
       throw error;

@@ -1,4 +1,5 @@
 <template>
+  <FadeInComponent :duration="400" :direction="'bottom'">
   <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
       <img
@@ -16,9 +17,13 @@
       <p class="item-description">{{ item.briefDescription }}</p>
     </div>
   </router-link>
+  </FadeInComponent>
 </template>
 
 <script setup lang="ts">
+import { getUrlFromEndpoint } from '@/services/httpService';
+import FadeInComponent from './FadeInComponent.vue';
+
 defineProps({
   item: {
     type: Object,
@@ -37,7 +42,7 @@ defineProps({
 function getImageUrl(imagePath: string) {
   if (!imagePath) return '/fallback.png';
   const cleanPath = imagePath.replace(/^\/+/, '');
-  return `http://localhost:8080/${cleanPath}`;
+  return getUrlFromEndpoint(cleanPath);
 }
 </script>
 
