@@ -1,0 +1,124 @@
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 100%;
+    flex-grow: 1;
+    border-left: 4px solid var(--secondary);
+    height: 95%;
+
+}
+
+.message-list-item-content {
+    background-color: var(--white);
+    border-radius: 8px;
+    margin: 8px 0;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 60%;
+}
+
+.message-list-items {
+    height: 75%;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.message-container {
+    display: flex;
+    margin: 10px 0;
+    flex-direction: column;
+}
+  
+.message-container.sent-by-me {
+    align-items: flex-start;
+}
+  
+.message-container:not(.sent-by-me) {
+    align-items: flex-end;
+}
+  
+.message-list-item-text {
+    color: var(--text);
+}
+ 
+.message-list-item-text h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0;
+}
+  
+.message-list-item-text p {
+    font-size: 14px;
+    color: var(--secondary);
+    margin: 4px 0 0 0;
+}
+
+.message-list-item:hover {
+    background-color: var(--accent);
+}
+  
+.message-list-item:hover .message-list-item-text h3 {
+    color: var(--primary);
+}
+  
+.message-list-item:hover .timestamp {
+    color: var(--primary);
+}
+
+.message-list-footer {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    margin-top: auto;
+
+}
+.message-list-footer input {
+    width: 80%;
+    height: 30px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid var(--secondary);
+    margin-right: 10px;
+}
+.message-list-footer button {
+    background-color: var(--button);
+    height: 40px;
+    color: var(--button-text);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.message-list-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    height: 50px;
+}
+  
+.message-list-header .message-list-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+  
+.message-list-header .back-button {
+    position: absolute;
+    left: 10px;
+    background-color: var(--button);
+    height: 40px;
+    color: var(--button-text);
+    padding: 0 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+  

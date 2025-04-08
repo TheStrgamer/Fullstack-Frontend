@@ -2,11 +2,19 @@
     <div class="my-account-page-container">
         <div class="profile-picture-edit">
             <h1>Account Information</h1>
-            <img class="profilePicture" src="../assets/universal/images/defaultImage.jpg" alt="No image Found">
+            <img class="profilePicture" :src="profilePictureUrl" alt="No image found" @error="profilePictureUrl = defaultProfileImage">
+
+            <v-file-input
+                v-model="imgFile"
+                chips
+                accept="image/*"
+                label="Image"
+                @change="handleEditProfilePicture"
+            />
             <CustomButton class="profile-edit-btn" 
                 title="Edit Profile Image" 
                 icon_path=""
-                @clicked="handleEditProfileClick"
+                @clicked="handleEditProfile"
             />
         </div>
         <div class="information-edit">
@@ -65,7 +73,7 @@
                         <p class="error-message">{{ phonenumberErrorMessage }}</p>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="cancel-btn" @click="handleEditProfileClick">Cancel</button>
+                        <button type="button" class="cancel-btn" @click="handleEditProfile">Cancel</button>
                         <button type="submit" class="submit-btn" :disabled="!canSaveChanges">Save Changes</button>
                     </div>
                 </form>
@@ -74,7 +82,7 @@
             <CustomButton class="profile-edit-btn" v-if="!editToggle"
                 title="Edit Profile" 
                 icon_path=""
-                @clicked="handleEditProfileClick"
+                @clicked="handleEditProfile"
             />
         </div>
     </div>
@@ -86,6 +94,9 @@
     import CustomButton from './CustomButton.vue';
     import { useUserStore} from '../stores/UserStore'
 
+    import defaultProfileImage from '@/assets/universal/images/defaultImage.jpg';
+
+
     // edit toggle
     const editToggle = ref(false);
     // const editToggle = ref(true);
@@ -95,10 +106,12 @@
     const token = userStore.jwtToken;
 
     // user values
+    const imgFile = ref('');
     const firstName = ref('');
     const lastName = ref('');
     const email = ref('');
     const phonenumber = ref('');
+    const profilePictureUrl = ref('');
 
 
     // input values
@@ -125,6 +138,8 @@
 
     async function setUserValueFields() {
         const userInfo = await getProfileInfo();
+        console.log("userInfo:", userInfo);
+
 
         if (!userInfo) return;
 
@@ -132,11 +147,12 @@
         lastName.value = userInfo.surname ?? '';
         email.value = userInfo.email ?? '';
         phonenumber.value = userInfo.phonenumber ?? '';
-
-
-        console.log("retrived user info");
+        profilePictureUrl.value = getImageUrl(userInfo.profilePicture);
+        console.log(profilePictureUrl.value);
     }
-    function handleEditProfileClick() {
+
+
+    function handleEditProfile() {
         editToggle.value = !editToggle.value;
         console.log("Edit profile: ", editToggle.value);
 
@@ -149,16 +165,39 @@
         }
     }
 
+    async function handleEditProfilePicture() {
+        if (!imgFile.value) return;
+
+        const formData = new FormData();
+        formData.append('image', imgFile.value);
+
+        try {
+            const response = await axios.post('http://localhost:8080/api/users/upload-profile-image', formData, {
+            headers: {
+                Authorization: `Bearer ${userStore.jwtToken}`,
+                'Content-Type': 'multipart/form-data',
+            },
+            });
+
+            if (response.status === 200) {
+            console.log('Image uploaded successfully');
+            // Optional: update profile picture preview
+            await setUserValueFields(); // or update image URL directly
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+        }
+    }
+
+
     async function getProfileInfo() {
         try {
-            const response = await axios.post("http://localhost:8080/api/users/my_account", 
-            {},
-            {
+            const response = await axios.get(`http://localhost:8080/api/users/my_account`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
             });
-            console.log(response.data);
+            // console.log("responsedata", response.data);
             return response.data;
         } catch (error) {
             console.error("Error loading profile: ", error);
@@ -203,12 +242,20 @@
             if (response.status == 200) {
                 console.log("Updated user succesfully");
                 setUserValueFields();
-                handleEditProfileClick();
+                handleEditProfile();
             }
 
         } catch (error) {
             console.error("Error editing profile: ", error);
         }
     }
+
+    function getImageUrl(imagePath: string) {
+        if (!imagePath) return defaultProfileImage;
+
+        const cleanPath = imagePath.replace(/^\/+/, '');
+        return `http://localhost:8080/${cleanPath}`;
+    }
+
 
 </script>

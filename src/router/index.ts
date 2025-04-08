@@ -8,6 +8,7 @@ import Profile from '../views/Profile.vue'
 import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
+import ChatView from '@/views/ChatView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 
 
@@ -63,6 +64,18 @@ const router = createRouter({
       path: "/Item",
       name: "Item",
       component: ItemMaximized,
+    },
+    {
+      path: "/chats",
+      name: "chats",
+      component: ChatView,
+      meta: { requiresLogin: true }
+    },
+    {
+      path: "/chats/:chatId",
+      name: "chat",
+      component: ChatView,
+      meta: { requiresLogin: true }
     },
     {
       path: "/createlisting",
