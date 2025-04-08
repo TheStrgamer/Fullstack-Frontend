@@ -90,10 +90,6 @@
     const editToggle = ref(false);
     // const editToggle = ref(true);
 
-    // token
-    const userStore = useUserStore();
-    const token = userStore.jwtToken;
-
     // user values
     const firstName = ref('');
     const lastName = ref('');
