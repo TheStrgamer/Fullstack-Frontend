@@ -44,7 +44,7 @@
       <p>Opprettet: {{ formatDate(itemStore.getCreatedAt()) }}</p>
       <p>Oppdatert: {{ formatDate(itemStore.getUpdatedAt()) }}</p>
     </div>
-    <button class="negotiate-button" @click="negotiate">
+    <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
       Negotiate
     </button>
   </div>
@@ -60,15 +60,19 @@ import router from '@/router';
 import { useRoute } from 'vue-router'
 import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
+import { useUserStore } from '@/stores/UserStore.ts'
 
 const route = useRoute()
 const itemId = route.query.id as string
 const itemStore = useItemStore()
+const userStore = useUserStore()
 const itemLoaded = ref(false)
 
 // Bildekarusell
 const images = ref<string[]>([])
 const currentImageIndex = ref(0)
+
+const isLoggedIn = computed(() => userStore.isAuthenticated());
 
 onMounted(async () => {
   try {
@@ -132,9 +136,8 @@ function prevImage() {
 }
 
 function negotiate() {
-  const token = sessionStorage.getItem('jwtToken') || ''
   const listingId = Number(itemId)
-  startConversation(listingId, token)
+  startConversation(listingId)
     .then((response) => {
       console.log('Conversation started:', response, ". redirecting to chat")
       router.push({

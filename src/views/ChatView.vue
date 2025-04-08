@@ -52,8 +52,7 @@
         chatId.value = 0;
         isOnMessageWindow.value = false;
       }   
-      const token = sessionStorage.getItem('jwtToken') || '';
-      chats.value = await fetchActiveChats(token);
+      chats.value = await fetchActiveChats();
     } catch (error) {
       console.warn('Using mock data due to fetch error');
       console.error(error);
@@ -138,8 +137,7 @@
           messages: []
         };
       }
-      const token = sessionStorage.getItem('jwtToken') || '';
-      const chatData = await fetchConversation(chatId, token);
+      const chatData = await fetchConversation(chatId);
       return chatData;
     } catch (error) {
       console.warn('Using mock data due to fetch error');

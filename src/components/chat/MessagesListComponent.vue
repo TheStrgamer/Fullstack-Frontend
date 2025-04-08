@@ -4,16 +4,22 @@
       <button v-if="isMobile" class="back-button" @click="$emit('return')"> < </button>
       <h2 class="message-list-title">{{ name }}</h2>
     </div>
-    <div class="message-list-items">
-      <ChatMessage
-        v-for="message in allmessages"
+    <div class="message-list-items" ref="messageList">
+      <FadeInComponent
+        v-for="(message, index) in allmessages"
         :key="message.id"
-        :user="message"
-        :message="message.message"
-        :timestamp="message.timestamp"
-        :avatar="message.sentByMe ? myAvatar : avatar"
-        :name="message.sentByMe ? 'You' : name"
-      />
+        :duration="200 + index * 50"
+        :direction="message.sentByMe ? 'right' : 'left'"
+        >
+        <ChatMessage
+          :key="message.id"
+          :user="message"
+          :message="message.message"
+          :timestamp="message.timestamp"
+          :avatar="message.sentByMe ? myAvatar : avatar"
+          :name="message.sentByMe ? 'You' : name"
+        />
+      </FadeInComponent>
     </div>
     <div class="message-list-footer" v-if ="chatId !== 0">
       <input 
@@ -29,9 +35,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch, onMounted, onUnmounted } from 'vue';
+import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
+import FadeInComponent from '@/components/FadeInComponent.vue';
 
 interface Message {
   id: number;
@@ -49,7 +56,8 @@ interface SendMessage {
 export default defineComponent({
   name: 'ChatMessagesComponent',
   components: {
-    ChatMessage
+    ChatMessage,
+    FadeInComponent
   },
   props: {
     messages: {
@@ -83,6 +91,7 @@ export default defineComponent({
   },
 
   setup(props) {
+    const messageList = ref<HTMLElement | null>(null);
     const allmessages = ref<Message[]>([]);
     watch(() => props.messages, (newMessages) => {
       allmessages.value = newMessages;
@@ -91,15 +100,25 @@ export default defineComponent({
     const messageInput = ref('');
     const wsService = new WebSocketService(`ws://localhost:8080/ws/chat/${props.chatId}?token=${props.token}`);
     onMounted(() => {
+      setTimeout(() => scrollToBottom(), 100);
       if (props.chatId !== 0){
         wsService.connect();
         wsService.onMessage((newMessage: Message) => {
           allmessages.value.push(newMessage);
+          scrollToBottom();
         });
       } else {
         console.warn('No chatId provided, WebSocket connection not established.');
       }
     });
+
+    function scrollToBottom() {
+      nextTick(() => {
+        if (messageList.value) {
+          messageList.value.scrollTop = messageList.value.scrollHeight;
+        }
+      });
+    }
 
     function sendMessage() {
       if (messageInput.value.trim() !== '') {
@@ -120,6 +139,7 @@ export default defineComponent({
         
         allmessages.value.push(newMessageParsed);
         messageInput.value = '';
+        scrollToBottom();
       }
     }
 
@@ -130,7 +150,8 @@ export default defineComponent({
     return {
       messageInput,
       sendMessage,
-      allmessages
+      allmessages,
+      messageList
     };
   }
 });

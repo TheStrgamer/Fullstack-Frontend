@@ -3,11 +3,17 @@
     <div v-if="feedItems.length === 0">
       <p style="text-align: center;">Ingen annonser å vise for øyeblikket.</p>
     </div>
-    <ItemCardMinimized
-      v-for="item in feedItems"
+    <FadeInComponent
+      v-for="(item, index) in feedItems"
       :key="item.id"
-      :item="item"
-    />
+      :duration="index * 100 + 200"
+      :direction="'bottom'"
+    >
+      <ItemCardMinimized
+        :item="item"
+        :key="item.id"
+      />
+    </FadeInComponent>
   </div>
 </template>
 
@@ -15,6 +21,7 @@
 import { ref, onMounted } from 'vue';
 import { useFeedStore } from '../stores/FeedStore.ts';
 import ItemCardMinimized from './ItemCardMinimized.vue';
+import FadeInComponent from './FadeInComponent.vue';
 
 // Define an interface for feed items
 interface FeedItem {

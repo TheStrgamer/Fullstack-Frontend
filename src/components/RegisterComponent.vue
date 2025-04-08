@@ -32,6 +32,7 @@
 
 <script lang="ts">
     import axios from 'axios';
+    import { postDataWithoutAuth } from '@/services/httpService';
     export default {
         name: 'RegisterComponent',
         data() {
@@ -160,7 +161,7 @@
                 }
                 console.log('registered with first name: ', this.firstName, 'last name: ', this.lastName, 'email: ', this.email, 'password: ', this.password, 'phonenumber: ', this.phonenumber)
                 try {
-                    const response = await axios.post('http://localhost:8080/api/users/register', {
+                    const response = await postDataWithoutAuth('users/register', {
                         email: this.email,
                         password: this.password,
                         firstname: this.firstName,
