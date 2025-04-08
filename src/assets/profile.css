@@ -1,8 +1,9 @@
 @import './base.css';
 
 .profilePicture {
-    width: 256px;
-
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
 
 }
 .profile_content_box {
@@ -78,6 +79,11 @@
 
 .form-buttons .cancel-btn {
     background-color: var(--secondary);
+}
+
+.information-edit .label-field {
+    border-bottom: solid 1px black;
+    margin-bottom: 10px;
 }
 
 
