@@ -46,13 +46,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 250px;
   }
   
   .item-image {
     width: 100%;
     border-radius: 12px;
-    object-fit: cover;
-    max-height: 400px;
+    object-fit: contain;
+    max-height: 250px;
   }
   
   .carousel-btn {
@@ -130,6 +131,24 @@
     font-size: 0.85rem;
     padding: 4px 8px;
     border-radius: 6px;
+  }
+
+  @media (min-width: 768px) {
+    .item-image {
+      max-height: 350px !important;
+    }
+  
+    .image-carousel {
+      height: 100%;
+    }
+  }
+    @media (min-width: 850px) {
+      .item-image {
+        max-height: 500px !important;
+      }
+    .image-carousel {
+      height: 100%;
+    }
   }
   
   
