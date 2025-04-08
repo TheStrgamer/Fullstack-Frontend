@@ -100,7 +100,7 @@ export default defineComponent({
     const messageInput = ref('');
     const wsService = new WebSocketService(`ws://localhost:8080/ws/chat/${props.chatId}?token=${props.token}`);
     onMounted(() => {
-      setTimeout(() => scrollToBottom(), 50);
+      setTimeout(() => scrollToBottom(), 100);
       if (props.chatId !== 0){
         wsService.connect();
         wsService.onMessage((newMessage: Message) => {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useUserStore } from "../stores/UserStore";
 
 const backendUrl = "http://localhost:8080/";
 const apiUrl = `${backendUrl}api/`;
@@ -25,6 +26,7 @@ export async function fetchDataWithAuth(endpoint: string, json: boolean = false)
     });
   } catch (error) {
     console.error("Error fetching data:", error);
+    logoutIfTokenInvalid();
     throw error;
   }
 }
@@ -61,6 +63,7 @@ export async function postDataWithAuth(endpoint: string, data: any) {
     return response;
   } catch (error) {
     console.error("Error posting data:", error);
+    logoutIfTokenInvalid()
     throw error;
   }
 }
@@ -78,4 +81,31 @@ export async function postDataWithoutAuth(endpoint: string, data: any) {
 
 export function getUrlFromEndpoint(endpoint: string) {
   return backendUrl + endpoint;
+}
+
+async function validateUserToken() {
+  try{
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+        console.error("No token found");
+        return false;
+    }
+    const response = await fetchDataWithAuth("users/validate");
+    if (response.status !== 200) {
+            console.error("Invalid token");
+            return false;
+    }
+    return response.data;
+  } catch (error) {
+    return false;
+  }
+}
+
+async function logoutIfTokenInvalid() {
+    const isValid = await validateUserToken();
+    if (!isValid) {
+        console.error("Token is not valid, logging out");
+        let userStore = useUserStore();
+        userStore.logout();
+    }
 }
