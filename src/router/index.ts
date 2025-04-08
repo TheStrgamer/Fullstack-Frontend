@@ -10,6 +10,7 @@ import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
 import AdminPanelView from '@/views/AdminPanelView.vue'
+import NuhUhView from '@/views/NuhUhView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
 
@@ -92,9 +93,15 @@ const router = createRouter({
       meta: { requiresLogin: true } 
     },
     {
+      path: "/nuh",
+      name: "nuh",
+      component: NuhUhView,
+      meta: { requiresLogin: true }
+    },
+    {
       path: "/:pathMatch(.*)*", 
       component: NotFound 
-    },
+    }
   ],
 })
 
@@ -105,9 +112,7 @@ router.beforeEach(async (to, from, next) => {
     next("/login");
   } else if (to.meta.requiresAdmin && !await isUserAdmin()) {
     console.warn("User is not admin, redirecting to home");
-    const url = "https://i.pinimg.com/originals/44/0f/ba/440fbafa6d3a0b4a673636037b937192.gif";
-    window.location.href = url;
-    next("/");
+    next("/nuh");
   }
    else {
     next();

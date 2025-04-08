@@ -153,6 +153,7 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+    overflow-x: auto;
 }
   
 .data-table th, .data-table td {
@@ -162,11 +163,14 @@
 }
   
 .data-table th {
-    background-color: #3d4954;
+    background-color: #505f6d;
     color: #f5f5f5;
 }
 .data-table tr {
     color: black;
+}
+.data-table th:hover {
+    background-color: #3d4954;
 }
 
 .action-btn {
