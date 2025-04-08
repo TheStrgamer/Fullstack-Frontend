@@ -30,3 +30,7 @@
   --button-text: var(--white);
 
 }
+
+button:hover {
+  background-color: var(--secondary);
+}

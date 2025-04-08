@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="title">Create new listing</h1>
-    <form class="create-item-form" @submit.prevent="handleSubmit">
+    <h1 class="title">Update Listing</h1>
+    <form class="update-item-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="title">Title</label>
         <input v-model="listing.title" type="text" id="title" required />
@@ -30,6 +30,7 @@
             v-for="category in categoriesStore.categories"
             :key="category.id"
             :value="category.id?.toString()"
+
           >
             {{ category.name }}
           </option>
@@ -44,6 +45,7 @@
             v-for="condition in conditionStore.conditions"
             :key="condition.id"
             :value="condition.id?.toString()"
+
           >
             {{ condition.name }}
           </option>
@@ -77,13 +79,21 @@ import { useUserStore } from '@/stores/UserStore.ts'
 import { onMounted, reactive } from 'vue'
 import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
 import { addressToCoords }  from '@/services/geoCodingService'
+import { useRoute } from 'vue-router';
+import axios from 'axios';
+import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
+
+const route = useRoute();
+const item_id = route.query.id;
 
 const categoriesStore = useCategoriesStore();
 const conditionStore = useConditionStore();
 const itemStore = useItemStore();
 const userStore = useUserStore();
 
-// Form Data
+const token = userStore.jwtToken;
+
+// Form Fields
 const listing = reactive({
   title: '',
   brief_description: '',
@@ -95,21 +105,32 @@ const listing = reactive({
   address: '',
 })
 
-Object.assign(listing, {
-  title: '',
-  brief_description: '',
-  full_description: '',
-  price: '',
-  category: '',
-  condition: '',
-  size: '',
-  address: '',
-});
+
 
 
 onMounted(async () => {
   await categoriesStore.fetchCategories();
   await conditionStore.fetchConditions();
+
+  try {
+    const response = await fetchDataWithAuth(`listings/id/${item_id}`)
+    console.log(response.data);
+    const data = response.data;
+    // data for item with id
+    Object.assign(listing, {
+      title: data.title,
+      brief_description: data.briefDescription,
+      full_description: data.fullDescription,
+      price: data.price,
+      category: data.categoryName || '',   // or lookup category ID if needed
+      condition: data.conditionName || '',  // or lookup condition ID
+      size: data.size || '',
+      address: '', // if you want to reverse geocode from lat/lng
+});
+
+  } catch (error) {
+    console.error(error);
+  }
 });
 
 // Handle form submission
@@ -154,5 +175,5 @@ const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
 </script>
 
 <style scoped>
-@import '../assets/createItem.css';
+@import '../assets/updateItem.css';
 </style>

@@ -1,6 +1,6 @@
 <template>
   <FadeInComponent :duration="400" :direction="'bottom'">
-  <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
+  <router-link :to="{ path: routePath, query: { id: item.id } }" class="no-link-style">
     <div class="item-card-minimized">
       <img
         v-if="item.imagePath"
@@ -35,6 +35,10 @@ defineProps({
       imagePath: '',
       briefDescription: ''
     })
+  },
+  routePath: {
+    type: String,
+    default: "/item"
   }
 });
 

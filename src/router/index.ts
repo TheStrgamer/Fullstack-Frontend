@@ -9,6 +9,8 @@ import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
+import MyListings from '@/views/MyListings.vue'
+import UpdateListing from '@/views/UpdateListing.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 
 
@@ -52,6 +54,17 @@ const router = createRouter({
       path: "/profile/my_account",
       component: MyAccount,
       meta: { requiresLogin: true } 
+    },
+    {
+      path: "/profile/my_listings",
+      component: MyListings,
+      meta: { requiresLogin: true }
+    },
+
+    {
+      path: "/profile/item/update",
+      component: UpdateListing,
+      meta: { requiresLogin: true}
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
