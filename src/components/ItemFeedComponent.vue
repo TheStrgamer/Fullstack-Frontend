@@ -32,7 +32,7 @@ const feedItems = ref<FeedItem[]>([]);
 
 onMounted(async () => {
   const feedStore = useFeedStore();
-  await feedStore.fetchRecommendedItems(10);
+  await feedStore.fetchRecommendedItems(20);
   feedItems.value = feedStore.getRecommendedItems;
 });
 </script>
