@@ -1,46 +1,25 @@
 import { useUserStore } from '@/stores/UserStore.ts'
-import { fetchDataWithoutAuth, postDataWithAuth, putDataWithAuth, deleteDataWithAuth } from './httpService';
+import { fetchDataWithoutAuth, postDataWithAuth, putDataWithAuth, postImages} from './httpService';
 
-export function itemServices() {
+export function imageService() {
   const userStore = useUserStore();
 
-  async function fetchItemFromAPI(itemId: string) {
-    const response = await fetchDataWithoutAuth(`listings/id/${itemId}`);
+  async function fetchImageFromAPI(itemId: string) {
+    const response = await fetchDataWithoutAuth(`images/get${itemId}`);
 
     return response.data
   }
 
-  async function fetchConditionsFromAPI() {
-    const response = await fetchDataWithoutAuth("listings/conditions");
-    return response.data;
-  }
 
-  async function fetchCategoriesFromAPI() {
-    const response = await fetchDataWithoutAuth("listings/categories");
-    return response.data;
-  }
-
-  async function createItem(item: any) {
+  async function uploadImages(imageData: any) {
     try {
       await userStore.refreshTokenIfNeeded();
 
       const formattedItem = {
-        category: item.category,
-        condition: item.condition,
-        title: item.title,
-        saleStatus: typeof item.sale_status === 'string' ? parseInt(item.sale_status) : item.sale_status || 0,
-        price: item.price,
-        briefDescription: item.brief_description,
-        fullDescription: item.full_description,
-        size: item.size || "",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        latitude: item.latitude || 0,
-        longitude: item.longitude || 0
       };
 
       console.log("Sending formatted item to server:", formattedItem);
-      const response = await postDataWithAuth("listings/create", formattedItem);
+      const response = await postImages("images/uploadListing", formattedItem);
 
       return response.data;
   
@@ -79,22 +58,12 @@ export function itemServices() {
     }
   }
 
-  async function deleteItem(itemId: string) {
-    try {
-      const response = await deleteDataWithAuth(`listings/${itemId}/delete`);
-      return response;
-    } catch (error) {
-      console.error("Error deleting item: ", error);
-    }
-  }
-  
-
   return {
     fetchItemFromAPI,
     fetchConditionsFromAPI,
     fetchCategoriesFromAPI,
     createItem,
     updateItem,
-    deleteItem
+    uploadImages,
   }
 }

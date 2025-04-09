@@ -2,6 +2,11 @@
   <div>
     <h1 class="title">Create new listing</h1>
     <form class="create-item-form" @submit.prevent="handleSubmit">
+
+      <div class="form-group">
+        <ImageUpload @update:images="selectedImages = $event" />
+      </div>
+
       <div class="form-group">
         <label for="title">Title</label>
         <input v-model="listing.title" type="text" id="title" required />
@@ -77,11 +82,19 @@ import { useUserStore } from '@/stores/UserStore.ts'
 import { onMounted, reactive } from 'vue'
 import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
 import { addressToCoords }  from '@/services/geoCodingService'
+import axios from 'axios';
+import { ref } from 'vue';
+import { createElementBlock } from 'vue'
+
+import ImageUpload from '@/components/ImageUpload.vue'
+import { postImages } from '@/services/httpService'
 
 const categoriesStore = useCategoriesStore();
 const conditionStore = useConditionStore();
 const itemStore = useItemStore();
 const userStore = useUserStore();
+
+const selectedImages = ref<File[]>([]);
 
 // Form Data
 const listing = reactive({
@@ -112,6 +125,8 @@ onMounted(async () => {
   await conditionStore.fetchConditions();
 });
 
+
+
 // Handle form submission
 const handleSubmit = async () => {
 
@@ -119,8 +134,8 @@ const handleSubmit = async () => {
   // const condition = conditionStore.conditions.find(cond => cond.id.toString() === condition.value);
   const geoData = await addressToCoords(listing.address);
 
-const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
-const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
+  const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
+  const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
 
 
   const selectedCategory = categoriesStore.categories.find(
@@ -135,8 +150,8 @@ const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
     brief_description: listing.brief_description,
     full_description: listing.full_description,
     price: parseFloat(listing.price || '0'),
-    category: selectedCategory,
-    condition: selectedCondition,
+    category: selectedCategory?.id,
+    condition: selectedCondition?.id,
     size: listing.size || '',
     sale_status: 'available',
     latitude: lat,
@@ -144,13 +159,28 @@ const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
   }
 
   try {
-    itemStore.createItemListing(itemData);
+    const createdListing = await itemStore.createItemListing(itemData);
+    if (!createdListing || !createdListing.id) {
+      throw new Error("No listing ID returned from server");
+    }
+    
+    // Build FormData for image upload
+    const formData = new FormData();
+    formData.append("id", createdListing.id);
 
-    // form.reset();
+    selectedImages.value.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    console.log("Sending formatted images to server:", formData);
+    const response = await postImages("images/uploadListing", formData);
+
+    console.log("Images uploaded:", response.data);
   } catch (error) {
-    console.error('Failed to create item:', error);
+    console.error("Error creating item and/or uploading images:", error);
+    throw error;
   }
-};
+}
 </script>
 
 <style scoped>

@@ -5,16 +5,15 @@
 
 
     import axios from 'axios';
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, onActivated } from 'vue';
 
     // store and state
     const userstore = useUserStore();
     const token = userstore.jwtToken;
     const listings = ref([]); // Store the fetched listings
 
-    onMounted(() => {
-        getListings();
-    });
+    onMounted(getListings);
+    onActivated(getListings);
 
     // helper
     async function getListings() {
@@ -37,7 +36,8 @@
     <div class="mu-listings-page">
         <div class="my-listsings-topbar">
             <h1>My Listings</h1>
-            <button>Add</button>
+           
+            <router-link to="/createlisting">New</router-link>
         </div>
 
 

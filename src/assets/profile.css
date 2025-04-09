@@ -116,6 +116,27 @@
     width: 93%;
 }
 
+.my-listsings-topbar router-link {
+    background-color: var(--button);
+    color: var(--button-text);
+    padding: 0;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+.my-listsings-topbar router-link {
+    color: var(--button-text);
+    text-decoration: none;
+    padding: 10px;
+    background-color: var(--button);
+    border-radius: 8px;
+    min-width: 100px;
+    text-align: center;
+    display: block;
+}
+
 @media (min-width: 768px) {
     .profile_content_box {
         flex-direction: row;
@@ -179,6 +200,16 @@
         display: flex;
 
         flex-direction: row;
+    }
+
+    .my-listsings-topbar router-link {
+        background-color: var(--button);
+        color: var(--button-text);
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 8px;
+        min-width: 100px;
+        text-align: center;
     }
     
 }

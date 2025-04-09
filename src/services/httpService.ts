@@ -68,6 +68,27 @@ export async function postDataWithAuth(endpoint: string, data: any) {
   }
 }
 
+export async function postImages(endpoint: string, data: any) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sedning post request to:", apiUrl + endpoint);
+    const response = await axios.post(apiUrl + endpoint, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    logoutIfTokenInvalid()
+    throw error;
+  }
+}
+
 export async function putDataWithAuth(endpoint: string, data: any) {
   try {
     let token = sessionStorage.getItem("jwtToken") || "";
@@ -96,6 +117,26 @@ export async function postDataWithoutAuth(endpoint: string, data: any) {
     return response;
   } catch (error) {
     console.error("Error posting data:", error);
+    throw error;
+  }
+}
+
+export async function deleteDataWithAuth(endpoint: string) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+
+    console.log("Sedning delete request to:", apiUrl + endpoint);
+    const response = await axios.delete(apiUrl + endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("Error deleting: ", error);
+    logoutIfTokenInvalid()
     throw error;
   }
 }

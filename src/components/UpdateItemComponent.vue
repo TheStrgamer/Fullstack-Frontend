@@ -65,6 +65,8 @@
       </div>
 
       <button type="submit">Submit</button>
+      <button type="button" @click="handleDelete">Delete</button>
+
     </form>
   </div>
   <br><br>
@@ -79,11 +81,12 @@ import { useUserStore } from '@/stores/UserStore.ts'
 import { onMounted, reactive } from 'vue'
 import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
 import { addressToCoords, coordsToAddress }  from '@/services/geoCodingService'
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
 
 const route = useRoute();
+const router = useRouter();
 const item_id = route.query.id;
 
 const categoriesStore = useCategoriesStore();
@@ -182,6 +185,7 @@ const handleSubmit = async () => {
 
   try {
     itemStore.updateItemListing(itemData);
+    await router.push('/profile/my_listings');
 
     // form.reset();
   } catch (error) {
@@ -189,6 +193,17 @@ const handleSubmit = async () => {
   }
 };
 
+
+const handleDelete = async () => {
+  if (!confirm("Are you sure you want to delete this listing?")) return;
+
+  try {
+    await itemStore.deleteItem(listing.id);
+    await router.push('/profile/my_listings');
+  } catch (error) {
+    console.error("Failed to delete item:", error);
+  }
+};
 
 async function convertCoordsToAddress(lat: string | number, long: string | number) {
   const geoData = await coordsToAddress(String(lat), String(long));
