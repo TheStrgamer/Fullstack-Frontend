@@ -68,6 +68,27 @@ export async function postDataWithAuth(endpoint: string, data: any) {
   }
 }
 
+export async function putDataWithAuth(endpoint: string, data: any) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sending put request to: ", apiUrl + endpoint);
+    const response = await axios.put(apiUrl + endpoint, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error putting data", error);
+    logoutIfTokenInvalid()
+    throw error;
+  }
+}
+
 export async function postDataWithoutAuth(endpoint: string, data: any) {
   try {
     console.log("Sedning post request to:", apiUrl + endpoint);

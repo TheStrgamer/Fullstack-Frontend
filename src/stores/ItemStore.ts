@@ -174,6 +174,20 @@ export const useItemStore = defineStore("item", {
         });
     },
 
+    // Update an Item
+    updateItemListing(item: any) {
+      console.log("Updating item:", item);
+      itemServices().updateItem(item)
+        .then((response: any) => {
+          console.log("Item updated successfully:", response);
+        })
+        .catch((error: any) => {
+          console.error("Error updating item:", error);
+        });
+    },
+
+
+
     fetchItem(itemId: string) {
         itemServices().fetchItemFromAPI(itemId)
         .then((item: any) => {

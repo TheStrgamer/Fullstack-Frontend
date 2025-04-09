@@ -9,14 +9,21 @@ interface Condition {
 export const useConditionStore = defineStore("condition", {
   state: () => ({
     conditions: [] as Condition[],
+    isLoading: false,
   }),
   actions: {
-    async fetchConditions() {
-      this.conditions = await itemServices().fetchConditionsFromAPI();
-    },
+    async fetchConditions(force = false) {
+      if (this.conditions.length && !force) return;
 
-    getConditions() {
-      return this.conditions;
+      this.isLoading = true;
+      try {
+        this.conditions = await itemServices().fetchConditionsFromAPI();
+      } catch (error) {
+        console.error("Failed to fetch conditions:", error);
+        this.conditions = [];
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 });

@@ -78,7 +78,7 @@ import { useItemStore } from '@/stores/ItemStore.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
 import { onMounted, reactive } from 'vue'
 import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
-import { addressToCoords }  from '@/services/geoCodingService'
+import { addressToCoords, coordsToAddress }  from '@/services/geoCodingService'
 import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
@@ -95,6 +95,7 @@ const token = userStore.jwtToken;
 
 // Form Fields
 const listing = reactive({
+  id: '',
   title: '',
   brief_description: '',
   full_description: '',
@@ -103,35 +104,49 @@ const listing = reactive({
   condition: '',
   size: '',
   address: '',
+  // not inlcuded in form
+  createdAt: ''
 })
 
 
-console.log(categoriesStore.categories);
+console.log("Categories: ", categoriesStore.categories);
+console.log("Conditions: ", conditionStore.conditions);
 
 onMounted(async () => {
   await categoriesStore.fetchCategories();
   await conditionStore.fetchConditions();
 
+  
+
   try {
     const response = await fetchDataWithAuth(`listings/id/${item_id}`)
+    
     console.log(response.data);
     const data = response.data;
-    // data for item with id
-    Object.assign(listing, {
+      // data for item with id
+      Object.assign(listing, {
+      id: item_id,
       title: data.title,
       brief_description: data.briefDescription,
       full_description: data.fullDescription,
       price: data.price,
-      category: data.categoryName || '',   // or lookup category ID if needed
-      condition: data.conditionName || '',  // or lookup condition ID
+      category: getCategoryIdByName(data.categoryName),
+      condition: getConditionIdByName(data.conditionName),
       size: data.size || '',
-      address: '', // if you want to reverse geocode from lat/lng
-});
+      address: '',
+      createdAt: data.createdAt
+    });
+
+    convertCoordsToAddress(data.latitude, data.longitude).then((resolvedAddress) => {
+      listing.address = resolvedAddress;
+    });
 
   } catch (error) {
     console.error(error);
   }
 });
+
+
 
 // Handle form submission
 const handleSubmit = async () => {
@@ -140,8 +155,8 @@ const handleSubmit = async () => {
   // const condition = conditionStore.conditions.find(cond => cond.id.toString() === condition.value);
   const geoData = await addressToCoords(listing.address);
 
-const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
-const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
+  const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
+  const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
 
 
   const selectedCategory = categoriesStore.categories.find(
@@ -152,12 +167,13 @@ const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
   )
 
   const itemData = {
+    id: listing.id,
     title: listing.title,
     brief_description: listing.brief_description,
     full_description: listing.full_description,
     price: parseFloat(listing.price || '0'),
-    category: selectedCategory,
-    condition: selectedCondition,
+    category: selectedCategory?.id,
+    condition: selectedCondition?.id,
     size: listing.size || '',
     sale_status: 'available',
     latitude: lat,
@@ -165,13 +181,29 @@ const long = geoData?.longitude ? parseFloat(geoData.longitude) : 0;
   }
 
   try {
-    itemStore.createItemListing(itemData);
+    itemStore.updateItemListing(itemData);
 
     // form.reset();
   } catch (error) {
     console.error('Failed to create item:', error);
   }
 };
+
+
+async function convertCoordsToAddress(lat: string | number, long: string | number) {
+  const geoData = await coordsToAddress(String(lat), String(long));
+  return geoData ? geoData.fullAddress : '';
+}
+
+function getCategoryIdByName(name: string): string {
+  const category = categoriesStore.categories.find(c => c.name === name);
+  return category ? category.id.toString() : '';
+}
+
+function getConditionIdByName(name: string): string {
+  const condition = conditionStore.conditions.find(c => c.name === name);
+  return condition ? condition.id.toString() : '';
+}
 </script>
 
 <style scoped>
