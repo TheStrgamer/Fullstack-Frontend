@@ -57,6 +57,7 @@ export async function postDataWithAuth(endpoint: string, data: any) {
     console.log("Sedning post request to:", apiUrl + endpoint);
     const response = await axios.post(apiUrl + endpoint, data, {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -78,6 +79,50 @@ export async function postDataWithoutAuth(endpoint: string, data: any) {
     throw error;
   }
 }
+
+export async function deleteDataWithAuth(endpoint: string) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sedning delete request to:", apiUrl + endpoint);
+    const response = await axios.delete(apiUrl + endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    logoutIfTokenInvalid();
+    if (axios.isAxiosError(error)) {
+        throw error.response?.data || error.message;
+    }
+    throw error
+  }
+}
+
+export async function putDataWithAuth(endpoint: string, data: any) {
+    try {
+      let token = sessionStorage.getItem("jwtToken") || "";
+      if (!token) {
+        throw new Error("No token found");
+      }
+      console.log("Sending PUT request to:", apiUrl + endpoint);
+      const response = await axios.put(apiUrl + endpoint, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error("Error putting data:", error);
+      logoutIfTokenInvalid();
+      throw error;
+    }
+  }
 
 export function getUrlFromEndpoint(endpoint: string) {
   return backendUrl + endpoint;
@@ -108,4 +153,15 @@ async function logoutIfTokenInvalid() {
         let userStore = useUserStore();
         userStore.logout();
     }
+}
+
+export async function isUserAdmin() {
+  try {
+    const response = await fetchDataWithAuth("admin/amIAdmin");
+    sessionStorage.setItem("isAdmin", response.data);
+    return response.data;
+  } catch (error) {
+    sessionStorage.setItem("isAdmin", "false");
+    return false;
+  }
 }
