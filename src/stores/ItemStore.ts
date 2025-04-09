@@ -109,7 +109,7 @@ export const useItemStore = defineStore("item", {
         this.imageUrls = [];
       }
 
-console.log(" Lagret imageUrls i store:", this.imageUrls);
+      console.log(" Lagret imageUrls i store:", this.imageUrls);
 
     },
 
