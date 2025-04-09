@@ -47,7 +47,6 @@
           <td>{{ formatCoords(listing.latitude, listing.longitude) }}</td>
           <td>{{ listing.longDescription }}</td>    
           <td>
-            <button class="action-btn">View</button>
             <button class="action-btn">Edit</button>
             <button class="action-btn">Delete</button>
           </td>

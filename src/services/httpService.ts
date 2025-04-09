@@ -57,6 +57,7 @@ export async function postDataWithAuth(endpoint: string, data: any) {
     console.log("Sedning post request to:", apiUrl + endpoint);
     const response = await axios.post(apiUrl + endpoint, data, {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -76,6 +77,29 @@ export async function postDataWithoutAuth(endpoint: string, data: any) {
   } catch (error) {
     console.error("Error posting data:", error);
     throw error;
+  }
+}
+
+export async function deleteDataWithAuth(endpoint: string) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sedning delete request to:", apiUrl + endpoint);
+    const response = await axios.delete(apiUrl + endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error deleting data:", error);
+    logoutIfTokenInvalid();
+    if (axios.isAxiosError(error)) {
+        throw error.response?.data || error.message;
+    }
+    throw error
   }
 }
 

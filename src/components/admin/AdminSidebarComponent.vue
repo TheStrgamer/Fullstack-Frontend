@@ -1,14 +1,16 @@
 <template>
     <nav class="admin-sidebar">
       <ul>
-        <li 
-          v-for="item in menuItems" 
-          :key="item.component"
-          :class="{ active: activeItem === item.component }"
-          @click="navigate(item.component)"
+        <router-link
+          v-for="item in menuItems"
+          :key="item.url"
+          :to="item.url"
+          class="sidebar-item"
+          :class="{ active: activeItem === item.url }"
+          @click="activeItem = item.url"
         >
-        <span>{{ item.label }}</span>
-        </li>
+          <li>{{ item.label }}</li>
+        </router-link>
       </ul>
     </nav>
 </template>
@@ -20,18 +22,12 @@
       return {
         activeItem: 'ListingManagement',
         menuItems: [
-          { label: 'Listings', component: 'ListingManagement' },
-          { label: 'Users', component: 'UserManagement' },
-          { label: 'Categories', component: 'CategoryManagement' }
+          { label: 'Users', url: 'user' },
+          { label: 'Listings', url: 'listing' },
+          { label: 'Categories', url: 'category' }
         ]
       }
     },
-    methods: {
-      navigate(component) {
-        this.activeItem = component
-        this.$emit('navigate', component)
-      }
-    }
   }
 </script>
 <style scoped>

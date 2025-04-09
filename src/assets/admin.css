@@ -14,26 +14,31 @@
     color: #f5f5f5;
 }
 
-  
 .admin-panel {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #f5f5f5;
+    color: #3d4954;
+    background-color: #f5f5f5;
 }
-  
+
 .admin-container {
     display: flex;
     flex: 1;
 }
-  
+.admin-create-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .admin-content {
     flex: 1;
     padding: 20px;
     background-color: #f5f5f5;
+    min-width: 350px;
 }
-  
+
 .button {
     padding: 8px 15px;
     border: none;
@@ -46,17 +51,17 @@
     justify-content: center;
     gap: 8px;
 }
-  
+
 .button:hover {
     opacity: 0.9;
     transform: translateY(-1px);
 }
-  
+
 .button-primary {
     background-color: #365f7b;
     color: #f5f5f5;
 }
-  
+
 .button-success {
     background-color: var(--success);
     color: #f5f5f5;
@@ -67,19 +72,19 @@
     color: #f5f5f5;
     border: 1px solid var(--border);
 }
-  
+
 .button-small {
     padding: 5px 10px;
     font-size: 0.85rem;
 }
-  
+
 .admin-header {
     background-color: #3d4954;
     color: #f5f5f5;
-    padding: 15px 20px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    height: 70px;
 }
-  
+
 .header-content {
     display: flex;
     justify-content: space-between;
@@ -87,26 +92,33 @@
     max-width: 1200px;
     margin: 0 auto;
 }
-  
+
 .user-info {
     display: flex;
     align-items: center;
     gap: 15px;
 }
-  
+
 .admin-sidebar {
-    width: 250px;
+    width: 150px;
     background-color: #505f6d;
     color: #f5f5f5;
     padding: 20px 0;
 }
-  
+.admin-sidebar a {
+    text-decoration: none;
+    color: #f5f5f5;
+}
+.admin-sidebar a:visited {
+    color: #f5f5f5;
+}
+
 .admin-sidebar ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
-  
+
 .admin-sidebar li {
     padding: 12px 20px;
     cursor: pointer;
@@ -115,56 +127,57 @@
     gap: 10px;
     transition: background-color 0.2s;
 }
-  
+
 .admin-sidebar li:hover {
     background-color: #3d4954;
 }
-  
+
 .admin-sidebar li.active {
     background-color: #365f7b;
 }
-  
+
 .admin-sidebar i {
     width: 20px;
     text-align: center;
 }
-  
+
 .view-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    height: 50px;
 }
-  
+
 .search-bar {
     margin-bottom: 20px;
     display: flex;
     gap: 10px;
 }
-  
+
 .search-bar input {
     padding: 8px;
     border: 1px solid #365f7b;
     border-radius: 4px;
     flex-grow: 1;
 }
-  
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
     overflow-x: auto;
 }
-  
+
 .data-table th, .data-table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #365f7b;
 }
-  
+
 .data-table th {
     background-color: #505f6d;
     color: #f5f5f5;
+    cursor: pointer;
 }
 .data-table tr {
     color: black;
@@ -193,4 +206,25 @@
 }
 .add-btn:hover {
     background-color: #3d4954;
+}
+.headerlink {
+    color: #f5f5f5;
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    height: 70px;
+}
+.headerlink:visited {
+    color: #f5f5f5;
+}
+
+.table-small {
+    background-color: #f5f5f5;
+    font-size: 0.8rem;
+    flex: 1;
+    
+}
+.feedback {
+    color: #933434;
 }

@@ -2,9 +2,11 @@
     <div class="admin-panel">
       <AdminHeader />
       <div class="admin-container">
-        <AdminSidebar @navigate="changeView" />
+        <AdminSidebar/>
         <main class="admin-content">
-          <component :is="currentView" />
+            <KeepAlive>
+                <router-view />
+            </KeepAlive>
         </main>
       </div>
     </div>
@@ -13,28 +15,16 @@
 <script>
   import AdminHeader from '@/components/admin/AdminHeaderComponent.vue'
   import AdminSidebar from '@/components/admin/AdminSidebarComponent.vue'
-  import ListingManagement from '@/components/admin/ListingAdminComponent.vue'
-  import UserManagement from '@/components/admin/UserAdminComponent.vue'
-  import CategoryManagement from '@/components/admin/CategoryAdminComponent.vue'
-
   export default {
     components: {
       AdminHeader,
-      AdminSidebar,
-      ListingManagement,
-      UserManagement,
-      CategoryManagement
+      AdminSidebar
     },
     data() {
       return {
         currentView: 'ListingManagement'
       }
     },
-    methods: {
-      changeView(view) {
-        this.currentView = view
-      }
-    }
   }
 </script>
 

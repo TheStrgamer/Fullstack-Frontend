@@ -1,7 +1,9 @@
 <template>
     <header class="admin-header">
       <div class="header-content">
-        <h1>Admin Panel</h1>
+        <router-link class="headerlink" to="/admin">
+            <h1>Admin Panel</h1>
+        </router-link>
           <a class="return" href="/" >Back to main</a>
       </div>
     </header>

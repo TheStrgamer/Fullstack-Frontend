@@ -3,7 +3,6 @@
     <div class="view-header">
       <h2>User Management</h2>
     </div>
-
     <div class="search-bar">
       <input
         type="text"
@@ -37,7 +36,6 @@
           </td>
           <td>{{ user.listings }}</td>
           <td>
-            <button class="action-btn">View</button>
             <button class="action-btn">Edit</button>
             <button class="action-btn">Delete</button>
           </td>

@@ -2,7 +2,7 @@
     <div class="management-view">
       <div class="view-header">
         <h2>Category Management</h2>
-        <button class="add-btn">Add Category</button>
+        <router-link to="/admin/addCategory" class="add-btn" >Add Category</router-link>
       </div>
   
       <div class="search-bar">
@@ -30,16 +30,18 @@
             <td>{{ category.description }}</td>
             <td>{{ category.listings }}</td>
             <td>
-              <button class="action-btn">View</button>
               <button class="action-btn">Edit</button>
-              <button class="action-btn">Delete</button>
+              <button 
+                class="action-btn delete-btn"
+                @click="confirmDelete(category)"
+              >Delete</button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 </template>
-  
+
 <script>
   import { fetchDataWithAuth } from '@/services/httpService';
   
@@ -83,6 +85,23 @@
       }
     },
     methods: {
+        confirmDelete(category) {
+            let message = 'This category has no listings.';
+            if (category.listings > 0) {
+             message = 'This category has ' + category.listings + ' listings. Their category will be set to "Other" if this category is deleted.';
+            }
+            this.$router.push({
+                name: 'ConfirmDelete',
+                params: {
+                itemType: 'categories',
+                itemId: category.id,
+                extraMessage: message,
+                },
+                query: {
+                itemName: category.name
+                }
+            });
+        },
       async fetchCategories() {
         try {
           const response = await fetchDataWithAuth('admin/categories');
@@ -109,7 +128,6 @@
     }
   };
 </script>
-  
 <style scoped>
   @import url('../../assets/admin.css');
 </style>
