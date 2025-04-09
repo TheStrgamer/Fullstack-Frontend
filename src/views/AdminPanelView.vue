@@ -4,9 +4,11 @@
       <div class="admin-container">
         <AdminSidebar/>
         <main class="admin-content">
-            <KeepAlive>
-                <router-view />
-            </KeepAlive>
+            <router-view v-slot="{ Component }">
+                <keep-alive>
+                    <component :is="Component" />
+                </keep-alive>
+            </router-view>
         </main>
       </div>
     </div>

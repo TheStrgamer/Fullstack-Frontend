@@ -30,7 +30,10 @@
             <td>{{ category.description }}</td>
             <td>{{ category.listings }}</td>
             <td>
-              <button class="action-btn">Edit</button>
+              <button 
+                class="action-btn"
+                @click="$router.push({ name: 'updateCategory', params: { categoryId: category.id } })"
+              >Edit</button>
               <button 
                 class="action-btn delete-btn"
                 @click="confirmDelete(category)"

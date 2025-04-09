@@ -15,6 +15,7 @@ import UserAdminComponent from '@/components/admin/UserAdminComponent.vue'
 import ListingAdminComponent from '@/components/admin/ListingAdminComponent.vue'
 import CategoryAdminComponent from '@/components/admin/CategoryAdminComponent.vue'
 import ConfirmDeleteAdminView from '@/views/ConfirmDeleteAdminView.vue'
+import AdminUpdateCategoryView from '@/views/AdminUpdateCategoryView.vue'
 import NuhUhView from '@/views/NuhUhView.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
@@ -123,6 +124,13 @@ const router = createRouter({
       path: "/admin/addCategory",
       name: "addCategory",
       component: AdminCreateView,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: "/admin/updateCategory/:categoryId",
+      name: "updateCategory",
+      component: AdminUpdateCategoryView,
+      props: true,
       meta: { requiresAdmin: true }
     },
     {
