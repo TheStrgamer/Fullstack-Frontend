@@ -1,34 +1,30 @@
 @import '../assets/base.css';
 
 .update-item-form {
-    width: 100%;
-    max-width: 700px; /* Optional: control max visual width */
-    padding: 1rem;
-    box-sizing: border-box;
-    flex-grow: 1; /* important! lets it grow in flex context */
-  }
+    max-width: 600px; /* Optional: control max visual width */
+    margin: 0 auto;
+}
   
-
-.update-item-form .form-group {
+.form-group {
     margin-bottom: 1rem;
 }
 
-.update-item-form .form-group label {
+.form-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
 }
 
-.update-item-form .form-group input,
-.update-item-form .form-group select,
-.update-item-form .form-group textarea {
+.form-group input,
+.form-group select,
+.form-group textarea {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-.update-item-form button[type="submit"] {
+button[type="submit"] {
     background-color: var(--button);
     color: white;
     border: none;
@@ -40,6 +36,13 @@
     height: 40px;
 }
 
-.update-item-form button[type="submit"]:hover {
+button[type="submit"]:hover {
     background-color: var(--button);
+}
+
+@media (min-width: 768px) {
+    .update-item-form {
+        min-width: 600px;
+        max-width: 600px;
+    }
 }

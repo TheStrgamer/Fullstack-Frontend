@@ -106,7 +106,7 @@ const listing = reactive({
 })
 
 
-
+console.log(categoriesStore.categories);
 
 onMounted(async () => {
   await categoriesStore.fetchCategories();
