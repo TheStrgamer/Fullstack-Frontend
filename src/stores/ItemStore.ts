@@ -14,7 +14,7 @@ export const useItemStore = defineStore("item", {
     categoryName: "",
     conditionName: "",
     size: "",
-    itemImageURL: "",
+    imageUrls: [] as string[],
     created_at: "",
     updated_at: "",
     latitude: 0.0,
@@ -49,9 +49,9 @@ export const useItemStore = defineStore("item", {
     setSize(size: string) {
       this.size = size;
     },
-    setItemImageURL(url: string) {
-      this.itemImageURL = url;
-    },
+    // setItemImageURL(url: string) {
+    //   this.imageUrls = url ? [url] : [];
+    // },
     setCreatedAt(date: string) {
       this.created_at = date;
     },
@@ -65,52 +65,6 @@ export const useItemStore = defineStore("item", {
       this.longitude = long;
     },
 
-    // Getters
-    getItemId() {
-      return this.itemId;
-    },
-    getTitle() {
-      return this.title;
-    },
-    getSaleStatus() {
-      return this.sale_status;
-    },
-    getPrice() {
-      return this.price;
-    },
-    getFullDescription() {
-      return this.full_description;
-    },
-    getBriefDescription() {
-      return this.brief_description;
-    },
-    getCategoryName() {
-      return this.categoryName;
-    },
-    getCondition() {
-      return this.conditionName;
-    },
-    getSize() {
-      return this.size;
-    },
-    getItemImageURL() {
-      return this.itemImageURL;
-    },
-    getCreatedAt() {
-      console.log("Created at:", this.created_at);
-      return this.created_at;
-    },
-    getUpdatedAt() {
-      console.log("Updated at:", this.updated_at);
-      return this.updated_at;
-    },
-    getLatitude() {
-      return this.latitude;
-    },
-    getLongitude() {
-      return this.longitude;
-    },
-
     // Reset state
     resetState() {
       this.itemId = 0;
@@ -122,7 +76,7 @@ export const useItemStore = defineStore("item", {
       this.categoryName = "";
       this.conditionName = "";
       this.size = "";
-      this.itemImageURL = "";
+      this.imageUrls = [];
       this.created_at = "";
       this.updated_at = "";
       this.latitude = 0.0;
@@ -130,58 +84,53 @@ export const useItemStore = defineStore("item", {
     },
 
     // Set all item properties at once
-    setItem(item: {
-      itemId?: number;
-      title?: string;
-      sale_status?: string;
-      price?: number;
-      full_description?: string;
-      brief_description?: string;
-      categoryName?: any;
-      conditionName?: any;
-      size?: string;
-      itemImageURL?: string;
-      created_at?: string;
-      updated_at?: string;
-      latitude?: number;
-      longitude?: number;
-    }) {
-      if (item.itemId !== undefined) this.itemId = item.itemId;
-      if (item.title !== undefined) this.title = item.title;
-      if (item.sale_status !== undefined) this.sale_status = item.sale_status;
-      if (item.price !== undefined) this.price = item.price;
-      if (item.full_description !== undefined) this.full_description = item.full_description;
-      if (item.brief_description !== undefined) this.brief_description = item.brief_description;
-      if (item.categoryName !== undefined) this.categoryName = item.categoryName;
-      if (item.conditionName !== undefined) this.conditionName = item.conditionName;
-      if (item.size !== undefined) this.size = item.size;
-      if (item.itemImageURL !== undefined) this.itemImageURL = item.itemImageURL;
-      if (item.created_at !== undefined) this.created_at = item.created_at;
-      if (item.updated_at !== undefined) this.updated_at = item.updated_at;
-      if (item.latitude !== undefined) this.latitude = item.latitude;
-      if (item.longitude !== undefined) this.longitude = item.longitude;
+    setItem(item: any) {
+      this.itemId = item.itemId ?? item.id ?? 0;
+      this.title = item.title ?? "";
+      this.sale_status = item.sale_status ?? item.saleStatus ?? "";
+      this.price = item.price ?? 0;
+      this.full_description = item.full_description ?? item.fullDescription ?? "";
+      this.brief_description = item.brief_description ?? item.briefDescription ?? "";
+      this.categoryName = item.categoryName ?? "";
+      this.conditionName = item.conditionName ?? "";
+      this.size = item.size ?? "";
+      this.created_at = item.created_at ?? item.createdAt ?? "";
+      this.updated_at = item.updated_at ?? item.updatedAt ?? "";
+      this.latitude = item.latitude ?? 0;
+      this.longitude = item.longitude ?? 0;
+    
+      console.log(" Fikk imageUrls fra item:", item.imageUrls);
+
+      if (Array.isArray(item.imageUrls)) {
+        this.imageUrls = item.imageUrls.filter((url: string) => !!url);
+      } else if (typeof item.imageUrls === "string" && item.imageUrls !== "") {
+        this.imageUrls = [item.imageUrls];
+      } else {
+        this.imageUrls = [];
+      }
+
+console.log(" Lagret imageUrls i store:", this.imageUrls);
+
     },
 
     // Create a new item
-    createItemListing(item: any) {
-      console.log("Creating item:", item);
-      itemServices().createItem(item)
-        .then((response: any) => {
-          console.log("Item created successfully:", response);
-        })
-        .catch((error: any) => {
-          console.error("Error creating item:", error);
-        });
+    async createItemListing(item: any) {
+      try {
+        const response = await itemServices().createItem(item);
+        console.log("Item created successfully:", response);
+      } catch (error) {
+        console.error("Error creating item:", error);
+      }
     },
 
-    fetchItem(itemId: string) {
-        itemServices().fetchItemFromAPI(itemId)
-        .then((item: any) => {
-          this.setItem(item);
-        })
-        .catch((error: any) => {
-          console.error(error);
-      });
+    async fetchItem(itemId: string) {
+      try {
+        const item = await itemServices().fetchItemFromAPI(itemId);
+        console.log(" Backend respons:", item);
+        this.setItem(item);
+      } catch (error) {
+        console.error("Error fetching item:", error);
+      }
     }
   }
 });

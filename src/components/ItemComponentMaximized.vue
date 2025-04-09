@@ -2,47 +2,50 @@
   <div v-if="itemLoaded" class="item-maximized">
     <!-- Kategori + Salgsstatus -->
     <div class="item-header-bar">
-      <span class="item-category">{{ itemStore.getCategoryName() }}</span>
+      <span class="item-category">{{ itemStore.categoryName }}</span>
       <span :class="['item-status', statusClass]">
-        {{ getSaleStatusText(itemStore.getSaleStatus()) }}
+        {{ getSaleStatusText(itemStore.sale_status) }}
       </span>
     </div>
 
     <!-- Bildekarusell -->
     <div class="image-carousel" v-if="images.length > 0">
       <button class="carousel-btn left" @click="prevImage" v-if="images.length > 1">&#10094;</button>
-      <img :src="images[currentImageIndex]" :alt="itemStore.getTitle()" class="item-image" />
+
+      <img :src="images[currentImageIndex]" :alt="itemStore.title" class="item-image" />
+
       <button class="carousel-btn right" @click="nextImage" v-if="images.length > 1">&#10095;</button>
+
+      <div class="image-index-display">
+        Bilde {{ currentImageIndex + 1 }} av {{ images.length }}
+      </div>
     </div>
-    <div v-else class="image-placeholder">
-      <img :src="itemStore.getItemImageURL()" :alt="itemStore.getTitle()" class="item-image" v-if="itemStore.getItemImageURL()" />
-      <p v-else>Ingen bilder tilgjengelig</p>
-    </div>
+
 
     <!-- Tittel + Pris -->
     <div class="item-info-row">
-      <h1 class="item-title">{{ itemStore.getTitle() }}</h1>
-      <span class="item-price-pill">{{ itemStore.getPrice() }} kr</span>
+      <h1 class="item-title">{{ itemStore.title }}</h1>
+      <span class="item-price-pill">{{ itemStore.price }} kr</span>
     </div>
 
     <!-- Tilstand + Størrelse -->
     <div class="item-info-row">
-      <p class="item-subinfo">Tilstand: {{ itemStore.getCondition() }}</p>
-      <p class="item-subinfo" v-if="itemStore.getSize()">Størrelse: {{ itemStore.getSize() }}</p>
+      <p class="item-subinfo">Tilstand: {{ itemStore.conditionName }}</p>
+      <p class="item-subinfo" v-if="itemStore.size">Størrelse: {{ itemStore.size }}</p>
     </div>
 
     <!-- Beskrivelse -->
-    <p class="item-description">{{ itemStore.getFullDescription() }}</p>
+    <p class="item-description">{{ itemStore.full_description }}</p>
 
     <!-- Lokasjon -->
     <p class="item-location">
-      Posisjon: {{ itemStore.getLatitude() }}, {{ itemStore.getLongitude() }}
+      Posisjon: {{ itemStore.latitude }}, {{ itemStore.longitude }}
     </p>
 
     <!-- Datoer -->
     <div class="item-dates">
-      <p>Opprettet: {{ formatDate(itemStore.getCreatedAt()) }}</p>
-      <p>Oppdatert: {{ formatDate(itemStore.getUpdatedAt()) }}</p>
+      <p>Opprettet: {{ formatDate(itemStore.created_at) }}</p>
+      <p>Oppdatert: {{ formatDate(itemStore.updated_at) }}</p>
     </div>
     <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
       Negotiate
@@ -83,21 +86,24 @@ onMounted(async () => {
 })
 
 async function fetchItemData() {
-  itemLoaded.value = false
+  itemLoaded.value = false;
 
-  await itemStore.fetchItem(itemId)
+  await itemStore.fetchItem(itemId);
 
-  if (itemStore.getItemImageURL()) {
-    images.value = [itemStore.getItemImageURL()]
-  } else {
-    images.value = ['https://via.placeholder.com/500x400?text=No+Image+Available']
-  }
+  const urls = itemStore.imageUrls
+  .map((url: string) => {
+    if (url.startsWith('http')) return url;
+    return `${import.meta.env.VITE_API_URL}/${url}`.replace(/([^:]\/)\/+/g, "$1"); // Fjerner dobbel slash
+  })
+  .filter((url: string) => url);
 
-  itemLoaded.value = true
+  images.value = urls.length > 0 ? urls : ['/default-image.png'];
+
+  itemLoaded.value = true;
 }
 
 const statusClass = computed(() => {
-  const status = itemStore.getSaleStatus()
+  const status = itemStore.sale_status
   if (typeof status === 'number') {
     return status === 0 ? 'forsale' : 'sold'
   }
