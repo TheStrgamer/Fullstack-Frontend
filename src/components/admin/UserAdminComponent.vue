@@ -10,7 +10,7 @@
         v-model="searchQuery"
       />
     </div>
- 
+    <div class="table-wrapper">
     <table class="data-table">
       <thead>
         <tr>
@@ -36,12 +36,20 @@
           </td>
           <td>{{ user.listings }}</td>
           <td>
-            <button class="action-btn">Edit</button>
-            <button class="action-btn">Delete</button>
-          </td>
+            <button 
+              class="action-btn"
+              @click="$router.push({ name: 'updateUser', params: { userId: user.id } })"
+            >Edit</button>
+            <button 
+              class="action-btn delete-btn"
+              @click="confirmDelete(user)"
+            >Delete
+            </button>          
+        </td>
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 
@@ -90,6 +98,23 @@ export default {
     }
   },
   methods: {
+    confirmDelete(user) {
+        let message = 'This user has no listings.';
+        if (user.listings > 0) {
+         message = 'This user has ' + user.listings + ' listings. These will be deleted with the user.';
+        }
+        this.$router.push({
+            name: 'ConfirmDelete',
+            params: {
+            itemType: 'users',
+            itemId: user.id,
+            extraMessage: message,
+            },
+            query: {
+            itemName: user.firstname + ' ' + user.surname
+            }
+        });
+    },
     async fetchUsers() {
       try {
         const response = await fetchDataWithAuth('admin/users');

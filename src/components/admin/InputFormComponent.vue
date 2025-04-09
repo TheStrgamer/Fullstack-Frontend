@@ -11,6 +11,11 @@
             :name="field.name"
             :placeholder="field.placeholder"
           />
+          <input
+            type="checkbox"
+            v-model="formData[field.name]"
+            :name="field.name"
+          />
           <textarea
             v-if="field.type === 'textarea'"
             v-model="formData[field.name]"

@@ -12,7 +12,7 @@
           v-model="searchQuery"
         />
       </div>
-  
+      <div class="table-wrapper">
       <table class="data-table">
         <thead>
           <tr>
@@ -42,6 +42,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
 </template>
 

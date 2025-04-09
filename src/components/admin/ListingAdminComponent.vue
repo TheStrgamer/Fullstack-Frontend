@@ -12,7 +12,7 @@
         v-model="searchQuery"
       />
     </div>
- 
+    <div class="table-wrapper">
     <table class="data-table">
       <thead>
         <tr>
@@ -47,12 +47,16 @@
           <td>{{ formatCoords(listing.latitude, listing.longitude) }}</td>
           <td>{{ listing.longDescription }}</td>    
           <td>
-            <button class="action-btn">Edit</button>
-            <button class="action-btn">Delete</button>
+            <button 
+              class="action-btn delete-btn"
+              @click="confirmDelete(listing)"
+            >Delete
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
+    </div>
     </div>
 </template>
   
@@ -108,6 +112,20 @@ export default {
 
   },
   methods: {
+    confirmDelete(listing) {
+        let message = 'This cannot be undone.';
+        this.$router.push({
+            name: 'ConfirmDelete',
+            params: {
+            itemType: 'listings',
+            itemId: listing.id,
+            extraMessage: message,
+            },
+            query: {
+            itemName: listing.title
+            }
+        });
+    },
     async fetchListings() {
       try {
         const response = await fetchDataWithAuth('admin/listings');
