@@ -3,7 +3,7 @@
       <div class="view-header">
         <h2>Listing Management</h2>
       </div>
-      
+
 
       <div class="search-bar">
       <input
@@ -45,9 +45,9 @@
           <td>{{ formatDate(listing.createdDate) }}</td>
           <td>{{ formatDate(listing.updatedDate) }}</td>
           <td>{{ formatCoords(listing.latitude, listing.longitude) }}</td>
-          <td>{{ listing.longDescription }}</td>    
+          <td>{{ listing.longDescription }}</td>
           <td>
-            <button 
+            <button
               class="action-btn delete-btn"
               @click="confirmDelete(listing)"
             >Delete
@@ -59,41 +59,57 @@
     </div>
     </div>
 </template>
-  
-<script>
-import { fetchDataWithAuth } from '@/services/httpService';
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import { fetchDataWithAuth } from '@/services/httpService';
 
-export default {
-  name: 'ListingAdminComponent',
-  data() {
-    return {
-      listings: [],
-      searchQuery: '',
-      sortKey: 'id',
-      sortAsc: true,
-    };
-  },
-  computed: {
-    filteredAndSortedListings() {
+  interface Listing {
+    id: number;
+    title: string;
+    shortDescription?: string;
+    creatorName?: string;
+    category?: string;
+    status: string | number;
+    condition?: string;
+    price?: number;
+    latitude?: number;
+    longitude?: number;
+    createdDate: string;
+    updatedDate: string;
+    [key: string]: any;
+  }
+
+  export default defineComponent({
+    name: 'ListingAdminComponent',
+    data() {
+      return {
+        listings: [] as Listing[],
+        searchQuery: '',
+        sortKey: 'id' as string,
+        sortAsc: true,
+      };
+    },
+    computed: {
+      filteredAndSortedListings(): Listing[] {
         const query = this.searchQuery.toLowerCase();
 
         return this.listings
-            .filter(listing => {
+          .filter(listing => {
             return (
-                listing.title?.toLowerCase().includes(query) ||
-                listing.shortDescription?.toLowerCase().includes(query) ||
-                listing.creatorName?.toLowerCase().includes(query) ||
-                listing.category?.toLowerCase().includes(query) ||
-                String(listing.status).includes(query) ||
-                listing.condition?.toLowerCase?.().includes(query) ||
-                String(listing.price)?.includes(query) ||
-                String(listing.latitude)?.includes(query) ||
-                String(listing.longitude)?.includes(query) ||
-                new Date(listing.createdDate).toLocaleString().toLowerCase().includes(query) ||
-                new Date(listing.updatedDate).toLocaleString().toLowerCase().includes(query)
+              listing.title?.toLowerCase().includes(query) ||
+              listing.shortDescription?.toLowerCase().includes(query) ||
+              listing.creatorName?.toLowerCase().includes(query) ||
+              listing.category?.toLowerCase().includes(query) ||
+              String(listing.status).includes(query) ||
+              listing.condition?.toLowerCase?.().includes(query) ||
+              String(listing.price)?.includes(query) ||
+              String(listing.latitude)?.includes(query) ||
+              String(listing.longitude)?.includes(query) ||
+              new Date(listing.createdDate).toLocaleString().toLowerCase().includes(query) ||
+              new Date(listing.updatedDate).toLocaleString().toLowerCase().includes(query)
             );
-            })
-            .sort((a, b) => {
+          })
+          .sort((a, b) => {
             const aVal = a[this.sortKey];
             const bVal = b[this.sortKey];
 
@@ -101,64 +117,63 @@ export default {
             if (bVal == null) return -1;
 
             if (typeof aVal === 'string') {
-                return this.sortAsc
+              return this.sortAsc
                 ? aVal.localeCompare(bVal)
                 : bVal.localeCompare(aVal);
             } else {
-                return this.sortAsc ? aVal - bVal : bVal - aVal;
+              return this.sortAsc ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
             }
-        });
-    }
-
-  },
-  methods: {
-    confirmDelete(listing) {
-        let message = 'This cannot be undone.';
+          });
+      }
+    },
+    methods: {
+      confirmDelete(listing: Listing) {
+        const message = 'This cannot be undone.';
         this.$router.push({
-            name: 'ConfirmDelete',
-            params: {
+          name: 'ConfirmDelete',
+          params: {
             itemType: 'listings',
-            itemId: listing.id,
+            itemId: listing.id.toString(),
             extraMessage: message,
-            },
-            query: {
+          },
+          query: {
             itemName: listing.title
-            }
+          }
         });
-    },
-    async fetchListings() {
-      try {
-        const response = await fetchDataWithAuth('admin/listings');
-        if (!response || !Array.isArray(response.data)) {
-          console.warn('Unexpected response:', response);
-          return;
+      },
+      async fetchListings() {
+        try {
+          const response = await fetchDataWithAuth('admin/listings');
+          if (!response?.data || !Array.isArray(response.data)) {
+            console.warn('Unexpected response:', response);
+            return;
+          }
+          this.listings = response.data as Listing[];
+        } catch (error) {
+          console.error('Error fetching listings:', error);
         }
-        this.listings = response.data;
-      } catch (error) {
-        console.error('Error fetching listings:', error);
+      },
+      sortBy(key: string) {
+        if (this.sortKey === key) {
+          this.sortAsc = !this.sortAsc;
+        } else {
+          this.sortKey = key;
+          this.sortAsc = true;
+        }
+      },
+      formatDate(dateStr: string): string {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return d.toISOString().slice(0, 16).replace('T', ' ');
+      },
+      formatCoords(lat?: number, lon?: number): string {
+        return lat !== undefined && lon !== undefined ? `${lat}, ${lon}` : '';
       }
     },
-    sortBy(key) {
-      if (this.sortKey === key) {
-        this.sortAsc = !this.sortAsc;
-      } else {
-        this.sortKey = key;
-        this.sortAsc = true;
-      }
-    },
-    formatDate(dateStr) {
-      if (!dateStr) return '';
-      const d = new Date(dateStr);
-      return d.toISOString().slice(0, 16).replace('T', ' ');
-    },
-    formatCoords(lat, lon) {
-      return `${lat}, ${lon}`;
+    mounted() {
+      this.fetchListings();
     }
-  },
-  mounted() {
-    this.fetchListings();
-  }
-};
+  });
 </script>
 
 <style scoped>

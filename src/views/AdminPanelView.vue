@@ -14,20 +14,9 @@
     </div>
 </template>
 
-<script>
-  import AdminHeader from '@/components/admin/AdminHeaderComponent.vue'
-  import AdminSidebar from '@/components/admin/AdminSidebarComponent.vue'
-  export default {
-    components: {
-      AdminHeader,
-      AdminSidebar
-    },
-    data() {
-      return {
-        currentView: 'ListingManagement'
-      }
-    },
-  }
+<script setup lang="ts">
+import AdminHeader from '../components/admin/AdminHeaderComponent.vue';
+import AdminSidebar from '../components/admin/AdminSidebarComponent.vue';
 </script>
 
 <style scoped>

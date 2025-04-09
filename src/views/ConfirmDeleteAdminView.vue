@@ -10,35 +10,45 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import { useRouter } from 'vue-router'
+  import { deleteDataWithAuth } from '@/services/httpService'
 
-<script>
-  import { deleteDataWithAuth } from '@/services/httpService';
-  export default {
-    props: ['itemName', 'itemId', 'itemType', 'extraMessage'],
-    data() {
-      return {
-        extraMessageText: this.extraMessage || '',
-      };
-    },
-    methods: {
-      async confirmDelete() {
-        const endpoint = 'admin/' + this.itemType + '/delete/' + this.itemId;
-        try {
-          const response = await deleteDataWithAuth(endpoint);
-          if (response.status === 200) {
-            this.$emit('deleteConfirmed', this.itemId);
-          }
-        } catch (error) {
-          console.error('Error deleting item:', error);
-          this.extraMessageText = error || 'An error occurred while deleting the item.';
-          return;
-        }
-        this.$router.go(-1);
-      },
-      cancelDelete() {
-        this.$router.go(-1);
+  const props = defineProps<{
+    itemName: string
+    itemId: string | number
+    itemType: string
+    extraMessage?: string
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'deleteConfirmed', id: string | number): void
+  }>()
+
+  const router = useRouter()
+  const extraMessageText = ref(props.extraMessage || '')
+
+  const confirmDelete = async () => {
+    try {
+      const endpoint = `admin/${props.itemType}/delete/${props.itemId}`
+      const response = await deleteDataWithAuth(endpoint)
+
+      if (response.status === 200) {
+        emit('deleteConfirmed', props.itemId)
       }
+    } catch (error: unknown) {
+      console.error('Error deleting item:', error)
+      extraMessageText.value = error instanceof Error
+        ? error.message
+        : 'An error occurred while deleting the item.'
+      return
     }
+    router.go(-1)
+  }
+
+  const cancelDelete = () => {
+    router.go(-1)
   }
 </script>
 

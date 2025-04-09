@@ -36,15 +36,15 @@
           </td>
           <td>{{ user.listings }}</td>
           <td>
-            <button 
+            <button
               class="action-btn"
               @click="$router.push({ name: 'updateUser', params: { userId: user.id } })"
             >Edit</button>
-            <button 
+            <button
               class="action-btn delete-btn"
               @click="confirmDelete(user)"
             >Delete
-            </button>          
+            </button>
         </td>
         </tr>
       </tbody>
@@ -53,23 +53,34 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { fetchDataWithAuth } from '@/services/httpService';
 
-export default {
+interface User {
+  id: number;
+  firstname: string;
+  surname: string;
+  email: string;
+  phonenumber?: string | number;
+  listings?: number;
+  [key: string]: any;
+}
+
+export default defineComponent({
   name: 'UserAdminComponent',
   data() {
     return {
-      users: [],
+      users: [] as User[],
       searchQuery: '',
-      sortKey: 'id',
+      sortKey: 'id' as string,
       sortAsc: true,
     };
   },
   computed: {
-    filteredAndSortedUsers() {
+    filteredAndSortedUsers(): User[] {
+      const query = this.searchQuery.toLowerCase();
       let filtered = this.users.filter(user => {
-        const query = this.searchQuery.toLowerCase();
         return (
           user.firstname.toLowerCase().includes(query) ||
           user.surname.toLowerCase().includes(query) ||
@@ -89,7 +100,7 @@ export default {
               ? aVal.localeCompare(bVal)
               : bVal.localeCompare(aVal);
           } else {
-            return this.sortAsc ? aVal - bVal : bVal - aVal;
+            return this.sortAsc ? (aVal as number) - (bVal as number) : (bVal as number) - (aVal as number);
           }
         });
       }
@@ -98,36 +109,36 @@ export default {
     }
   },
   methods: {
-    confirmDelete(user) {
-        let message = 'This user has no listings.';
-        if (user.listings > 0) {
-         message = 'This user has ' + user.listings + ' listings. These will be deleted with the user.';
+    confirmDelete(user: User) {
+      const message = user.listings && user.listings > 0
+        ? `This user has ${user.listings} listings. These will be deleted with the user.`
+        : 'This user has no listings.';
+
+      this.$router.push({
+        name: 'ConfirmDelete',
+        params: {
+          itemType: 'users',
+          itemId: user.id.toString(),
+          extraMessage: message,
+        },
+        query: {
+          itemName: `${user.firstname} ${user.surname}`
         }
-        this.$router.push({
-            name: 'ConfirmDelete',
-            params: {
-            itemType: 'users',
-            itemId: user.id,
-            extraMessage: message,
-            },
-            query: {
-            itemName: user.firstname + ' ' + user.surname
-            }
-        });
+      });
     },
     async fetchUsers() {
       try {
         const response = await fetchDataWithAuth('admin/users');
-        if (!response || !Array.isArray(response.data)) {
+        if (!response?.data || !Array.isArray(response.data)) {
           console.warn('Unexpected response:', response);
           return;
         }
-        this.users = response.data;
+        this.users = response.data as User[];
       } catch (error) {
         console.error('Error fetching users:', error);
       }
     },
-    sortBy(key) {
+    sortBy(key: string) {
       if (this.sortKey === key) {
         this.sortAsc = !this.sortAsc;
       } else {
@@ -139,7 +150,7 @@ export default {
   mounted() {
     this.fetchUsers();
   }
-};
+});
 </script>
 
 <style scoped>
