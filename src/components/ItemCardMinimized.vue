@@ -80,6 +80,6 @@ function getImageUrl(imagePath: string) {
 }
 </script>
 
-<style>
+<style scoped>
 @import '../assets/ItemCardMinimized.css';
 </style>

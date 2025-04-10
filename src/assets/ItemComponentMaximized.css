@@ -46,14 +46,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 250px;
   }
 
   .item-image {
     width: 100%;
     border-radius: 12px;
     object-fit: contain;
-    max-height: 250px;
+    max-height: 350px;
   }
 
   .carousel-btn {
@@ -76,6 +75,12 @@
 
   .carousel-btn.right {
     right: 10px;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .item-info-row {
@@ -147,7 +152,8 @@
 
   @media (min-width: 768px) {
     .item-image {
-      max-height: 350px !important;
+      max-height: 400px !important;
+      min-height: 250px !important;
     }
 
     .image-carousel {
@@ -156,7 +162,8 @@
   }
     @media (min-width: 850px) {
       .item-image {
-        max-height: 500px !important;
+        max-height: 400px !important;
+        min-height: 250px !important;
       }
     .image-carousel {
       height: 100%;
