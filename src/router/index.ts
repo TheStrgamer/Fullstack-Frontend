@@ -21,6 +21,7 @@ import AdminUpdateCategoryView from '@/views/AdminUpdateCategoryView.vue'
 import AdminUpdateUserView from '@/views/AdminUpdateUserView.vue'
 import NuhUhView from '@/views/NuhUhView.vue'
 import CategoryListings from '@/views/CategoryListings.vue'
+import TestFadeInView from '@/views/TestFadeInView.vue';
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
 
@@ -171,6 +172,16 @@ const router = createRouter({
       path: "/category/:categoryName",
       name: "CategoryListings",
       component: CategoryListings,
+    },
+    {
+      path: '/custom-button-test',
+      name: 'CustomButtonTest',
+      component: () => import('@/views/CustomButtonTest.vue'),
+    },
+    {
+      path: '/test-fadein',
+      name: 'TestFadeIn',
+      component: TestFadeInView,
     },
     {
       path: "/:pathMatch(.*)*",

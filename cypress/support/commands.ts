@@ -25,15 +25,52 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 //
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+
+Cypress.Commands.add('mockLoginBackend', () => {
+    cy.intercept('POST', '/users/login', (req) => {
+        const { email, password } = req.body;
+
+        if (email === 'validuser@example.com' && password === 'validpassword') {
+            req.reply({
+                statusCode: 200,
+                body: {
+                    token: 'mocked-jwt-token',
+                    expiration: 3600,
+                },
+            });
+        } else {
+            req.reply({
+                statusCode: 401,
+                body: {
+                    message: 'Invalid credentials',
+                },
+            });
+        }
+    });
+});
+
+Cypress.Commands.add('login', () => {
+    cy.mockLoginBackend();
+    cy.visit('/login');
+    cy.get('#email').type('validuser@example.com');
+    cy.get('#password').type('validpassword');
+    cy.get('button[type="submit"]').click();
+});
+
+Cypress.Commands.add('logout', () => {
+    cy.visit('/logout');
+});
+
+declare global {
+    namespace Cypress {
+        interface Chainable {
+            mockLoginBackend(): void;
+            login(): void;
+            logout(): void;
+            mount: typeof import('cypress/vue').mount;
+            saveCoverage(): void;
+        }
+    }
+}
 
 export {}
