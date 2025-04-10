@@ -14,6 +14,9 @@ export default defineConfig({
       }
       return config;
     },
+    env: {
+      CI: process.env.CI || false
+    },
     specPattern: 'cypress/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
   },
 });
