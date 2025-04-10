@@ -88,6 +88,7 @@ import { createElementBlock } from 'vue'
 
 import ImageUpload from '@/components/ImageUpload.vue'
 import { postImages } from '@/services/httpService'
+import router from '@/router'
 
 const categoriesStore = useCategoriesStore();
 const conditionStore = useConditionStore();
@@ -177,6 +178,9 @@ const handleSubmit = async () => {
     const response = await postImages("images/uploadListing", formData);
 
     console.log("Images uploaded:", response.data);
+
+    console.log("Successfully created listing");
+    await router.push("/pofile");
   } catch (error) {
     console.error("Error creating item and/or uploading images:", error);
     throw error;
