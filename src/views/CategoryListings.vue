@@ -31,7 +31,15 @@ import { getListingsByCategory } from '@/services/httpService'
 const route = useRoute()
 const categoryName = ref(route.params.categoryName as string)
 
-const listings = ref([])
+interface ListingDTO {
+  id: number;
+  title: string;
+  brief_description: string;
+  price: number;
+  // legg til mer hvis vi bruker mer
+}
+
+const listings = ref<ListingDTO[]>([])
 
 async function fetchListings(category: string) {
   try {
