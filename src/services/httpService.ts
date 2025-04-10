@@ -58,6 +58,7 @@ export async function postDataWithAuth(endpoint: string, data: any) {
     console.log("Sedning post request to:", apiUrl + endpoint);
     const response = await axios.post(apiUrl + endpoint, data, {
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
@@ -128,17 +129,20 @@ export async function deleteDataWithAuth(endpoint: string) {
     if (!token) {
       throw new Error("No token found");
     }
-
     console.log("Sedning delete request to:", apiUrl + endpoint);
     const response = await axios.delete(apiUrl + endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
+    return response;
   } catch (error) {
-    console.error("Error deleting: ", error);
-    logoutIfTokenInvalid()
-    throw error;
+    console.error("Error deleting data:", error);
+    logoutIfTokenInvalid();
+    if (axios.isAxiosError(error)) {
+        throw error.response?.data || error.message;
+    }
+    throw error
   }
 }
 
@@ -175,4 +179,43 @@ async function logoutIfTokenInvalid() {
         let userStore = useUserStore();
         userStore.logout();
     }
+}
+
+export async function isUserAdmin() {
+  try {
+    const response = await fetchDataWithAuth("admin/amIAdmin");
+    sessionStorage.setItem("isAdmin", response.data);
+    return response.data;
+  } catch (error) {
+    sessionStorage.setItem("isAdmin", "false");
+    return false;
+  }
+}
+
+// Hent alle kategorinavn (uten auth)
+export async function getAllCategoryNames(): Promise<string[]> {
+  try {
+    const response = await fetchDataWithoutAuth("categories");
+    return response.data;
+  } catch (error) {
+    console.error("Kunne ikke hente kategorier:", error);
+    return [];
+  }
+}
+
+// Hent alle listings i gitt kategori (med eller uten auth)
+export async function getListingsByCategory(categoryName: string): Promise<any[]> {
+  try {
+    const userStore = useUserStore()
+    const endpoint = `categories/category/${encodeURIComponent(categoryName)}`
+
+    const response = userStore.isAuthenticated()
+      ? await fetchDataWithAuth(endpoint)
+      : await fetchDataWithoutAuth(endpoint)
+
+    return response.data
+  } catch (error) {
+    console.error(`Feil ved henting av annonser for kategori ${categoryName}:`, error)
+    return []
+  }
 }

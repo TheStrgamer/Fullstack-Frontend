@@ -43,7 +43,7 @@ export function itemServices() {
       const response = await postDataWithAuth("listings/create", formattedItem);
 
       return response.data;
-  
+
     } catch (error) {
       console.error("Error creating item:", error);
       throw error;

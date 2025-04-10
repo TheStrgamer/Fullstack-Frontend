@@ -5,7 +5,7 @@
     <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :myAvatar="''" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList" />
   </div>
 </template>
-  
+
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue';
   import Navbar from '@/components/NavbarComponent.vue';
@@ -14,7 +14,7 @@
   import { fetchActiveChats, fetchConversation } from '@/services/chatService.ts';
   import { useRoute } from 'vue-router';
   import  router  from '@/router';
-  
+
   interface Chat {
     id: number;
     name: string;
@@ -38,11 +38,11 @@
   let isOnMessageWindow = ref(false);
 
   let chatId = ref(0);
-  
+
   let chats = ref<Chat[]>([]);
   const isMobile = ref(window.innerWidth <= 850);
   const token = sessionStorage.getItem('jwtToken') || '';
-  
+
   onMounted(async () => {
     try {
       if (route.params.chatId) {
@@ -51,22 +51,21 @@
       } else {
         chatId.value = 0;
         isOnMessageWindow.value = false;
-      }   
+      }
       chats.value = await fetchActiveChats();
     } catch (error) {
-      console.warn('Using mock data due to fetch error');
-      console.error(error);
-      chats.value = mockChats();
+
+      chats.value = []
     }
   });
-  
+
   const messages = ref<MessageList>({
     id: 0,
     name: 'Messages',
     picture: '',
     messages: []
   });
-  
+
   watch(chatId, async (newChatId) => {
     try {
       messages.value = await getChatData(newChatId);
@@ -75,25 +74,25 @@
       console.error(error);
     }
   });
-  
+
   const renderChatList = computed(() => !isMobile.value || !isOnMessageWindow.value);
   const renderMessages = computed(() => !isMobile.value || isOnMessageWindow.value);
-  
+
   function swapMessages(id: number) {
     chatId.value = id;
     isOnMessageWindow.value = true;
   }
-  
+
   function openChatList() {
     router.push({ name: 'chats' });
     chatId.value = 0;
     isOnMessageWindow.value = false;
   }
-  
+
   window.addEventListener('resize', () => {
     isMobile.value = window.innerWidth <= 850;
   });
-  
+
   function mockChats(): Chat[] {
     return [
       {
@@ -126,7 +125,7 @@
       }
     ];
   }
-  
+
   async function getChatData(chatId: number): Promise<MessageList> {
     try {
       if (chatId === 0) {
@@ -145,7 +144,7 @@
       return mockMessages(chatId);
     }
   }
-  
+
   function mockMessages(chatId: number): MessageList {
     return {
       id: chatId,
@@ -158,7 +157,7 @@
     };
   }
 </script>
-  
+
 <style>
     @import '@/assets/chat.css';
 </style>

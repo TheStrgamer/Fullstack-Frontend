@@ -11,7 +11,18 @@ import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
 import MyListings from '@/views/MyListings.vue'
 import UpdateListing from '@/views/UpdateListing.vue'
+import AdminPanelView from '@/views/AdminPanelView.vue'
+import AdminCreateView from '@/views/AdminCreateCategoryView.vue'
+import UserAdminComponent from '@/components/admin/UserAdminComponent.vue'
+import ListingAdminComponent from '@/components/admin/ListingAdminComponent.vue'
+import CategoryAdminComponent from '@/components/admin/CategoryAdminComponent.vue'
+import ConfirmDeleteAdminView from '@/views/ConfirmDeleteAdminView.vue'
+import AdminUpdateCategoryView from '@/views/AdminUpdateCategoryView.vue'
+import AdminUpdateUserView from '@/views/AdminUpdateUserView.vue'
+import NuhUhView from '@/views/NuhUhView.vue'
+import CategoryListings from '@/views/CategoryListings.vue'
 import { useUserStore } from '../stores/UserStore.ts'
+import { isUserAdmin } from '../services/httpService.ts'
 
 
 const router = createRouter({
@@ -30,7 +41,7 @@ const router = createRouter({
       path: "/geocoding",
       name: "geocoding",
       component: GeoCoding,
-      
+
     },
     {
       path: "/logout",
@@ -48,12 +59,12 @@ const router = createRouter({
     {
       path: "/profile",
       component: Profile,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/profile/my_account",
       component: MyAccount,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/profile/my_listings",
@@ -69,9 +80,9 @@ const router = createRouter({
 
     { //TODO This is only to test if requiresLogin works, remove it later
       // If any route requires login, implement it the same way as this please
-      path: "/requirelogin", 
-      component: HomeView, 
-      meta: { requiresLogin: true } 
+      path: "/requirelogin",
+      component: HomeView,
+      meta: { requiresLogin: true }
     },
     {
       path: "/Item",
@@ -94,21 +105,90 @@ const router = createRouter({
       path: "/createlisting",
       name: "CreateListing",
       component: CreateItem,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
-      path: "/:pathMatch(.*)*", 
-      component: NotFound 
+      path: "/admin",
+      name: "admin",
+      component: AdminPanelView,
+      meta: { requiresAdmin: true },
+      children: [
+        {
+          path: '',
+          name: 'admin-home',
+          redirect: '/admin/user'
+        },
+        {
+          path: 'listing',
+          name: 'admin-listing',
+          component: ListingAdminComponent
+        },
+        {
+          path: 'category',
+          name: 'admin-category',
+          component: CategoryAdminComponent
+        },
+        {
+          path: 'user',
+          name: 'admin-user',
+          component: UserAdminComponent
+        }
+      ]
     },
+    {
+      path: "/admin/addCategory",
+      name: "addCategory",
+      component: AdminCreateView,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: "/admin/updateCategory/:categoryId",
+      name: "updateCategory",
+      component: AdminUpdateCategoryView,
+      props: true,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: "/admin/updateUser/:userId",
+      name: "updateUser",
+      component: AdminUpdateUserView,
+      props: true,
+      meta: { requiresAdmin: true }
+    },
+    {
+      path: '/confirm-delete/:itemType/:itemId/:extraMessage',
+      name: 'ConfirmDelete',
+      component: ConfirmDeleteAdminView,
+      props: true
+    },
+    {
+      path: "/nuh",
+      name: "nuh",
+      component: NuhUhView,
+      meta: { requiresLogin: true }
+    },
+    {
+      path: "/category/:categoryName",
+      name: "CategoryListings",
+      component: CategoryListings,
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: NotFound
+    }
   ],
 })
 
 // For routes that require the user to be logged in
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.meta.requiresLogin && !useUserStore().isAuthenticated()) {
     console.warn("User is not authenticated, redirecting to login");
     next("/login");
-  } else {
+  } else if (to.meta.requiresAdmin && !await isUserAdmin()) {
+    console.warn("User is not admin, redirecting to home");
+    next("/nuh");
+  }
+   else {
     next();
   }
 });

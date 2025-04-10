@@ -16,16 +16,16 @@
           :user="message"
           :message="message.message"
           :timestamp="message.timestamp"
-          :avatar="message.sentByMe ? myAvatar : avatar"
+          :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(avatar.slice(1))"
           :name="message.sentByMe ? 'You' : name"
         />
       </FadeInComponent>
     </div>
     <div class="message-list-footer" v-if ="chatId !== 0">
-      <input 
-        type="text" 
-        placeholder="Type a message..." 
-        class="message-input" 
+      <input
+        type="text"
+        placeholder="Type a message..."
+        class="message-input"
         v-model="messageInput"
         @keyup.enter="sendMessage"
       />
@@ -38,6 +38,7 @@
 import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
+import { getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
 
 interface Message {
@@ -136,7 +137,7 @@ export default defineComponent({
           message: newMessage.message,
           timestamp: new Date().toLocaleTimeString()
         };
-        
+
         allmessages.value.push(newMessageParsed);
         messageInput.value = '';
         scrollToBottom();
@@ -151,7 +152,8 @@ export default defineComponent({
       messageInput,
       sendMessage,
       allmessages,
-      messageList
+      messageList,
+      getUrlFromEndpoint
     };
   }
 });

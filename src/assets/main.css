@@ -2,8 +2,8 @@
 
 /* Default styles for mobile (small screens) */
 body {
-  /* margin: 5px;
-  padding: 5px; */
+  margin: 5px;
+  padding: 5px;
   background-color: var(--background);
 }
 
@@ -73,7 +73,7 @@ body {
 }
 
 .invalid-field {
-  border: 2px solid var(--invalid);  
+  border: 2px solid var(--invalid);
 }
 
 /* Tablet styles (768 px and up) */

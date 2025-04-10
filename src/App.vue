@@ -6,3 +6,10 @@ import { RouterView } from 'vue-router'
   <RouterView />
 </template>
 
+<style>
+body {
+  margin: 0;
+  padding: 0;
+}
+</style>
+

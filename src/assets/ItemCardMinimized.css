@@ -1,7 +1,7 @@
 @import './base.css';
 
 .item-card-minimized {
-    /* scale: 1; */
+    position: relative;
     display: flex;
     flex-direction: column;
     background-color: var(--accent);
@@ -15,10 +15,8 @@
     box-sizing: border-box;
     text-decoration: none;
     color: var(--text);
-  }
-
-  .item-card-minimized:hover {
-    scale: 1.1;
+    justify-content: space-between;
+    height: 100%;
   }
   
   .item-image {
@@ -26,24 +24,24 @@
     height: auto;;
     max-height: 350px;;
     border-radius: 12px;
-    object-fit: cover;
+    object-fit: contain;
     margin-bottom: 10px;
   }
-  
+
   .item-info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 6px;
   }
-  
+
   .item-title {
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--text1);
     margin: 0;
   }
-  
+
   /* Price pill styled like navbar Home button */
   .item-price-pill {
     background-color: var(--button);
@@ -54,7 +52,7 @@
     font-weight: 500;
     white-space: nowrap;
   }
-  
+
   /* Description below the row */
   .item-description {
     font-size: 0.95rem;
@@ -63,29 +61,47 @@
     padding-top: 6px;
     word-wrap: break-word;
   }
-  
+
   /* Remove default link look */
   .no-link-style {
     text-decoration: none;
     color: inherit;
-  }  
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+    height: 24px;
+  }
+
+  .favorite-btn {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: #c44; /* standard outline */
+  }
+
+  .favorite-btn.active {
+    color: #e63946; /* fylt hjerte */
+  }
 
   @media (min-width: 768px) {
     .item-card-minimized{
       max-width: 200px;
       min-width: 200px;
-      min-height: 250px !important;
-      max-height: 250px !important;
+      height: 280px !important;
     }
 
     .item-image {
       width: 100%;
-      height: auto;
-      min-height: 145px !important;
-      max-height: 145px !important;
+      height: 140px !important;
+      /* min-height: 20px !important;
+      max-height: 20px !important; */
       border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 10px;
+      object-fit: contain;
+      margin-bottom: 8px;
     }
 
     .item-title {
@@ -101,6 +117,16 @@
       margin: 0;
       padding-top: 6px;
       word-wrap: break-word;
+    }
+
+    .top-bar {
+      margin-bottom: 4px;
+      height: 20px;
+    }
+
+    .favorite-btn {
+      font-size: 1.2rem;
+      margin-right: 4px;
     }
   }
   

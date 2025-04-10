@@ -1,6 +1,6 @@
 <template>
     <div class="chat-list-item-content" @click="$emit('click')">
-        <img :src="user.avatar" alt="User Avatar" class="avatar" v-if="user.avatar!=''" />
+        <img :src="getUrlFromEndpoint(user.avatar.slice(1))" alt="User Avatar" class="avatar" v-if="user.avatar!=''" />
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieyaZb-hSOtWnc6wha3QQlMLL8_cfvr2WIQ&s" alt="Default Avatar" class="avatar" v-else />
         <div class="chat-list-item-text">
             <h3>{{ user.name }}
@@ -12,6 +12,7 @@
 </template>
 
 <script lang="ts">
+import { getUrlFromEndpoint } from '@/services/httpService';
   export default {
     name: 'ChatListItem',
     props: {
@@ -33,6 +34,11 @@
       onClick() {
         this.$emit('click', this.user.id);
       },
+    },
+    setup() {
+      return {
+        getUrlFromEndpoint
+      };
     },
   };
 

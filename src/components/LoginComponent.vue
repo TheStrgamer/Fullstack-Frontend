@@ -4,7 +4,7 @@
         <div>
             <input v-model="email" type="text" id="email" name="email" placeholder="email" />
             <p class="error-message">{{ emailErrorMessage }}</p>
-        </div>        
+        </div>
         <div>
             <input v-model="password" type="password" id="password" name="password" placeholder="password" />
             <p class="error-message">{{ passwordErrorMessage }}</p>
@@ -63,7 +63,7 @@
                         break;
                     default:
                         break;
-                    
+
                 }
                 const element = document.getElementById(id);
                 if (element) {
@@ -106,7 +106,7 @@
 
                     console.log('Login successful:', userStore.jwtToken);
                     router.push('/');
-                    
+
                 } catch (error: unknown) {
                     if (axios.isAxiosError(error)) {
                         if (error.response) {
@@ -134,7 +134,7 @@
                         this.setResponseMessage('An unexpected error occurred. Please try again later.', true);
                     }
                 }
-                
+
             },
         }
     }

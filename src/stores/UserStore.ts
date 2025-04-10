@@ -1,6 +1,10 @@
 import { defineStore } from 'pinia'
-import { getJwtToken } from '../services/authService'
-import router from '../router';
+import { getJwtToken } from '@/services/authService'
+import router from '@/router';
+import { isUserAdmin } from '@/services/httpService';
+
+
+
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -24,6 +28,9 @@ export const useUserStore = defineStore('user', {
           sessionStorage.setItem('expiresAt', String(this.expiresAt)); // TODO: maybe remove this line
           sessionStorage.setItem('email', this.email);
 
+          const isAdmin = await isUserAdmin();
+          sessionStorage.setItem('isAdmin', String(isAdmin));
+
           return true;
         } else {
           console.error('Failed to retrieve token');
@@ -40,6 +47,7 @@ export const useUserStore = defineStore('user', {
       this.jwtToken = '';
       this.expiresAt = 0;
       this.email = '';
+      sessionStorage.removeItem('isAdmin');
       sessionStorage.removeItem('jwtToken');
       sessionStorage.removeItem('expiresAt');
       sessionStorage.removeItem('email');
@@ -84,6 +92,11 @@ export const useUserStore = defineStore('user', {
     // Getter method for checking auth state
     isAuthenticated() {
       return !!this.jwtToken && !this.isTokenExpired();
+    },
+
+    isUserAdmin() {
+      const isAdmin = sessionStorage.getItem('isAdmin');
+      return isAdmin === 'true';
     }
   }
 });

@@ -6,12 +6,13 @@
     </router-link>
 
     <!-- Hamburger toggle (hidden on larger screens) -->
-    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu"> 
+    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu">
       <span></span>
     </button>
 
     <!-- Mobile dropdown menu -->
     <nav class="mobile-menu">
+      <router-link v-if="isAdmin" to="/admin">Admin</router-link>
       <router-link to="/example" @click="isMenuOpen = false">Example</router-link>
       <router-link to="/profile" @click="isMenuOpen = false">Profile</router-link>
       <router-link to="/chats" @click="isMenuOpen = false">Chat</router-link>
@@ -21,6 +22,7 @@
 
     <!-- Desktop/tablet nav links (always visible on larger screens) -->
     <nav class="nav-links">
+      <router-link v-if="isAdmin" to="/admin">Admin</router-link>
       <router-link to="/example">Example</router-link>
       <router-link to="/profile">Profile</router-link>
       <router-link to="/chats">Chat</router-link>
@@ -36,6 +38,7 @@ import { useUserStore } from '@/stores/UserStore';
 
 const userStore = useUserStore();
 const isLoggedIn = computed(() => userStore.isAuthenticated());
+const isAdmin = computed(() => userStore.isUserAdmin());
 
 const isMenuOpen = ref(false);
 
