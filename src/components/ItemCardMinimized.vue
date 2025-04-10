@@ -1,33 +1,33 @@
 <template>
   <FadeInComponent :duration="400" :direction="'bottom'">
-  <router-link :to="{ path: routePath, query: { id: item.id } }" class="no-link-style">
-    <div class="item-card-minimized">
-      <!-- Topp-rad med hjerteknapp -->
-      <div class="top-bar">
-        <button
-        v-if="isLoggedIn && isFavoriteable"
-        class="favorite-btn"
-        :class="{ active: isFavorite }"
-        @click.stop.prevent="toggleFavoriteStatus"
-        >
-        <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
-        </button>
+    <router-link :to="{ path: routePath, query: { id: item.id } }" class="no-link-style">
+      <div class="item-card-minimized">
+        <!-- Topp-rad med hjerteknapp -->
+        <div class="top-bar">
+          <button
+          v-if="isLoggedIn && isFavoriteable"
+          class="favorite-btn"
+          :class="{ active: isFavorite }"
+          @click.stop.prevent="toggleFavoriteStatus"
+          >
+          <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
+          </button>
+        </div>
+        <img
+          class="item-image"
+          :src="getImageUrl(item.imagePath)"
+          :alt="item.title"
+        />
+
+        <div class="item-info-row">
+          <h3 class="item-title">{{ item.title }}</h3>
+          <span class="item-price-pill">{{ item.price }} kr</span>
+        </div>
+
+        <p class="item-description">{{ item.briefDescription }}</p>
+
       </div>
-      <img
-        class="item-image"
-        :src="getImageUrl(item.imagePath)"
-        :alt="item.title"
-      />
-
-      <div class="item-info-row">
-        <h3 class="item-title">{{ item.title }}</h3>
-        <span class="item-price-pill">{{ item.price }} kr</span>
-      </div>
-
-      <p class="item-description">{{ item.briefDescription }}</p>
-
     </router-link>
-    </div>
   </FadeInComponent>
 </template>
 
