@@ -16,7 +16,7 @@
           :user="message"
           :message="message.message"
           :timestamp="message.timestamp"
-          :avatar="message.sentByMe ? myAvatar : avatar"
+          :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(avatar.slice(1))"
           :name="message.sentByMe ? 'You' : name"
         />
       </FadeInComponent>
@@ -38,6 +38,7 @@
 import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
+import { getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
 
 interface Message {
@@ -151,7 +152,8 @@ export default defineComponent({
       messageInput,
       sendMessage,
       allmessages,
-      messageList
+      messageList,
+      getUrlFromEndpoint
     };
   }
 });
