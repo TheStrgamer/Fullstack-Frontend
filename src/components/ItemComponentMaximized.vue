@@ -48,10 +48,9 @@
     <p class="item-description">{{ itemStore.full_description }}</p>
 
     <!-- Lokasjon -->
-    <p class="item-location">
-      Posisjon: {{ itemStore.latitude }}, {{ itemStore.longitude }}
-    </p>
-
+     <PositionElementsComponent
+      :latitude="itemStore.latitude"
+      :longitude="itemStore.longitude"></PositionElementsComponent>
     <!-- Datoer -->
     <div class="item-dates">
       <p>Opprettet: {{ formatDate(itemStore.created_at) }}</p>
@@ -71,6 +70,7 @@
 import { onMounted, computed, ref } from 'vue'
 import router from '@/router';
 import { useRoute } from 'vue-router'
+import PositionElementsComponent from './PositionElementsComponent.vue';
 import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
