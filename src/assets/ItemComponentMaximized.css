@@ -125,14 +125,13 @@
 
   .item-location {
     font-size: 0.95rem;
-    color: #666;
   }
 
   .item-dates {
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
-    color: #999;
+    color: var(--text);
   }
   .image-index-display {
     position: absolute;
