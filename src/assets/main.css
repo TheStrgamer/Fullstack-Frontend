@@ -2,8 +2,8 @@
 
 /* Default styles for mobile (small screens) */
 body {
-  /* margin: 5px;
-  padding: 5px; */
+  margin: 5px;
+  padding: 5px;
   background-color: var(--background);
 }
 

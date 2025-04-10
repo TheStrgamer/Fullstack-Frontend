@@ -165,3 +165,31 @@ export async function isUserAdmin() {
     return false;
   }
 }
+
+// Hent alle kategorinavn (uten auth)
+export async function getAllCategoryNames(): Promise<string[]> {
+  try {
+    const response = await fetchDataWithoutAuth("categories");
+    return response.data;
+  } catch (error) {
+    console.error("Kunne ikke hente kategorier:", error);
+    return [];
+  }
+}
+
+// Hent alle listings i gitt kategori (med eller uten auth)
+export async function getListingsByCategory(categoryName: string): Promise<any[]> {
+  try {
+    const userStore = useUserStore()
+    const endpoint = `categories/category/${encodeURIComponent(categoryName)}`
+
+    const response = userStore.isAuthenticated()
+      ? await fetchDataWithAuth(endpoint)
+      : await fetchDataWithoutAuth(endpoint)
+
+    return response.data
+  } catch (error) {
+    console.error(`Feil ved henting av annonser for kategori ${categoryName}:`, error)
+    return []
+  }
+}

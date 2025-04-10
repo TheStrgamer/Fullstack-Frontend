@@ -18,6 +18,7 @@ import ConfirmDeleteAdminView from '@/views/ConfirmDeleteAdminView.vue'
 import AdminUpdateCategoryView from '@/views/AdminUpdateCategoryView.vue'
 import AdminUpdateUserView from '@/views/AdminUpdateUserView.vue'
 import NuhUhView from '@/views/NuhUhView.vue'
+import CategoryListings from '@/views/CategoryListings.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
 
@@ -152,6 +153,11 @@ const router = createRouter({
       name: "nuh",
       component: NuhUhView,
       meta: { requiresLogin: true }
+    },
+    {
+      path: "/category/:categoryName",
+      name: "CategoryListings",
+      component: CategoryListings,
     },
     {
       path: "/:pathMatch(.*)*",
