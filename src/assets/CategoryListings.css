@@ -1,0 +1,23 @@
+.listings-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+  }
+  
+  .category-heading {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+  }
+  
+  .category-pill {
+    background-color: var(--button);
+    color: var(--button-text);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: capitalize;
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
+  }

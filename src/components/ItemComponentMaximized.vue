@@ -75,6 +75,7 @@ import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
 import { toggleFavorite, checkFavoriteStatus } from '@/services/favoriteService';
+import { getUrlFromEndpoint } from '@/services/httpService.ts'
 
 const route = useRoute()
 const itemId = route.query.id as string
@@ -100,16 +101,21 @@ onMounted(async () => {
   }
 })
 
+function getImageUrl(imagePath: string): string {
+  if (!imagePath) return '/default-image.png';
+  if (imagePath.startsWith('http')) return imagePath;
+
+  const cleanPath = imagePath.replace(/^\/+/, '');
+  return getUrlFromEndpoint(cleanPath);
+}
+
 async function fetchItemData() {
   itemLoaded.value = false;
 
   await itemStore.fetchItem(itemId);
 
-  const urls = itemStore.imageUrls
-  .map((url: string) => {
-    if (url.startsWith('http')) return url;
-    return `${import.meta.env.VITE_API_URL}/${url}`.replace(/([^:]\/)\/+/g, "$1"); // Fjerner dobbel slash
-  })
+  const urls = itemStore.imageUrls.map(getImageUrl)
+  .map(getImageUrl)
   .filter((url: string) => url);
 
   images.value = urls.length > 0 ? urls : ['/default-image.png'];
