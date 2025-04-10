@@ -4,7 +4,7 @@ export async function toggleFavorite(listingId: number) {
   console.log("Toggler favoritt for listing:", listingId);
   const response = await postDataWithAuth(`users/favorites/toggle/${listingId}`, {});
   console.log("Respons fra server:", response);
-  return response.data;
+  return response.data.isFavorited;
 }
 
 export async function checkFavoriteStatus(listingId: number): Promise<boolean> {

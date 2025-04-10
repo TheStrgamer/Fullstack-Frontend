@@ -133,6 +133,18 @@
     border-radius: 6px;
   }
 
+  .favorite-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--primary);
+  }
+  
+  .favorite-btn.active {
+    color: var(--primary);
+  }
+
   @media (min-width: 768px) {
     .item-image {
       max-height: 350px !important;

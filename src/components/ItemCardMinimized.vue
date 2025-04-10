@@ -14,7 +14,6 @@
       </div>
     <router-link :to="{ path: '/item', query: { id: item.id } }" class="no-link-style">
       <img
-        v-if="item.imagePath"
         class="item-image"
         :src="getImageUrl(item.imagePath)"
         :alt="item.title"
@@ -36,7 +35,7 @@
 import { getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from './FadeInComponent.vue';
 import { useUserStore } from '@/stores/UserStore';
-import { ref, computed} from 'vue';
+import { ref, computed, watch} from 'vue';
 import { toggleFavorite } from '@/services/favoriteService';
 
 const userStore = useUserStore();
@@ -59,14 +58,15 @@ const props = defineProps({
     default: true
   }
 });
-const isFavorite = ref(props.item.isFavorited);
+const isFavorite = ref(!!props.item.isFavorited); // startverdi, og så lar vi den leve
+
 
 async function toggleFavoriteStatus(event: MouseEvent) {
-  event.preventDefault(); // forhindrer routing når man klikker på hjertet
-
+  event.preventDefault();
   try {
-    await toggleFavorite(props.item.id);
-    isFavorite.value = !isFavorite.value;
+    const newStatus = await toggleFavorite(props.item.id);
+    isFavorite.value = !!newStatus; // defensivt
+    console.log("Ny favorittstatus mottatt fra server:", newStatus);
   } catch (err) {
     console.error("Kunne ikke oppdatere favoritt:", err);
   }
@@ -74,7 +74,7 @@ async function toggleFavoriteStatus(event: MouseEvent) {
 
 // Genererer full URL til bildet
 function getImageUrl(imagePath: string) {
-  if (!imagePath) return '/fallback.png';
+  if (!imagePath || imagePath == null) return '/default-image.png';
   const cleanPath = imagePath.replace(/^\/+/, '');
   return getUrlFromEndpoint(cleanPath);
 }

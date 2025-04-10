@@ -1,5 +1,15 @@
 <template>
   <div v-if="itemLoaded" class="item-maximized">
+    <div class="top-bar">
+          <button
+            v-if="isLoggedIn"
+            class="favorite-btn"
+            :class="{ active: isFavorite }"
+            @click="toggleFavoriteStatus"
+          >
+            <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
+          </button>
+        </div>
     <!-- Kategori + Salgsstatus -->
     <div class="item-header-bar">
       <span class="item-category">{{ itemStore.categoryName }}</span>
@@ -64,12 +74,14 @@ import { useRoute } from 'vue-router'
 import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
+import { toggleFavorite, checkFavoriteStatus } from '@/services/favoriteService';
 
 const route = useRoute()
 const itemId = route.query.id as string
 const itemStore = useItemStore()
 const userStore = useUserStore()
 const itemLoaded = ref(false)
+const isFavorite = ref(false);
 
 // Bildekarusell
 const images = ref<string[]>([])
@@ -78,6 +90,9 @@ const currentImageIndex = ref(0)
 const isLoggedIn = computed(() => userStore.isAuthenticated());
 
 onMounted(async () => {
+  if (isLoggedIn.value) {
+    isFavorite.value = await checkFavoriteStatus(Number(itemId));
+  }
   try {
     await fetchItemData()
   } catch (error) {
@@ -154,6 +169,15 @@ function negotiate() {
     .catch((error) => {
       console.error('Error starting conversation:', error)
     })
+}
+
+async function toggleFavoriteStatus() {
+  try {
+    await toggleFavorite(Number(itemId));
+    isFavorite.value = !isFavorite.value;
+  } catch (err) {
+    console.error("Kunne ikke oppdatere favoritt:", err);
+  }
 }
 </script>
 
