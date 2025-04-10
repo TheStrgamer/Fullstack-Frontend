@@ -5,10 +5,18 @@ describe('CategoryComponent', () => {
 
   it('should toggle the category menu when the button is clicked on mobile screens', () => {
     cy.viewport(500, 800);
-
+  
     cy.get('.category-toggle').click();
+  
+    cy.get('.category-list')
+      .should('exist')
+      .should('have.css', 'height')
+      .and('not.equal', '0px')
+      .and('not.equal', 'auto')
+      .and('not.equal', '');
+  
     cy.get('.category-list').should('be.visible');
-
+  
     cy.get('.category-toggle').click();
     cy.get('.category-list').should('not.exist');
   });
@@ -44,9 +52,13 @@ describe('CategoryComponent', () => {
 
   it('should adapt to screen size changes', () => {
     cy.viewport(500, 800);
+  
     cy.get('.category-list').should('not.exist');
-
+  
     cy.viewport(1024, 800);
+  
+    cy.wait(300);
+  
     cy.get('.category-list').should('be.visible');
   });
 });
