@@ -1,6 +1,8 @@
 <template>
   <div v-if="itemLoaded" class="item-maximized">
     <div class="top-bar">
+      <h1 class="item-title">{{ itemStore.title }}</h1>
+
           <button
             v-if="isLoggedIn"
             class="favorite-btn"
@@ -10,13 +12,6 @@
             <i :class="isFavorite ? 'fas fa-heart' : 'far fa-heart'"></i>
           </button>
         </div>
-    <!-- Kategori + Salgsstatus -->
-    <div class="item-header-bar">
-      <span class="item-category">{{ itemStore.categoryName }}</span>
-      <span :class="['item-status', statusClass]">
-        {{ getSaleStatusText(itemStore.sale_status) }}
-      </span>
-    </div>
 
     <!-- Bildekarusell -->
     <div class="image-carousel" v-if="images.length > 0">
@@ -30,36 +25,51 @@
         Bilde {{ currentImageIndex + 1 }} av {{ images.length }}
       </div>
     </div>
-
-
-    <!-- Tittel + Pris -->
-    <div class="item-info-row">
-      <h1 class="item-title">{{ itemStore.title }}</h1>
+        <!-- Tittel + Pris -->
+    <div class="item-info-row price-row">
+      <span :class="['item-status', statusClass]">
+        {{ getSaleStatusText(itemStore.sale_status) }}
+      </span>
       <span class="item-price-pill">{{ itemStore.price }} kr</span>
+    </div>
+
+    <!-- Kategori + Salgsstatus -->
+    <div class="category-row">
+      <span class="item-category"><strong>Kategori:</strong> {{ itemStore.categoryName }}</span>
     </div>
 
     <!-- Tilstand + Størrelse -->
     <div class="item-info-row">
-      <p class="item-subinfo">Tilstand: {{ itemStore.conditionName }}</p>
-      <p class="item-subinfo" v-if="itemStore.size">Størrelse: {{ itemStore.size }}</p>
+      <p class="item-subinfo"><strong>Tilstand:</strong> {{ itemStore.conditionName }}</p>
+      <p class="item-subinfo" v-if="itemStore.size"><strong>Størrelse:</strong> {{ itemStore.size }}</p>
     </div>
 
     <!-- Beskrivelse -->
-    <p class="item-description">{{ itemStore.full_description }}</p>
+    <div class="description">
+      <h3 class="section-title">Beskrivelse</h3>
+      <p class="item-description">{{ itemStore.full_description }}</p>
+    </div>
 
     <!-- Lokasjon -->
-    <p class="item-location">
-      Posisjon: {{ itemStore.latitude }}, {{ itemStore.longitude }}
-    </p>
-
-    <!-- Datoer -->
-    <div class="item-dates">
-      <p>Opprettet: {{ formatDate(itemStore.created_at) }}</p>
-      <p>Oppdatert: {{ formatDate(itemStore.updated_at) }}</p>
+    <div class="location">
+      <h3 class="section-title">Lokasjon</h3>
+      <PositionElementsComponent :latitude="itemStore.latitude" :longitude="itemStore.longitude"></PositionElementsComponent>
     </div>
+
+    <!-- Selger -->
+     <h3 class="section-title">Selger</h3>
+    <ContactInfoComponent :userId="itemStore.creatorId" />
+
+    <!-- Negotiate Button -->
     <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
-      Negotiate
+      <i class="fas fa-comments"></i> Kontakt selger
     </button>
+
+        <!-- Datoer -->
+    <div class="item-dates">
+      <p><strong>Opprettet:</strong> {{ formatDate(itemStore.created_at) }}</p>
+      <p><strong>Oppdatert:</strong> {{ formatDate(itemStore.updated_at) }}</p>
+    </div>
   </div>
   <div v-else class="loading-container">
     <div class="loading-spinner"></div>
@@ -71,6 +81,8 @@
 import { onMounted, computed, ref } from 'vue'
 import router from '@/router';
 import { useRoute } from 'vue-router'
+import PositionElementsComponent from './PositionElementsComponent.vue';
+import ContactInfoComponent from './ContactInfoComponent.vue';
 import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
@@ -187,6 +199,6 @@ async function toggleFavoriteStatus() {
 }
 </script>
 
-<style>
+<style scoped>
 @import '../assets/ItemComponentMaximized.css';
 </style>

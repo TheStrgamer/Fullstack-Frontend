@@ -7,7 +7,7 @@
             <div class="category-heading">
                 <span class="category-pill">{{ categoryName }}</span>
             </div>
-  
+
         <div class="listings-grid">
           <ItemCardMinimized
             v-for="item in listings"

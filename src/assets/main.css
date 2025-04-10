@@ -73,7 +73,7 @@ body {
 }
 
 .invalid-field {
-  border: 2px solid var(--invalid);  
+  border: 2px solid var(--invalid);
 }
 
 /* Tablet styles (768 px and up) */

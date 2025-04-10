@@ -68,7 +68,7 @@ function prevPage() {
 onMounted(async () => {
   updateItemsPerPage();
   window.addEventListener('resize', updateItemsPerPage);
-  
+
   const feedStore = useFeedStore();
   await feedStore.fetchRecommendedItems(30);
   feedItems.value = feedStore.getRecommendedItems;

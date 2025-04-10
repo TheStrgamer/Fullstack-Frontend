@@ -2,17 +2,17 @@
     max-width: 600px;
     margin: 0 auto;
   }
-  
+
   .form-group {
     margin-bottom: 1rem;
   }
-  
+
   .form-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: bold;
   }
-  
+
   .form-group input,
   .form-group select,
   .form-group textarea {
@@ -21,7 +21,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
   }
-  
+
   button[type="submit"] {
     background-color: var(--button);
     color: white;
@@ -33,7 +33,7 @@
     width: 100px;
     height: 40px;
   }
-  
+
   button[type="submit"]:hover {
     background-color: var(--button);
   }

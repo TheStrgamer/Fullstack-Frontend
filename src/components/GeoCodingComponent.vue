@@ -4,13 +4,13 @@
       <AutoComplete v-model:address = "address" />
       <button type="submit">Submit</button>
     </form>
-  
+
     <form @submit.prevent="coordsToAddress" class="input-form-flex" style="height: 100px;">
       <input v-model="latitude" type="text" placeholder="Latitude" />
       <input v-model="longitude" type="text" placeholder="Longitude" />
       <button type="submit">Submit</button>
     </form>
-  
+
     <p>Latitude: {{ latitude }}</p>
     <p>Longitude: {{ longitude }}</p>
     <p>Address: {{ fullAddress }}</p>
@@ -20,11 +20,11 @@
     <p>Country: {{ country }}</p>
   </div>
 </template>
-  
+
 <script lang="ts">
   import AutoComplete from './AutoCompleteAddressSearchComponent.vue';
   import { addressToCoords, coordsToAddress } from '@/services/geoCodingService';
-  
+
   export default {
     name: 'RegisterComponent',
     components: {
@@ -51,7 +51,7 @@
             return;
           }
           console.log(result);
-          
+
           this.latitude = result.latitude;
           this.longitude = result.longitude;
           this.fullAddress = result.fullAddress;
@@ -64,7 +64,7 @@
           console.error(err);
         }
       },
-  
+
       async coordsToAddress() {
         try {
           const result = await coordsToAddress(this.latitude, this.longitude);

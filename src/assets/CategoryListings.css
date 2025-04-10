@@ -4,13 +4,13 @@
     gap: 16px;
     justify-content: center;
   }
-  
+
   .category-heading {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
   }
-  
+
   .category-pill {
     background-color: var(--button);
     color: var(--button-text);

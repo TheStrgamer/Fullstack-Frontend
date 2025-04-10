@@ -14,10 +14,10 @@
         <h2 class="chat-list-title" v-if="chats.length === 0">You have no active chats</h2>
     </div>
 </template>
-  
+
 <script lang="ts">
   import ChatListItem from '@/components/chat/ChatListItem.vue';
-  
+
   interface Chat {
     id: number;
     name: string;
@@ -25,7 +25,7 @@
     lastMessage: string;
     timestamp: string;
   }
-  
+
   export default {
     name: 'ChatListComponent',
     components: {
@@ -49,7 +49,7 @@
     }
   }
 </script>
-  
+
 <style scoped>
     @import '@/assets/chat.css';
 </style>
