@@ -1,7 +1,7 @@
 @import './base.css';
 
 /* Default styles for mobile (small screens) */
-  
+
   /* TODO make navbar better */
   .navbar {
     display: flex;
@@ -23,7 +23,7 @@
     max-width: 100%;
     position: sticky; /* does this make the navbar stay at the top? idk */
   }
-  
+
   .navbar a:not(.logo-container) {
     color: var(--button-text);
     text-decoration: none;
@@ -33,7 +33,7 @@
     background-color: var(--button);
     border-radius: 8px;
   }
-  
+
   .logo-container {
     display: flex;
     align-items: center;
@@ -47,15 +47,15 @@
   .logo-container img {
     display: block;
   }
-  
+
   .logo-icon {
     height: 45px;
   }
-  
+
   .logo-text {
     display: none !important; /* skjul tekst-logo på små skjermer */
   }
-  
+
   /* Vis tekst-logo fra tablet og opp */
   @media (min-width: 768px) {
     .logo-text {
@@ -64,11 +64,11 @@
       margin-top: 10px;
     }
   }
-  
+
   .nav-links {
     display: none;;
   }
-  
+
   /* Hamburger knapp */
   .menu-toggle {
     background: none;
@@ -80,7 +80,7 @@
     padding: 0;
     z-index: 1100;
   }
-  
+
   .mobile-menu{
     position: fixed;
     top: 10px;
@@ -99,11 +99,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     height: auto;
   }
-  
+
   .navbar.open .mobile-menu {
     transform: translateX(0%);
   }
-  
+
   .mobile-menu router-link {
     background-color: var(--button);
     color: var(--button-text);
@@ -112,7 +112,7 @@
     border-radius: 8px;
     text-align: center;
   }
-  
+
   .menu-toggle::before,
   .menu-toggle::after,
   .menu-toggle span {
@@ -126,22 +126,22 @@
     left: 0;
     transition: 0.3s ease;
   }
-  
+
   /* Øverste linje */
   .menu-toggle::before {
     top: 0;
   }
-  
+
   /* Midterste linje – vi trenger en ekstra span for dette */
   .menu-toggle span {
     top: 10px;
   }
-  
+
   /* Nederste linje */
   .menu-toggle::after {
     bottom: 0;
   }
-  
+
   .nav-buttons {
     display: none;
     flex-direction: column;
@@ -149,11 +149,11 @@
     margin-top: 10px;
     gap: 5px;
   }
-  
+
   .nav-buttons.open {
     display: flex;
   }
-  
+
   .nav-buttons router-link {
     color: var(--button-text);
     text-decoration: none;
@@ -170,23 +170,23 @@
     .menu-toggle {
       display: none; /* Hide hamburger on larger screens */
     }
-  
+
     .mobile-menu {
       display: none; /* Hide sliding menu entirely */
     }
-  
+
     .navbar {
       flex-wrap: nowrap;
       padding: 10px 20px;
     }
-  
+
     .navbar .nav-links {
       display: flex;
       flex-direction: row;
       gap: 10px;
       margin-left: auto; /* Push to the right */
     }
-  
+
     .nav-links router-link {
       background-color: var(--button);
       color: var(--button-text);

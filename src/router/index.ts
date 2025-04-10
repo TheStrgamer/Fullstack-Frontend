@@ -38,7 +38,7 @@ const router = createRouter({
       path: "/geocoding",
       name: "geocoding",
       component: GeoCoding,
-      
+
     },
     {
       path: "/logout",
@@ -56,19 +56,19 @@ const router = createRouter({
     {
       path: "/profile",
       component: Profile,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/profile/my_account",
       component: MyAccount,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
       // If any route requires login, implement it the same way as this please
-      path: "/requirelogin", 
-      component: HomeView, 
-      meta: { requiresLogin: true } 
+      path: "/requirelogin",
+      component: HomeView,
+      meta: { requiresLogin: true }
     },
     {
       path: "/Item",
@@ -91,14 +91,14 @@ const router = createRouter({
       path: "/createlisting",
       name: "CreateListing",
       component: CreateItem,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/admin",
       name: "admin",
       component: AdminPanelView,
       meta: { requiresAdmin: true },
-      children: [      
+      children: [
         {
           path: '',
           name: 'admin-home',
@@ -154,8 +154,8 @@ const router = createRouter({
       meta: { requiresLogin: true }
     },
     {
-      path: "/:pathMatch(.*)*", 
-      component: NotFound 
+      path: "/:pathMatch(.*)*",
+      component: NotFound
     }
   ],
 })

@@ -6,7 +6,7 @@
     </router-link>
 
     <!-- Hamburger toggle (hidden on larger screens) -->
-    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu"> 
+    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu">
       <span></span>
     </button>
 

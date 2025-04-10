@@ -1,7 +1,7 @@
 .category-wrapper {
     padding: 10px;
   }
-  
+
   .category-toggle {
     display: block;
     background-color: var(--primary);
@@ -13,7 +13,7 @@
     cursor: pointer;
     width: 100%;
   }
-  
+
   .category-list {
     margin-top: 10px;
     list-style: none;
@@ -22,7 +22,7 @@
     flex-direction: column;
     gap: 6px;
   }
-  
+
   .category-list li {
     background-color: var(--primary);
     padding: 8px 10px;
@@ -30,20 +30,20 @@
     cursor: pointer;
     color: var(--button-text);
   }
-  
+
   /* Tablet og desktop: vis alltid */
   @media (min-width: 768px) {
     .category-toggle {
       display: none;
     }
-  
+
     .category-list {
       display: flex !important;
       flex-direction: column;
       width: 180px;
-      
+
     }
-  
+
     .category-wrapper {
       min-width: 200px;
     }

@@ -52,7 +52,7 @@
                 responseMessage: '',
             }
         },
-            
+
 
         methods: {
             verifyEmail() {
@@ -122,7 +122,7 @@
                         break;
                     default:
                         break;
-                    
+
                 }
                 const element = document.getElementById(id);
                 if (element) {
@@ -193,7 +193,7 @@
                                     console.error(`Error: ${status} - ${data}`);
                                     break;
                             }
-                        } 
+                        }
                         else if (error.request) {
                             this.setResponseMessage('No response from the server. Please check your connection.', true);
                         }

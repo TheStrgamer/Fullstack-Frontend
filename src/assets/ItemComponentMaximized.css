@@ -12,7 +12,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
   }
-  
+
   .item-header-bar {
     display: flex;
     justify-content: space-between;
@@ -20,11 +20,11 @@
     color: var(--secondary);
     padding: 0 4px;
   }
-  
+
   .item-category {
     font-weight: 500;
   }
-  
+
   .item-status {
     padding: 4px 10px;
     border-radius: 8px;
@@ -32,15 +32,15 @@
     font-weight: 500;
     color: var(--button-text);
   }
-  
+
   .item-status.forsale {
     background-color: var(--primary);
   }
-  
+
   .item-status.sold {
     background-color: var(--secondary);
   }
-  
+
   .image-carousel {
     position: relative;
     display: flex;
@@ -48,14 +48,14 @@
     justify-content: center;
     height: 250px;
   }
-  
+
   .item-image {
     width: 100%;
     border-radius: 12px;
     object-fit: contain;
     max-height: 250px;
   }
-  
+
   .carousel-btn {
     position: absolute;
     top: 50%;
@@ -69,27 +69,27 @@
     z-index: 1;
     border-radius: 6px;
   }
-  
+
   .carousel-btn.left {
     left: 10px;
   }
-  
+
   .carousel-btn.right {
     right: 10px;
   }
-  
+
   .item-info-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .item-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
   }
-  
+
   .item-price-pill {
     background-color: var(--button);
     color: var(--button-text);
@@ -98,24 +98,24 @@
     font-size: 1rem;
     white-space: nowrap;
   }
-  
+
   .item-subinfo {
     margin: 0;
     font-size: 0.95rem;
     color: #444;
   }
-  
+
   .item-description {
     margin-top: 8px;
     font-size: 1rem;
     line-height: 1.5;
   }
-  
+
   .item-location {
     font-size: 0.95rem;
     color: #666;
   }
-  
+
   .item-dates {
     display: flex;
     justify-content: space-between;
@@ -140,7 +140,7 @@
     cursor: pointer;
     color: var(--primary);
   }
-  
+
   .favorite-btn.active {
     color: var(--primary);
   }
@@ -149,7 +149,7 @@
     .item-image {
       max-height: 350px !important;
     }
-  
+
     .image-carousel {
       height: 100%;
     }
@@ -162,5 +162,5 @@
       height: 100%;
     }
   }
-  
+
   

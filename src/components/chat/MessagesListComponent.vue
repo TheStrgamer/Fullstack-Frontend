@@ -22,10 +22,10 @@
       </FadeInComponent>
     </div>
     <div class="message-list-footer" v-if ="chatId !== 0">
-      <input 
-        type="text" 
-        placeholder="Type a message..." 
-        class="message-input" 
+      <input
+        type="text"
+        placeholder="Type a message..."
+        class="message-input"
         v-model="messageInput"
         @keyup.enter="sendMessage"
       />
@@ -137,7 +137,7 @@ export default defineComponent({
           message: newMessage.message,
           timestamp: new Date().toLocaleTimeString()
         };
-        
+
         allmessages.value.push(newMessageParsed);
         messageInput.value = '';
         scrollToBottom();

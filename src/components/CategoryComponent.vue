@@ -4,7 +4,7 @@
       <button class="category-toggle" @click="toggleMenu" aria-label="Vis kategorier">
         ☰ Kategorier
       </button>
-  
+
       <ul class="category-list" v-if="menuOpen || isWideScreen">
         <FadeInComponent :duration="100 + 50*index" :direction="'top'" v-for="(category, index) in categories" :key="category">
           <li @click="selectCategory(category)">
@@ -14,11 +14,11 @@
       </ul>
     </div>
   </template>
-  
+
   <script setup lang="ts">
   import FadeInComponent from './FadeInComponent.vue'
   import { ref, onMounted } from 'vue'
-  
+
   const menuOpen = ref(false)
   const isWideScreen = ref(false)
   const categories = ref([
@@ -30,11 +30,11 @@
     'Elektronikk',
     'Bøker'
   ])
-  
+
   function toggleMenu() {
     menuOpen.value = !menuOpen.value
   }
-  
+
   function selectCategory(category: string) {
     // TODO: emit event or use store
     console.log('Valgt kategori:', category)
