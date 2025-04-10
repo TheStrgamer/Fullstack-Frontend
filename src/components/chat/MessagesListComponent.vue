@@ -17,11 +17,12 @@
           :message="message.message"
           :timestamp="message.timestamp"
           :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(avatar.slice(1))"
-          :name="message.sentByMe ? 'You' : name"
+          :name="message.sentByMe ? 'Deg' : name"
         />
       </FadeInComponent>
     </div>
     <div class="message-list-footer" v-if ="chatId !== 0">
+      <button class="offer-button" @click="goToCreateOffer">Gi bud</button>
       <input
         type="text"
         placeholder="Type a message..."
@@ -38,8 +39,10 @@
 import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
-import { getUrlFromEndpoint } from '@/services/httpService';
+import { fetchDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
+import { RouterLink } from 'vue-router';
+import router from '@/router';
 
 interface Message {
   id: number;
@@ -112,6 +115,15 @@ export default defineComponent({
         console.warn('No chatId provided, WebSocket connection not established.');
       }
     });
+    async function goToCreateOffer() {
+      try {
+        const response = await fetchDataWithAuth(`negotiation/chat/getListingId/${props.chatId}`);
+        const listingId = response.data;
+        router.push({ name: 'addOffer', params: { id: listingId } });
+      } catch (error) {
+        console.error('Error fetching listing ID:', error);
+      }
+    }
 
     function scrollToBottom() {
       nextTick(() => {
@@ -153,7 +165,8 @@ export default defineComponent({
       sendMessage,
       allmessages,
       messageList,
-      getUrlFromEndpoint
+      getUrlFromEndpoint,
+      goToCreateOffer,
     };
   }
 });

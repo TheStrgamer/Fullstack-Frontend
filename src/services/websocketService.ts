@@ -16,13 +16,42 @@ export class WebSocketService {
       };
 
       this.socket.onmessage = (event) => {
-        //console.log("Message received:", event.data);
-        const message = JSON.parse(event.data);
-        this.messages.push(message);
-        if (this.onMessageCallback) {
-          this.onMessageCallback(message);
+        const rawData = event.data;
+        
+        if (rawData.startsWith("ADD MESSAGE ")) {
+            const messageContent = rawData.substring("ADD MESSAGE ".length);
+            try {
+                const message = JSON.parse(messageContent);
+                this.messages.push(message);
+                if (this.onMessageCallback) {
+                    this.onMessageCallback(message);
+                }
+            } catch (e) {
+                console.error("Failed to parse message:", e);
+            }
+        } 
+        else if (rawData.startsWith("UPDATE STATUS ")) {
+            const updateParts = rawData.substring("UPDATE STATUS ".length).split(" TO ");
+            if (updateParts.length === 2) {
+                const offerId = parseInt(updateParts[0]);
+                const status = parseInt(updateParts[1]);
+                console.log(`Offer ${offerId} status updated to ${status}`);
+            }
+        } 
+        else if (rawData.startsWith("CREATE OFFER ")) {
+            // New offer created
+            const offerString = rawData.substring("CREATE OFFER ".length);
+            try {
+                const offer = JSON.parse(offerString);
+                console.log("New offer created:", offer);
+            } catch (e) {
+                console.error("Failed to parse offer:", e);
+            }
+        } 
+        else {
+            console.log("Unknown message type received:", rawData);
         }
-      };
+    };
 
       this.socket.onclose = () => {
         console.log("WebSocket connection closed");

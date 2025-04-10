@@ -1,0 +1,68 @@
+.create-offer-view {
+    max-width: 28rem;
+    margin: 2.5rem auto;
+    border-radius: 1rem;
+    background-color: var(--accent);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    color: var(--text1);
+    border: 5px solid var(--background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.create-offer-view h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.create-offer-view h2 {
+    font-size: 1.125rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.create-offer-view img {
+    width: 100%;
+    height: 12rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid var(--accent);
+    margin-top: 0.5rem;
+}
+
+.create-offer-view label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    color: var(--text1);
+}
+
+.create-offer-view input[type="number"] {
+    width: 90%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--accent);
+    background-color: var(--white);
+    color: var(--text1);
+    outline: none;
+}
+
+.create-offer-view button {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: var(--white);
+    transition: background-color 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.create-offer-view button:hover {
+    background-color: var(--secondary);
+}
+  

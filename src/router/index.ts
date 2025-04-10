@@ -23,6 +23,7 @@ import NuhUhView from '@/views/NuhUhView.vue'
 import CategoryListings from '@/views/CategoryListings.vue'
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
+import CreateOfferView from '@/views/CreateOfferView.vue'
 
 
 const router = createRouter({
@@ -99,6 +100,13 @@ const router = createRouter({
       path: "/chats/:chatId",
       name: "chat",
       component: ChatView,
+      meta: { requiresLogin: true }
+    },
+    {
+      path: '/listing/:id/makeOffer',
+      name: 'addOffer',
+      component: CreateOfferView,
+      props: true,
       meta: { requiresLogin: true }
     },
     {

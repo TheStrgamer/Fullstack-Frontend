@@ -58,6 +58,12 @@
 
   onMounted(async () => {
     await updateChats();
+    const initialChatId = route.params.chatId;
+    if (initialChatId) {
+      chatId.value = Number(initialChatId);
+      isOnMessageWindow.value = true;
+      messages.value = await getChatData(chatId.value);
+    }
   });
   watch(
     () => route.params.chatId,
@@ -155,7 +161,7 @@
       if (chatId === 0) {
         return {
           id: 0,
-          name: 'Messages',
+          name: 'Meldinger',
           picture: '',
           messages: []
         };
