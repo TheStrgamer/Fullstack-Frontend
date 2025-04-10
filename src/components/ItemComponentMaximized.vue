@@ -56,16 +56,20 @@
       <PositionElementsComponent :latitude="itemStore.latitude" :longitude="itemStore.longitude"></PositionElementsComponent>
     </div>
 
-    <!-- Datoer -->
+    <!-- Selger -->
+     <h3 class="section-title">Selger</h3>
+    <ContactInfoComponent :userId="itemStore.creatorId" />
+
+    <!-- Negotiate Button -->
+    <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
+      <i class="fas fa-comments"></i> Kontakt selger
+    </button>
+
+        <!-- Datoer -->
     <div class="item-dates">
       <p><strong>Opprettet:</strong> {{ formatDate(itemStore.created_at) }}</p>
       <p><strong>Oppdatert:</strong> {{ formatDate(itemStore.updated_at) }}</p>
     </div>
-
-    <!-- Negotiate Button -->
-    <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
-      <i class="fas fa-comments"></i> Forhandle
-    </button>
   </div>
   <div v-else class="loading-container">
     <div class="loading-spinner"></div>
@@ -78,6 +82,7 @@ import { onMounted, computed, ref } from 'vue'
 import router from '@/router';
 import { useRoute } from 'vue-router'
 import PositionElementsComponent from './PositionElementsComponent.vue';
+import ContactInfoComponent from './ContactInfoComponent.vue';
 import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
