@@ -59,10 +59,6 @@ export function imageService() {
   }
 
   return {
-    fetchItemFromAPI,
-    fetchConditionsFromAPI,
-    fetchCategoriesFromAPI,
-    createItem,
     updateItem,
     uploadImages,
   }

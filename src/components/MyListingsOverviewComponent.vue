@@ -7,10 +7,18 @@
     import axios from 'axios';
     import { ref, onMounted, onActivated } from 'vue';
 
+
+    interface ListingDTO {
+        id: number,
+        title: string,
+        brief_description: string,
+        price: number
+    }
+
     // store and state
     const userstore = useUserStore();
     const token = userstore.jwtToken;
-    const listings = ref([]); // Store the fetched listings
+    const listings = ref<ListingDTO[]>([]); // Store the fetched listings
 
     onMounted(getListings);
     onActivated(getListings);
