@@ -43,21 +43,43 @@
   const isMobile = ref(window.innerWidth <= 850);
   const token = sessionStorage.getItem('jwtToken') || '';
 
-  onMounted(async () => {
+  async function updateChats() {
     try {
-      if (route.params.chatId) {
-        chatId.value = Number(route.params.chatId);
+      const chatData = await fetchActiveChats();
+      chats.value = chatData.sort((a, b) => {
+        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+      });
+    } catch (error) {
+      console.warn('Using mock data due to fetch error');
+      console.error(error);
+      chats.value = mockChats();
+    }
+  }
+
+  onMounted(async () => {
+    await updateChats();
+  });
+  watch(
+    () => route.params.chatId,
+    async (newChatId) => {
+      if (newChatId) {
+        chatId.value = Number(newChatId);
         isOnMessageWindow.value = true;
+        messages.value = await getChatData(chatId.value);
       } else {
         chatId.value = 0;
         isOnMessageWindow.value = false;
+        messages.value = {
+          id: 0,
+          name: 'Messages',
+          picture: '',
+          messages: []
+        }
       }
-      chats.value = await fetchActiveChats();
-    } catch (error) {
+    },
+    { immediate: true }
+  );
 
-      chats.value = []
-    }
-  });
 
   const messages = ref<MessageList>({
     id: 0,
@@ -83,10 +105,12 @@
     isOnMessageWindow.value = true;
   }
 
-  function openChatList() {
+  async function openChatList() {
     router.push({ name: 'chats' });
     chatId.value = 0;
+    await updateChats();
     isOnMessageWindow.value = false;
+
   }
 
   window.addEventListener('resize', () => {

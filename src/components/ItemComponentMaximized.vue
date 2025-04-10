@@ -183,6 +183,7 @@ function negotiate() {
         name: 'chat',
         params: { chatId: response },
       })
+      console.log("current route:", router.currentRoute.value)
     })
     .catch((error) => {
       console.error('Error starting conversation:', error)
