@@ -35,6 +35,10 @@
     border-radius: 8px;
   }
 
+  .navbar a:not(.logo-container):hover {
+    background-color: var(--secondary);
+  }
+  
   .logo-container {
     display: flex;
     align-items: center;
@@ -45,8 +49,16 @@
     border-radius: 0;
   }
 
+  .logo-container:hover {
+    
+  }
+
   .logo-container img {
     display: block;
+  }
+  
+  .logo-container img:hover {
+    border-bottom: solid 3px var(--primary);
   }
 
   .logo-icon {

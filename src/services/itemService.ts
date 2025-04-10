@@ -1,5 +1,5 @@
 import { useUserStore } from '@/stores/UserStore.ts'
-import { fetchDataWithoutAuth, postDataWithAuth } from './httpService';
+import { fetchDataWithoutAuth, postDataWithAuth, putDataWithAuth, deleteDataWithAuth } from './httpService';
 
 export function itemServices() {
   const userStore = useUserStore();
@@ -25,16 +25,16 @@ export function itemServices() {
       await userStore.refreshTokenIfNeeded();
 
       const formattedItem = {
-        category: typeof item.category === 'object' ? item.category : { id: item.category },
-        condition: typeof item.condition === 'object' ? item.condition : { id: item.condition },
+        category: item.category,
+        condition: item.condition,
         title: item.title,
-        sale_status: typeof item.sale_status === 'string' ? parseInt(item.sale_status) : item.sale_status || 0,
+        saleStatus: typeof item.sale_status === 'string' ? parseInt(item.sale_status) : item.sale_status || 0,
         price: item.price,
-        brief_description: item.brief_description,
-        full_description: item.full_description,
+        briefDescription: item.brief_description,
+        fullDescription: item.full_description,
         size: item.size || "",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         latitude: item.latitude || 0,
         longitude: item.longitude || 0
       };
@@ -50,10 +50,52 @@ export function itemServices() {
     }
   }
 
+  async function updateItem(item: any) {
+    try {
+      await userStore.refreshTokenIfNeeded();
+
+      const formattedItem = {
+        title: item.title,
+        category_id: item.category,
+        condition_id: item.condition,
+        price: item.price,
+        sale_status: typeof item.sale_status === 'string' ? parseInt(item.sale_status) : item.sale_status || 0,
+        brief_description: item.brief_description,
+        full_description: item.full_description,
+        size: item.size || "",
+        updatedAt: new Date().toISOString(),
+        latitude: item.latitude || 0,
+        longitude: item.longitude || 0,
+        images: item.imageUrls
+      };
+
+      console.log("Sending formatted item to server:", formattedItem);
+      const response = await putDataWithAuth(`listings/update/${item.id}`, formattedItem);
+
+      return response.data;
+  
+    } catch (error) {
+      console.error("Error updating item:", error);
+      throw error;
+    }
+  }
+
+  async function deleteItem(itemId: string) {
+    try {
+      const response = await deleteDataWithAuth(`listings/${itemId}/delete`);
+      return response;
+    } catch (error) {
+      console.error("Error deleting item: ", error);
+    }
+  }
+  
+
   return {
     fetchItemFromAPI,
     fetchConditionsFromAPI,
     fetchCategoriesFromAPI,
     createItem,
+    updateItem,
+    deleteItem
   }
 }
