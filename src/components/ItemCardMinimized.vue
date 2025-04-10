@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { getUrlFromEndpoint } from '@/services/httpService';
+import { getUrlFromEndpoint, getImageUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from './FadeInComponent.vue';
 
 defineProps({

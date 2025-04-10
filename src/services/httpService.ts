@@ -2,6 +2,7 @@ import axios from "axios";
 import { useUserStore } from "../stores/UserStore";
 
 const backendUrl = "http://localhost:8080/";
+const imageRUL = `${backendUrl}uploads/`
 const apiUrl = `${backendUrl}api/`;
 
 export async function fetchDataWithAuth(endpoint: string, json: boolean = false) {
@@ -143,6 +144,10 @@ export async function deleteDataWithAuth(endpoint: string) {
 
 export function getUrlFromEndpoint(endpoint: string) {
   return backendUrl + endpoint;
+}
+
+export function getImageUrlFromEndpoint(endpoint: string) {
+  return imageRUL + endpoint;
 }
 
 async function validateUserToken() {

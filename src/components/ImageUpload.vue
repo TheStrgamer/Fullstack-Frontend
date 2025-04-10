@@ -1,3 +1,76 @@
+<script setup lang="ts">
+  import { convertTypeAcquisitionFromJson } from 'typescript';
+import { ref, computed, watch } from 'vue';
+
+  
+  const props = defineProps<{
+    existingImageUrls?: string[]; // makes the prop opational
+  }>();
+
+  const emit = defineEmits<{
+    (e: 'update:images', files: File[]): void;
+    (e: 'update:existingImages', urls: string[]): void;
+  }>();
+
+  const fileInput = ref<HTMLInputElement | null>(null);
+  const newImages = ref<File[]>([]);
+  const previewImages = ref<string[]>([]);
+  const existingImages = ref<string[]>([]);
+
+  watch(
+    () => props.existingImageUrls,
+    (newUrls) => {
+      existingImages.value = [...(newUrls ?? [])];
+    },
+    { immediate: true } // ensures run on mount
+  );
+
+
+
+  // Combine new and existing previews into one array with a flag
+  const allPreviewImages = computed(() =>
+    [
+      ...existingImages.value.map((url) => ({ url, isNew: false })),
+      ...previewImages.value.map((url) => ({ url, isNew: true })),
+    ]
+  );
+
+  console.log("Preview Images", allPreviewImages);
+
+  function triggerFileInput() {
+    fileInput.value?.click();
+  }
+
+  function handleFileChange(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+    if (files && files.length > 0) {
+      const selectedFiles = Array.from(files);
+      newImages.value.push(...selectedFiles);
+      previewImages.value.push(...selectedFiles.map(file => URL.createObjectURL(file)));
+      emit('update:images', newImages.value);
+    }
+  }
+
+  function handleRemoveImage(index: number) {
+    const item = allPreviewImages.value[index];
+    if (item.isNew) {
+      const localIndex = previewImages.value.indexOf(item.url);
+      if (localIndex !== -1) {
+        previewImages.value.splice(localIndex, 1);
+        newImages.value.splice(localIndex, 1);
+        emit('update:images', newImages.value);
+      }
+    } else {
+      const localIndex = existingImages.value.indexOf(item.url);
+      if (localIndex !== -1) {
+        existingImages.value.splice(localIndex, 1);
+        emit('update:existingImages', existingImages.value);
+      }
+    }
+  }
+</script>
+
+
 <template>
     <div>
       <button @click="triggerFileInput" class="upload-button">
@@ -6,57 +79,51 @@
   
       <input
         ref="fileInput"
-        type="file"
+        type = file
         accept="image/*"
         multiple
         style="display: none"
         @change="handleFileChange"
       />
   
-      <ul v-if="previewImages.length">
-        <li v-for="(img, index) in previewImages" :key="index">
-          <img :src="img" alt="preview" class="preview-img" />
+      <ul v-if="allPreviewImages.length">
+        <li v-for="(img, index) in allPreviewImages" :key="index">
+          <img :src="img.url" alt="preview" class="preview-img" />
+          <button class="remove-button" @click="handleRemoveImage(index)">X</button>
         </li>
       </ul>
+
     </div>
   </template>
   
-  <script setup lang="ts">
-  import { ref, watch } from 'vue';
-  
-  const emit = defineEmits<{
-    (e: 'update:images', files: File[]): void;
-  }>();
-  
-  const fileInput = ref<HTMLInputElement | null>(null);
-  const previewImages = ref<string[]>([]);
-  
-  function triggerFileInput() {
-    fileInput.value?.click();
-  }
-  
-  function handleFileChange(event: Event) {
-    const files = (event.target as HTMLInputElement).files;
-    if (files && files.length > 0) {
-      const selectedFiles = Array.from(files);
-      emit('update:images', selectedFiles);
-  
-      // Create image previews
-      previewImages.value = selectedFiles.map(file => URL.createObjectURL(file));
-    }
-  }
-  </script>
+
   
   <style scoped>
   .upload-button {
     background-color: var(--button, #2E4732);
     color: white;
     border: none;
-    /* padding: 0.6rem 1rem; */
     border-radius: 4px;
     cursor: pointer;
     font-size: 1rem;
     margin-bottom: 1rem;
+  }
+
+  .remove-button {
+    background-color: #f5f5f500;
+    color: red;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+
+  }
+
+  li {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
   
   .preview-img {

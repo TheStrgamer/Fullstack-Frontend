@@ -1,6 +1,13 @@
 <template>
   <div>
     <h1 class="title">Update Listing</h1>
+    <div class="form-group">
+      <ImageUpload
+        :existingImageUrls="existingImageUrls"
+        @update:images="selectedImages = $event"
+        @update:existingImages="existingImageUrls = $event"
+      />
+      </div>
     <form class="update-item-form" @submit.prevent="handleSubmit">
       <div class="form-group">
         <label for="title">Title</label>
@@ -74,27 +81,32 @@
 
 
 <script setup lang="ts">
-import { useCategoriesStore } from '@/stores/CategoriesStore.ts'
-import { useConditionStore } from '@/stores/ConditionStore.ts'
-import { useItemStore } from '@/stores/ItemStore.ts'
-import { useUserStore } from '@/stores/UserStore.ts'
-import { onMounted, reactive } from 'vue'
-import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
-import { addressToCoords, coordsToAddress }  from '@/services/geoCodingService'
-import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
-import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
+  import { useCategoriesStore } from '@/stores/CategoriesStore.ts'
+  import { useConditionStore } from '@/stores/ConditionStore.ts'
+  import { useItemStore } from '@/stores/ItemStore.ts'
+  import { useUserStore } from '@/stores/UserStore.ts'
+  import { onMounted, reactive, ref } from 'vue'
+  import AutoCompleteAddressSearchComponent from './AutoCompleteAddressSearchComponent.vue'
+  import { addressToCoords, coordsToAddress }  from '@/services/geoCodingService'
+  import { useRoute, useRouter } from 'vue-router';
+  import axios from 'axios';
+  import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint, postImages } from '@/services/httpService';
+  import ImageUpload from '@/components/ImageUpload.vue'
 
-const route = useRoute();
-const router = useRouter();
-const item_id = route.query.id;
+  const route = useRoute();
+  const router = useRouter();
+  const item_id = route.query.id;
 
-const categoriesStore = useCategoriesStore();
-const conditionStore = useConditionStore();
-const itemStore = useItemStore();
-const userStore = useUserStore();
+  const categoriesStore = useCategoriesStore();
+  const conditionStore = useConditionStore();
+  const itemStore = useItemStore();
+  const userStore = useUserStore();
 
-const token = userStore.jwtToken;
+  const token = userStore.jwtToken;
+
+  const selectedImages = ref<File[]>([]);
+  const existingImageUrls = ref<string[]>([]);
+
 
 // Form Fields
 const listing = reactive({
@@ -108,7 +120,8 @@ const listing = reactive({
   size: '',
   address: '',
   // not inlcuded in form
-  createdAt: ''
+  createdAt: '',
+  imageUrls: [] as String[]
 })
 
 
@@ -119,7 +132,6 @@ onMounted(async () => {
   await categoriesStore.fetchCategories();
   await conditionStore.fetchConditions();
 
-  
 
   try {
     const response = await fetchDataWithAuth(`listings/id/${item_id}`)
@@ -127,7 +139,7 @@ onMounted(async () => {
     console.log(response.data);
     const data = response.data;
       // data for item with id
-      Object.assign(listing, {
+    Object.assign(listing, {
       id: item_id,
       title: data.title,
       brief_description: data.briefDescription,
@@ -137,8 +149,11 @@ onMounted(async () => {
       condition: getConditionIdByName(data.conditionName),
       size: data.size || '',
       address: '',
-      createdAt: data.createdAt
+      createdAt: data.createdAt,
+      imageUrls: data.imageUrls
     });
+
+    existingImageUrls.value = data.imageUrls;
 
     convertCoordsToAddress(data.latitude, data.longitude).then((resolvedAddress) => {
       listing.address = resolvedAddress;
@@ -169,6 +184,10 @@ const handleSubmit = async () => {
     (cond) => cond.id.toString() === listing.condition
   )
 
+  // images
+  console.log("Remaining existing images", existingImageUrls.value);
+  console.log("new images", selectedImages.value);
+
   const itemData = {
     id: listing.id,
     title: listing.title,
@@ -180,16 +199,34 @@ const handleSubmit = async () => {
     size: listing.size || '',
     sale_status: 'available',
     latitude: lat,
-    longitude: long
-  }
+    longitude: long,
+    imageUrls: existingImageUrls.value, // remaining original images
+  };
 
   try {
     itemStore.updateItemListing(itemData);
+
+    // Build FormData for image upload
+    if (selectedImages.value.length != 0) {
+      const formData = new FormData();
+      formData.append("id", listing.id);
+
+      selectedImages.value.forEach((file) => {
+        formData.append("images", file);
+      });
+
+      // upload new images
+      console.log("Sending formatted images to server:", formData);
+      const response = await postImages("images/uploadListing", formData);
+
+      console.log("Images uploaded:", response.data);
+    }
+    
     await router.push('/profile/my_listings');
 
     // form.reset();
   } catch (error) {
-    console.error('Failed to create item:', error);
+    console.error('Failed to update item:', error);
   }
 };
 

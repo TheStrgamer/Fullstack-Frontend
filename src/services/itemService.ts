@@ -65,7 +65,8 @@ export function itemServices() {
         size: item.size || "",
         updatedAt: new Date().toISOString(),
         latitude: item.latitude || 0,
-        longitude: item.longitude || 0
+        longitude: item.longitude || 0,
+        images: item.imageUrls
       };
 
       console.log("Sending formatted item to server:", formattedItem);

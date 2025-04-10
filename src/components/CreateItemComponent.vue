@@ -172,6 +172,7 @@ const handleSubmit = async () => {
       formData.append("images", file);
     });
 
+    // upload new images
     console.log("Sending formatted images to server:", formData);
     const response = await postImages("images/uploadListing", formData);
 
