@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { fetchActiveChats, fetchConversation, startConversation } from '../chatService';
 import { fetchDataWithAuth, postDataWithAuth } from '../httpService';
 import type { AxiosResponse } from 'axios';
@@ -7,6 +7,18 @@ import { AxiosHeaders } from 'axios';
 vi.mock('../httpService');
 
 describe('chatService', () => {
+  let toLocaleStringSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    toLocaleStringSpy = vi
+      .spyOn(Date.prototype, 'toLocaleString')
+      .mockReturnValue('10.4.2025, 12:00');
+  });
+
+  afterEach(() => {
+    toLocaleStringSpy.mockRestore();
+  });
+
   describe('fetchActiveChats', () => {
     it('should fetch and format active chats correctly', async () => {
       const mockResponse: AxiosResponse = {
