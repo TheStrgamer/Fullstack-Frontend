@@ -11,6 +11,7 @@
 
     <nav class="mobile-menu">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
+
       <router-link to="/profile" @click="isMenuOpen = false">Profil</router-link>
       <router-link to="/profile/my_favorites" @click="isMenuOpen = false">Favoritter</router-link>
       <router-link to="/chats" @click="isMenuOpen = false">Chat</router-link>
@@ -20,6 +21,7 @@
 
     <nav class="nav-links">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
+
       <router-link to="/profile">Profil</router-link>
       <router-link to="/profile/my_favorites" @click="isMenuOpen = false">Favoritter</router-link>
       <router-link to="/chats">Chat</router-link>

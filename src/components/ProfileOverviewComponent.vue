@@ -14,30 +14,24 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                 <ProfileLinkCard
                     to="/profile/my_account"
                     icon_path="/icons/settings.svg"
-                    title="My Account"
-                    description="View your account information"
+                    title="Min Bruker"
+                    description="Få en oversikt over bruker informasjonen din"
                 />
 
                 <ProfileLinkCard 
                     to="/profile/my_listings" 
                     icon_path="/icons/listings.svg"
-                    title="My Listings" 
-                    description="View your active ads"
+                    title="Mine Annonser" 
+                    description="Få en oversikt over dine annonser"
                 />
 
                 <ProfileLinkCard
                     to="/profile/my_favorites"
                     icon_path="/icons/ads.svg"
-                    title="My Favorites"
-                    description="View your favorited ads"
+                    title="Mine Favoritter"
+                    description="Få en oversikt over annonser som du har markert som en av dine favoritter"
                 />
 
-                <ProfileLinkCard 
-                    to="/" 
-                    icon_path="/icons/ads.svg"
-                    title="TEMP" 
-                    description="View your favorited ads"
-                />
             </div>
         </div>
     </div>

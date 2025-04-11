@@ -13,7 +13,7 @@ defineProps<{
 
 <router-link :to="to" class="profile-link-card">
     <div class="card-content">
-      <img :src="icon_path" alt="icon" class="card-icon" />
+      <!-- <img :src="icon_path" alt="icon" class="card-icon" /> -->
       <div class="card-text">
         <h2 class="card-title">{{ title }}</h2>
         <p class="card-description">{{ description }}</p>

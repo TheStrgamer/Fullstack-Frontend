@@ -15,7 +15,7 @@
 
     flex-grow: auto;
 
-    min-width: 300px;
+    width: 300px;
     min-height: 180px;
 
     margin: 10px;
@@ -23,7 +23,7 @@
     background: var(--primary);
 
     text-decoration: none;
-    color: inherit;
+    color: var(--white);
     display: block;
 }
 
@@ -116,7 +116,7 @@
     width: 93%;
 }
 
-.my-listsings-topbar router-link {
+/* .my-listsings-topbar router-link {
     background-color: var(--button);
     color: var(--button-text);
     padding: 0;
@@ -124,9 +124,9 @@
     border-radius: 8px;
     text-align: center;
 
-}
+} */
 
-.my-listsings-topbar router-link {
+.my-listsings-topbar a {
     color: var(--button-text);
     text-decoration: none;
     padding: 10px;
@@ -136,6 +136,7 @@
     text-align: center;
     display: block;
 }
+
 
 @media (min-width: 768px) {
     .profile_content_box {
