@@ -61,9 +61,20 @@
     <ContactInfoComponent :userId="itemStore.creatorId" />
 
     <!-- Negotiate Button -->
-    <button v-if="isLoggedIn" class="negotiate-button" @click="negotiate">
-      <i class="fas fa-comments"></i> Kontakt selger
-    </button>
+     <div class="negotiate-buttons" v-if="isLoggedIn && itemStore.sale_status != '1'">
+      <button class="negotiate-button" @click="negotiate">
+        <i class="fas fa-comments"></i> Kontakt selger
+      </button>
+      <div class="navtext">
+        <p>eller</p>
+      </div>
+      <button class="negotiate-button" @click="purchase">
+        Kjøp direkte
+      </button>
+    </div>
+    <div v-else class="navtext">
+      <p>Produktet er allerede solgt.</p>
+    </div>
 
         <!-- Datoer -->
     <div class="item-dates">
@@ -87,7 +98,7 @@ import { useItemStore } from '../stores/ItemStore.ts'
 import { startConversation } from '@/services/chatService.ts'
 import { useUserStore } from '@/stores/UserStore.ts'
 import { toggleFavorite, checkFavoriteStatus } from '@/services/favoriteService';
-import { getUrlFromEndpoint } from '@/services/httpService.ts'
+import { getUrlFromEndpoint, putDataWithAuth } from '@/services/httpService.ts'
 
 const route = useRoute()
 const itemId = route.query.id as string
@@ -119,6 +130,24 @@ function getImageUrl(imagePath: string): string {
 
   const cleanPath = imagePath.replace(/^\/+/, '');
   return getUrlFromEndpoint(cleanPath);
+}
+
+async function purchase() {
+  const listingId = Number(itemId)
+  try {
+    putDataWithAuth(`purchase/fromListing/${listingId}`, {})
+      .then((response) => {
+        console.log('Purchase response:', response.data)
+        router.push({
+          name: 'home',
+        })
+      })
+      .catch((error) => {
+        console.error('Error during purchase:', error)
+      })
+  } catch (error) {
+    console.error('Error starting conversation:', error)
+  }
 }
 
 async function fetchItemData() {

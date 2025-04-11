@@ -40,6 +40,7 @@
 <script lang="ts">
 import { putDataWithAuth, deleteDataWithAuth } from '@/services/httpService';
 
+
   export default {
     name: 'OfferComponent',
     props: {
@@ -71,8 +72,15 @@ import { putDataWithAuth, deleteDataWithAuth } from '@/services/httpService';
     },
     methods: {
       async buyWithOffer() {
-        console.log('Offer bought:', this.offerId);
+        try {
+            const response = await putDataWithAuth(`purchase/fromOffer/${this.offerId}`, {});
+            console.log('Offer accepted:', response.data);
+            this.$router.push({ name: 'home' });
+        } catch (error) {
+            console.error('Navigation error:', error);
+        }
       },
+
       async acceptOffer() {
         console.log('Offer accepted:', this.offerId);
         try {

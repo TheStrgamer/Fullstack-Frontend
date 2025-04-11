@@ -25,7 +25,6 @@ import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
 import CreateOfferView from '@/views/CreateOfferView.vue'
 
-
 const router = createRouter({
   history: createWebHistory(),
   routes: [

@@ -24,6 +24,7 @@
     <nav class="nav-links">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
       <router-link to="/profile">Profil</router-link>
+      <router-link to="/profile/my_favorites" @click="isMenuOpen = false">Favoritter</router-link>
       <router-link to="/chats">Chat</router-link>
       <router-link v-if="!isLoggedIn" to="/login">Logg inn</router-link>
       <router-link v-else to="/logout">Logg ut</router-link>
