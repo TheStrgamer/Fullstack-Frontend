@@ -22,14 +22,14 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     to="/profile/my_listings" 
                     icon_path="/icons/listings.svg"
                     title="Mine Annonser" 
-                    description="Få en oversikt over dine anonser"
+                    description="Få en oversikt over dine annonser"
                 />
 
                 <ProfileLinkCard
                     to="/profile/my_favorites"
                     icon_path="/icons/ads.svg"
                     title="Mine Favoritter"
-                    description="Få en oversikt over anonser som du har markert som en av dine favoritter"
+                    description="Få en oversikt over annonser som du har markert som en av dine favoritter"
                 />
 
             </div>
