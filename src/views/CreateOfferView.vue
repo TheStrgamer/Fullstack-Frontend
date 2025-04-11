@@ -57,7 +57,14 @@
         try {
             const response = await fetchDataWithAuth(`listings/mini/id/${listingId}`)
             console.log('Response:', response.data)
-
+            if (response.data.imagePath === null) {
+                return { 
+                    title: response.data.title,
+                    imageUrl: '',
+                    originalPrice: response.data.price,
+                    sellerName: response.data.creatorName
+                }
+            }
             return {
                 title: response.data.title,
                 imageUrl: getUrlFromEndpoint(response.data.imagePath.slice(1)),

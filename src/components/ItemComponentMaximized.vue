@@ -72,7 +72,7 @@
         Kjøp direkte
       </button>
     </div>
-    <div v-else class="navtext">
+    <div v-else-if="isLoggedIn" class="navtext">
       <p>Produktet er allerede solgt.</p>
     </div>
 

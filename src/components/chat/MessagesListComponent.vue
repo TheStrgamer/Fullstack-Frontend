@@ -30,10 +30,11 @@
           :status="message.status"
           :offerId="message.offerId"
           :amISeller="amISeller"
+          :chatClosed="isClosed"
         />
       </FadeInComponent>
     </div>
-    <div class="message-list-footer" v-if ="chatId !== 0">
+    <div class="message-list-footer" v-if ="chatId !== 0 && !isClosed">
       <button class="offer-button" @click="goToCreateOffer">Gi bud</button>
       <input
         type="text"
@@ -43,6 +44,10 @@
         @keyup.enter="sendMessage"
       />
       <button class="send-button" @click="sendMessage">Send</button>
+    </div>
+    <div v-else-if="isClosed" class="offer-button">
+      <p>Chatten er stengt.</p>
+      <p>Ingen nye meldinger kan sendes.</p>
     </div>
   </div>
 </template>
@@ -123,6 +128,7 @@ export default defineComponent({
     const myAvatar = ref('');
     const messageList = ref<HTMLElement | null>(null);
     const allmessages = ref<Message[]>([]);
+    const isClosed = ref(false);
     
     watch(() => props.messages, (newMessages) => {
       allmessages.value = newMessages;
@@ -133,6 +139,16 @@ export default defineComponent({
     onMounted( async() => {
       setTimeout(() => scrollToBottom(), 100);
       await getMyAvatar();
+
+      const response = await fetchDataWithAuth('negotiation/chat/isClosed/' + props.chatId);
+      if (response.data) {
+        isClosed.value = response.data;
+        if (isClosed) {
+          console.warn('Chat is closed, no WebSocket connection will be established.');
+          return;
+        }
+      }
+
       if (props.chatId !== 0){
         wsService.connect();
         wsService.onMessage((updatedOffer: Message) => {
@@ -222,6 +238,7 @@ export default defineComponent({
       getUrlFromEndpoint,
       goToCreateOffer,
       myAvatar,
+      isClosed,
     };
   }
 });

@@ -13,13 +13,13 @@
       <p v-else-if="offerStatus === 3">Tilbudet er slettet.</p>
     </div>
 
-    <div class="offer-actions" v-if="offerStatus === 1 && !amISeller">
+    <div class="offer-actions" v-if="offerStatus === 1 && !amISeller && !chatClosed">
       <p>Tilbudet er akseptert.</p>
       <button @click="buyWithOffer" class="accept-button">
         Kjøp
       </button>
     </div>
-    <div class="offer-actions" v-if="!offeredByMe && offerStatus === 0">
+    <div class="offer-actions" v-if="!offeredByMe && offerStatus === 0  && !chatClosed">
       <button @click="acceptOffer" class="accept-button">
         Godta tilbud
       </button>
@@ -68,6 +68,10 @@ import { putDataWithAuth, deleteDataWithAuth } from '@/services/httpService';
       },
       amISeller: {
         type: Boolean,
+      },
+      chatClosed: {
+        type: Boolean,
+        default: false,
       },
     },
     methods: {
