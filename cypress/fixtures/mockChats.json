@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "name": "Mock User 1",
+      "avatar": "https://example.com/avatar1.png",
+      "lastMessage": "Hello!",
+      "timestamp": "2025-04-10T12:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Mock User 2",
+      "avatar": "https://example.com/avatar2.png",
+      "lastMessage": "How are you?",
+      "timestamp": "2025-04-10T12:10:00"
+    }
+  ]
+  
