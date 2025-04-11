@@ -41,7 +41,6 @@ import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'v
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
 import { getUrlFromEndpoint } from '@/services/httpService';
-import { getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
 
 interface Message {
