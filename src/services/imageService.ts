@@ -61,5 +61,6 @@ export function imageService() {
   return {
     updateItem,
     uploadImages,
+    fetchImageFromAPI,
   }
 }

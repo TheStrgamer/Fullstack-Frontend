@@ -1,0 +1,10 @@
+[
+  {
+    "id": "1",
+    "title": "Sample Item",
+    "price": "100",
+    "imagePath": "/default-image.png",
+    "briefDescription": "This is a sample item description.",
+    "isFavorited": false
+  }
+]

@@ -129,7 +129,7 @@ const updateUser = async (userData: any) => {
   } catch (error: any) {
     console.error('Error updating user:', error)
     feedback.value = error.response?.data || "Failed to update user"
-    throw error
+    // throw error
   }
 }
 

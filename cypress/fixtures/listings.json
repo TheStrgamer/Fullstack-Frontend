@@ -1,0 +1,20 @@
+[
+  {
+    "id": 101,
+    "title": "Smartphone",
+    "description": "Latest model smartphone",
+    "price": 699
+  },
+  {
+    "id": 102,
+    "title": "Novel",
+    "description": "Bestselling novel",
+    "price": 15
+  },
+  {
+    "id": 103,
+    "title": "T-shirt",
+    "description": "Comfortable cotton t-shirt",
+    "price": 20
+  }
+]
