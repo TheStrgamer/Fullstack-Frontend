@@ -25,7 +25,7 @@ import CategoryListings from '@/views/CategoryListings.vue'
 import TestFadeInView from '@/views/TestFadeInView.vue';
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
-
+import CreateOfferView from '@/views/CreateOfferView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -109,6 +109,13 @@ const router = createRouter({
       component: ChatView,
       meta: { requiresLogin: true }
     },
+    {
+      path: '/listing/:id/makeOffer/:chatId',
+      name: 'addOffer',
+      component: CreateOfferView,
+      props: true,
+      meta: { requiresLogin: true }
+    },    
     {
       path: "/createlisting",
       name: "CreateListing",

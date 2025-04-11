@@ -11,18 +11,22 @@
 
     <nav class="mobile-menu">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
-      <router-link to="/profile" @click="isMenuOpen = false">Min side</router-link>
+
+      <router-link to="/profile" @click="isMenuOpen = false">Profil</router-link>
+      <router-link to="/profile/my_favorites" @click="isMenuOpen = false">Favoritter</router-link>
       <router-link to="/chats" @click="isMenuOpen = false">Chat</router-link>
-      <router-link v-if="!isLoggedIn" to="/login" @click="isMenuOpen = false">Login</router-link>
-      <router-link v-else to="/logout" @click="isMenuOpen = false">Logut</router-link>
+      <router-link v-if="!isLoggedIn" to="/login" @click="isMenuOpen = false">Logg inn</router-link>
+      <router-link v-else to="/logout" @click="isMenuOpen = false">Logg ut</router-link>
     </nav>
 
     <nav class="nav-links">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
-      <router-link to="/profile">Min side</router-link>
+
+      <router-link to="/profile">Profil</router-link>
+      <router-link to="/profile/my_favorites" @click="isMenuOpen = false">Favoritter</router-link>
       <router-link to="/chats">Chat</router-link>
-      <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
-      <router-link v-else to="/logout">Logut</router-link>
+      <router-link v-if="!isLoggedIn" to="/login">Logg inn</router-link>
+      <router-link v-else to="/logout">Logg ut</router-link>
     </nav>
   </header>
 </template>

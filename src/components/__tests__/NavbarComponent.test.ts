@@ -38,8 +38,8 @@ describe('Navbar.vue', () => {
       global: { plugins: [createTestingPinia()] }
     })
 
-    expect(wrapper.text()).toContain('Login')
-    expect(wrapper.text()).not.toContain('Log out')
+    expect(wrapper.text()).toContain('Logg inn')
+    expect(wrapper.text()).not.toContain('Logg ut')
   })
 
   it('shows Log out when logged in', async () => {
@@ -56,8 +56,8 @@ describe('Navbar.vue', () => {
       global: { plugins: [createTestingPinia()] }
     })
 
-    expect(wrapper.text()).toContain('Log out')
-    expect(wrapper.text()).not.toContain('Login')
+    expect(wrapper.text()).toContain('Logg ut')
+    expect(wrapper.text()).not.toContain('Logg inn')
   })
 
   it('shows admin link when isAdmin is true', async () => {

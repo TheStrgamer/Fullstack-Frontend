@@ -62,7 +62,7 @@ describe('ChatListComponent.vue', () => {
       }
     })
 
-    expect(wrapper.text()).toContain('You have no active chats')
+    expect(wrapper.text()).toContain('Du har ingen aktive samtaler')
   })
 
   it('applies full width class on mobile', () => {

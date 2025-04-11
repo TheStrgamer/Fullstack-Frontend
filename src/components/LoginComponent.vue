@@ -6,11 +6,11 @@
             <p class="error-message">{{ emailErrorMessage }}</p>
         </div>
         <div>
-            <input v-model="password" type="password" id="password" name="password" placeholder="password" />
+            <input v-model="password" type="password" id="password" name="password" placeholder="passord" />
             <p class="error-message">{{ passwordErrorMessage }}</p>
         </div>
-        <button type="submit" >Login</button>
-        <p>Don't have an account? <router-link to="/register">Register</router-link></p>
+        <button type="submit" >Logg inn</button>
+        <p>Har du ikke bruker? <router-link to="/register">Registrer</router-link></p>
     </form>
 </template>
 

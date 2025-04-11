@@ -31,8 +31,8 @@ describe('Navbar', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Login')
-    expect(wrapper.text()).not.toContain('Log out')
+    expect(wrapper.text()).toContain('Logg inn')
+    expect(wrapper.text()).not.toContain('Logg ut')
   })
 
   // Can be implemented when the actual NavBar has the Log out button in the right state

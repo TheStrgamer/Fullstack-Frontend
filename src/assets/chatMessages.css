@@ -94,6 +94,9 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.message-list-footer button:hover {
+    background-color: var(--secondary);
+}
 
 .message-list-header {
     position: relative;
@@ -110,6 +113,10 @@
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
+}
+.message-list-header .message-list-title span {
+    font-size: 1rem;
+    font-weight: normal;
 }
 
 .message-list-header .back-button {

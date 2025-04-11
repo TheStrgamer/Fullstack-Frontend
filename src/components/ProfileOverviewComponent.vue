@@ -6,7 +6,7 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
 <template>
     <div class="profile">
         <div>
-            <h1>Min Side</h1>
+            <h1>Din profil</h1>
         </div>
         
         <div>

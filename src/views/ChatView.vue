@@ -2,7 +2,9 @@
   <Navbar />
   <div class="chat-page" data-cy="chat-page">
     <ChatListComponent v-if="renderChatList" :chats="chats" :isMobile="isMobile" @clicked="swapMessages" />
-    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :myAvatar="''" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList" />
+    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" 
+      :avatar="messages.picture" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList"   
+      :amISeller="messages.amISeller" :listingName="messages.listingName"  @create-offer="handleCreateOffer" />
   </div>
 </template>
 
@@ -11,7 +13,7 @@
   import Navbar from '@/components/NavbarComponent.vue';
   import MessageListComponent from '@/components/chat/MessagesListComponent.vue';
   import ChatListComponent from '@/components/chat/ChatListComponent.vue';
-  import { fetchActiveChats, fetchConversation } from '@/services/chatService.ts';
+  import { fetchActiveChats, fetchConversation, fetchOffers } from '@/services/chatService.ts';
   import { useRoute } from 'vue-router';
   import  router  from '@/router';
 
@@ -22,15 +24,25 @@
     lastMessage: string;
     timestamp: string;
   }
-  interface Message {
-    id: number;
-    message: string;
-    timestamp: string;
-    sentByMe: boolean;
-  }
+
+interface Message {
+  id: number;
+  sentByMe: boolean;
+  message?: string;
+  timestamp: string;
+
+  isOffer?: boolean;
+  offerId?: number;
+  price?: number;
+  status?: number;
+  senderName?: string;
+
+}
   interface MessageList {
     id: number;
     name: string;
+    amISeller: boolean;
+    listingName: string;
     picture: string;
     messages: Message[];
   }
@@ -38,29 +50,70 @@
   let isOnMessageWindow = ref(false);
 
   let chatId = ref(0);
-
   let chats = ref<Chat[]>([]);
   const isMobile = ref(window.innerWidth <= 850);
   const token = sessionStorage.getItem('jwtToken') || '';
 
-  onMounted(async () => {
+  async function updateChats() {
     try {
-      if (route.params.chatId) {
-        chatId.value = Number(route.params.chatId);
+      const chatData = await fetchActiveChats();
+      chats.value = chatData.sort((a, b) => {
+        return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+      });
+    } catch (error) {
+      console.warn('Using mock data due to fetch error');
+      console.error(error);
+      chats.value = mockChats();
+    }
+  }
+
+  function handleCreateOffer(payload: { chatId: number, listingId: number }) {
+    router.push({ 
+      name: 'addOffer', 
+      params: { 
+        id: payload.listingId, 
+        chatId: payload.chatId 
+      }
+    });
+  }
+
+  onMounted(async () => {
+    await updateChats();
+    const initialChatId = route.params.chatId;
+    if (initialChatId) {
+      chatId.value = Number(initialChatId);
+      isOnMessageWindow.value = true;
+      messages.value = await getChatData(chatId.value);
+    }
+  });
+  watch(
+    () => route.params.chatId,
+    async (newChatId) => {
+      if (newChatId) {
+        chatId.value = Number(newChatId);
         isOnMessageWindow.value = true;
+        messages.value = await getChatData(chatId.value);
       } else {
         chatId.value = 0;
         isOnMessageWindow.value = false;
+        messages.value = {
+          amISeller: false,
+          listingName: '',
+          id: 0,
+          name: 'Messages',
+          picture: '',
+          messages: []
+        }
       }
-      chats.value = await fetchActiveChats();
-    } catch (error) {
+    },
+    { immediate: true }
+  );
 
-      chats.value = []
-    }
-  });
 
   const messages = ref<MessageList>({
     id: 0,
+    amISeller: false,
+    listingName: '',
     name: 'Messages',
     picture: '',
     messages: []
@@ -83,10 +136,12 @@
     isOnMessageWindow.value = true;
   }
 
-  function openChatList() {
+  async function openChatList() {
     router.push({ name: 'chats' });
     chatId.value = 0;
+    await updateChats();
     isOnMessageWindow.value = false;
+
   }
 
   window.addEventListener('resize', () => {
@@ -130,14 +185,39 @@
     try {
       if (chatId === 0) {
         return {
+          amISeller: false,
+          listingName: '',
           id: 0,
-          name: 'Messages',
+          name: 'Meldinger',
           picture: '',
           messages: []
         };
       }
       const chatData = await fetchConversation(chatId);
-      return chatData;
+      const offers = await fetchOffers(chatId);
+      const mergedMessages = [
+        ...chatData.messages.map(msg => ({
+          ...msg,
+          isOffer: false,
+        })),
+        ...offers.map(offer => ({
+          ...offer,
+          isOffer: true,
+        }))
+      ];
+      mergedMessages.sort((a, b) => {
+        const timestampA = new Date(a.timestamp).getTime();
+        const timestampB = new Date(b.timestamp).getTime();
+        return timestampA - timestampB;
+      });
+      return {
+          amISeller: chatData.amISeller,
+          listingName: chatData.listingName,
+          id: chatId,
+          name: chatData.name,
+          picture: chatData.picture,
+          messages: mergedMessages
+      };
     } catch (error) {
       console.warn('Using mock data due to fetch error');
       console.error(error);
@@ -147,6 +227,8 @@
 
   function mockMessages(chatId: number): MessageList {
     return {
+      listingName: 'Mock Listing',
+      amISeller: false,
       id: chatId,
       name: 'Mock User',
       picture: '/images/default_user.png',

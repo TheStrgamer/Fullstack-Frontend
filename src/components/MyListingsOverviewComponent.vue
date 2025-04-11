@@ -40,7 +40,7 @@
 <template>
     <div class="my-listings-page">
         <div class="my-listsings-topbar">
-            <h1>Mine ansonser</h1>
+            <h1>Mine produkter</h1>
            
             <router-link to="/createlisting">Legg til ny</router-link>
         </div>
