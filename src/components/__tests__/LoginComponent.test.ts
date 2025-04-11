@@ -30,7 +30,7 @@ describe('LoginComponent.vue', () => {
     const wrapper = mount(LoginComponent)
     expect(wrapper.find('input#email').exists()).toBe(true)
     expect(wrapper.find('input#password').exists()).toBe(true)
-    expect(wrapper.find('button[type="submit"]').text()).toBe('Login')
+    expect(wrapper.find('button[type="submit"]').text()).toBe('Logg inn')
   })
 
   it('shows error for invalid email', async () => {

@@ -58,24 +58,50 @@ describe('WebSocketService', () => {
     expect(mockWebSocket.close).toHaveBeenCalled();
   });
 
-  it('should call the onMessage callback when a message is received', () => {
-    const callback = vi.fn();
-    webSocketService.onMessage(callback);
-
+  it('should store received messages for different types', () => {
     webSocketService.connect();
-
-    const mockEvent = { data: JSON.stringify({ type: 'test', payload: 'data' }) };
-    mockWebSocket.onmessage(mockEvent);
-
-    expect(callback).toHaveBeenCalledWith({ type: 'test', payload: 'data' });
-  });
-
-  it('should store received messages', () => {
-    webSocketService.connect();
-
-    const mockEvent = { data: JSON.stringify({ type: 'test', payload: 'data' }) };
-    mockWebSocket.onmessage(mockEvent);
-
+  
+    const addMessageEvent = { data: "ADD MESSAGE {\"type\": \"test\", \"payload\": \"data\"}" };
+    mockWebSocket.onmessage(addMessageEvent);
+  
     expect(webSocketService.getMessages()).toEqual([{ type: 'test', payload: 'data' }]);
+  
+    const updateOfferEvent = { data: "UPDATE OFFER 123 TO 1" };
+    mockWebSocket.onmessage(updateOfferEvent);
+  
+    expect(webSocketService.getMessages()).toEqual([
+      { type: 'test', payload: 'data' },
+      { offerId: 123, isOffer: true, message: '', timestamp: expect.any(String), sentByMe: false, status: 1, price: "0", senderName: "System" }
+    ]);
+  
+    const createOfferEvent = { data: "CREATE OFFER {\"offerId\": 456, \"updatedAt\": \"2025-04-11T10:31:44.235Z\", \"offeredByMe\": true, \"status\": 1, \"currentOffer\": \"100\", \"senderName\": \"Seller\"}" };
+    mockWebSocket.onmessage(createOfferEvent);
+  
+    expect(webSocketService.getMessages()).toMatchObject([
+      { type: 'test', payload: 'data' },
+      {
+        offerId: 123,
+        isOffer: true,
+        message: '',
+        timestamp: expect.any(String),
+        sentByMe: false,
+        status: 1,
+        price: "0",
+        senderName: "System"
+      },
+      {
+        offerId: 456,
+        isOffer: true,
+        message: '',
+        timestamp: "11.4.2025, 12:31:44",
+        sentByMe: true,
+        status: 1,
+        price: "100",
+        senderName: "Seller"
+      }
+    ]);
+    
   });
-});
+  
+})
+  
