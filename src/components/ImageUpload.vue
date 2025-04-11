@@ -4,7 +4,7 @@
 
   
   const props = withDefaults(defineProps<{
-    existingImageUrls?: string[]; // makes the prop opational
+    existingImageUrls?: string[];
     multiple?: boolean;
     display?: boolean;
   }>(), {
@@ -27,12 +27,11 @@
     (newUrls) => {
       existingImages.value = [...(newUrls ?? [])];
     },
-    { immediate: true } // ensures run on mount
+    { immediate: true }
   );
 
 
 
-  // Combine new and existing previews into one array with a flag
   const allPreviewImages = computed(() =>
     [
       ...existingImages.value.map((url) => ({ url, isNew: false })),

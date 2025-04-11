@@ -19,8 +19,6 @@
   }>()
 
   function onSearch() {
-    // TODO: emit event or use store to trigger filtering
-    console.log('Søker etter:', searchQuery.value)
     emits('search', searchQuery.value)
   }
   </script>

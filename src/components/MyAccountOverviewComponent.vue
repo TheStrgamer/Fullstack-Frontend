@@ -3,9 +3,6 @@
         <div class="profile-picture-edit">
             <h1>Account Information</h1>
             <img class="profilePicture" :src="profilePictureUrl" alt="No image found" @error="profilePictureUrl = defaultProfileImage">
-            <!-- <button @click="triggerFileInput" class="upload-button" v-if="editToggle">
-                📷 Upload Image
-            </button> -->
             <div v-if="editToggle">
                 <ImageUpload
                     :multiple="false"
@@ -96,13 +93,10 @@
 import { useUserStore } from '@/stores/UserStore';
 
 
-    // edit toggle
     const editToggle = ref(false);
-    // const editToggle = ref(true);
 
     const selectedImages = ref<File[]>([]);
 
-    // user values
     const imgFile = ref('');
     const firstName = ref('');
     const lastName = ref('');
@@ -111,13 +105,11 @@ import { useUserStore } from '@/stores/UserStore';
     const profilePictureUrl = ref('');
 
 
-    // input values
     const inputFirstName = ref('');
     const inputLastName = ref('');
     const inputEmail = ref('');
     const inputPhonenumber = ref('');
 
-    // error messages
     const firstNameErrorMessage = ref('');
     const lastNameErrorMessage = ref('');
     const emailErrorMessage = ref('');
@@ -139,7 +131,6 @@ import { useUserStore } from '@/stores/UserStore';
         const files = Array.from(target.files);
         selectedProfileImage.value = files;
 
-        // Optional: Preview the first selected image
         profilePictureUrl.value = URL.createObjectURL(files[0]);
     }
 
@@ -151,7 +142,6 @@ import { useUserStore } from '@/stores/UserStore';
     });
 
 
-    // helper functions
 
     async function setUserValueFields() {
         const userInfo = await getProfileInfo();
@@ -174,7 +164,6 @@ import { useUserStore } from '@/stores/UserStore';
         console.log("Edit profile: ", editToggle.value);
 
         if (editToggle.value) {
-            // Populate inputs with current values
             inputFirstName.value = firstName.value;
             inputLastName.value = lastName.value;
             inputEmail.value = email.value;
@@ -193,7 +182,6 @@ import { useUserStore } from '@/stores/UserStore';
         }
     }
 
-    // validation functions
     const canSaveChanges = computed(() => {
         return emailIsValid(inputEmail.value) && phonenumberIsValid(inputPhonenumber.value) && fullNameIsValud(inputFirstName.value, inputLastName.value);
     });
@@ -221,7 +209,7 @@ import { useUserStore } from '@/stores/UserStore';
 
                     const imageFormData = new FormData();
 
-                    imageFormData.append("images", selectedProfileImage.value[0]); // Grab first file
+                    imageFormData.append("images", selectedProfileImage.value[0]);
                     imageFormData.append("email", email.value);
 
                     console.log("Sending form: ", imageFormData);
@@ -229,7 +217,7 @@ import { useUserStore } from '@/stores/UserStore';
                     const response = await postImages("images/upload/profile/image", imageFormData);
                     if (response.status === 200) {
                         profileImagePath = response.data;
-                        selectedProfileImage.value = []; // Reset after upload
+                        selectedProfileImage.value = [];
                     }
                 };
             
@@ -238,7 +226,7 @@ import { useUserStore } from '@/stores/UserStore';
                 surname: inputLastName.value,
                 email: inputEmail.value,
                 phonenumber: inputPhonenumber.value,
-                profile_picture: profileImagePath, // String path to image
+                profile_picture: profileImagePath, 
             };
 
             const response = await putDataWithAuth("users/update", payload);

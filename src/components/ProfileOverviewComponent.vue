@@ -10,9 +10,7 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
         </div>
         
         <div>
-            <!-- priofile linking buttons -->
             <div class="profile_content_box">
-                <!-- My Account Button -->
                 <ProfileLinkCard
                     to="/profile/my_account"
                     icon_path="/icons/settings.svg"
@@ -20,7 +18,6 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     description="View your account information"
                 />
 
-                <!-- My Listings Button -->
                 <ProfileLinkCard 
                     to="/profile/my_listings" 
                     icon_path="/icons/listings.svg"
@@ -28,7 +25,6 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     description="View your active ads"
                 />
 
-                <!-- My Favorite Ads -->
                 <ProfileLinkCard
                     to="/profile/my_favorites"
                     icon_path="/icons/ads.svg"
@@ -36,7 +32,6 @@ import ProfileLinkCard from './ProfileLinkCard.vue';
                     description="View your favorited ads"
                 />
 
-                <!-- temp -->
                 <ProfileLinkCard 
                     to="/" 
                     icon_path="/icons/ads.svg"
