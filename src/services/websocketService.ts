@@ -1,7 +1,9 @@
+import { formatTimestamp } from './chatService';
 export class WebSocketService {
     private socket: WebSocket | null = null;
     private socketUrl: string = '';
     private messages: Array<any> = [];
+    private offers: Array<any> = [];
     private onMessageCallback: ((message: any) => void) | null = null;
 
     constructor(socketUrl: string) {
@@ -39,15 +41,31 @@ export class WebSocketService {
             }
         } 
         else if (rawData.startsWith("CREATE OFFER ")) {
-            // New offer created
-            const offerString = rawData.substring("CREATE OFFER ".length);
-            try {
-                const offer = JSON.parse(offerString);
-                console.log("New offer created:", offer);
-            } catch (e) {
-                console.error("Failed to parse offer:", e);
+          const offerString = rawData.substring("CREATE OFFER ".length);
+          try {
+            const offer = JSON.parse(offerString);
+            console.log("Parsed offer:", offer);
+            const message = {
+              id: offer.offerId,
+              isOffer: true,
+              message: "",
+              timestamp: formatTimestamp(offer.updatedAt),
+              sentByMe: offer.offeredByMe,
+              status: offer.status,
+              price: offer.currentOffer,
+              senderName: offer.senderName,
             }
-        } 
+        
+            this.messages.push(message);
+            if (this.onMessageCallback) {
+              this.onMessageCallback(message);
+            }
+            console.log("New offer created:", offer);
+          } catch (e) {
+            console.error("Failed to parse offer:", e);
+          }
+        }
+        
         else {
             console.log("Unknown message type received:", rawData);
         }

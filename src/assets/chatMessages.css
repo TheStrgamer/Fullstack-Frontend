@@ -94,6 +94,9 @@
     border-radius: 5px;
     cursor: pointer;
 }
+.message-list-footer button:hover {
+    background-color: var(--secondary);
+}
 
 .message-list-header {
     position: relative;

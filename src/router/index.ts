@@ -103,12 +103,12 @@ const router = createRouter({
       meta: { requiresLogin: true }
     },
     {
-      path: '/listing/:id/makeOffer',
+      path: '/listing/:id/makeOffer/:chatId',
       name: 'addOffer',
       component: CreateOfferView,
       props: true,
       meta: { requiresLogin: true }
-    },
+    },    
     {
       path: "/createlisting",
       name: "CreateListing",

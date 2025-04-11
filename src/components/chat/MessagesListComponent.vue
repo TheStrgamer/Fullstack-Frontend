@@ -11,13 +11,21 @@
         :duration="200 + index * 50"
         :direction="message.sentByMe ? 'right' : 'left'"
         >
-        <ChatMessage
-          :key="message.id"
+        <ChatMessage v-if="!message.isOffer"
           :user="message"
           :message="message.message"
           :timestamp="message.timestamp"
-          :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(avatar.slice(1))"
+          :avatar="message.sentByMe ? myAvatar : (avatar.slice(1) === '' ? '' : getUrlFromEndpoint(avatar.slice(1)))"
           :name="message.sentByMe ? 'Deg' : name"
+        /> 
+        <OfferComponent v-else
+          :senderName="message.senderName"
+          :price="message.price"
+          :offerStatus="message.status"
+          :updatedAt="message.timestamp"
+          :offeredByMe="message.sentByMe"
+          :status="message.status"
+          :offerId="message.offerId"
         />
       </FadeInComponent>
     </div>
@@ -38,17 +46,23 @@
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
+import OfferComponent from './OfferComponent.vue';
 import { WebSocketService } from '@/services/websocketService';
 import { fetchDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
-import { RouterLink } from 'vue-router';
-import router from '@/router';
 
 interface Message {
   id: number;
   sentByMe: boolean;
-  message: string;
+  message?: string;
   timestamp: string;
+
+  isOffer?: boolean;
+  offerId?: number;
+  price?: number;
+  status?: number;
+  senderName?: string;
+
 }
 
 interface SendMessage {
@@ -61,7 +75,8 @@ export default defineComponent({
   name: 'ChatMessagesComponent',
   components: {
     ChatMessage,
-    FadeInComponent
+    FadeInComponent,
+    OfferComponent,
   },
   props: {
     messages: {
@@ -73,10 +88,6 @@ export default defineComponent({
       default: 'Chat'
     },
     avatar: {
-      type: String,
-      default: ''
-    },
-    myAvatar: {
       type: String,
       default: ''
     },
@@ -94,17 +105,22 @@ export default defineComponent({
     }
   },
 
-  setup(props) {
+  emits: ['return', 'create-offer'],
+
+  setup(props, { emit }) {
+    const myAvatar = ref('');
     const messageList = ref<HTMLElement | null>(null);
     const allmessages = ref<Message[]>([]);
+    
     watch(() => props.messages, (newMessages) => {
       allmessages.value = newMessages;
     }, { immediate: true });
 
     const messageInput = ref('');
     const wsService = new WebSocketService(`ws://localhost:8080/ws/chat/${props.chatId}?token=${props.token}`);
-    onMounted(() => {
+    onMounted( async() => {
       setTimeout(() => scrollToBottom(), 100);
+      await getMyAvatar();
       if (props.chatId !== 0){
         wsService.connect();
         wsService.onMessage((newMessage: Message) => {
@@ -117,9 +133,10 @@ export default defineComponent({
     });
     async function goToCreateOffer() {
       try {
-        const response = await fetchDataWithAuth(`negotiation/chat/getListingId/${props.chatId}`);
+        const response = await fetchDataWithAuth(`negotiation/chat/getListingId/${props.chatId}`).then(response => {
         const listingId = response.data;
-        router.push({ name: 'addOffer', params: { id: listingId } });
+        emit('create-offer', { chatId: props.chatId, listingId });
+      })
       } catch (error) {
         console.error('Error fetching listing ID:', error);
       }
@@ -156,6 +173,18 @@ export default defineComponent({
       }
     }
 
+    async function getMyAvatar() {
+      try {
+        const response = await fetchDataWithAuth('users/pfp');
+        if (response.data && response.data) {
+          myAvatar.value = getUrlFromEndpoint(response.data.slice(1));
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        return '';
+      }
+    }
+
     onUnmounted(() => {
       wsService.close();
     });
@@ -167,6 +196,7 @@ export default defineComponent({
       messageList,
       getUrlFromEndpoint,
       goToCreateOffer,
+      myAvatar,
     };
   }
 });

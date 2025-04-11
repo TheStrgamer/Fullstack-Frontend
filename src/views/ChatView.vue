@@ -2,7 +2,7 @@
   <Navbar />
   <div class="chat-page">
     <ChatListComponent v-if="renderChatList" :chats="chats" :isMobile="isMobile" @clicked="swapMessages" />
-    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :myAvatar="''" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList" />
+    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList"   @create-offer="handleCreateOffer" />
   </div>
 </template>
 
@@ -11,7 +11,7 @@
   import Navbar from '@/components/NavbarComponent.vue';
   import MessageListComponent from '@/components/chat/MessagesListComponent.vue';
   import ChatListComponent from '@/components/chat/ChatListComponent.vue';
-  import { fetchActiveChats, fetchConversation } from '@/services/chatService.ts';
+  import { fetchActiveChats, fetchConversation, fetchOffers } from '@/services/chatService.ts';
   import { useRoute } from 'vue-router';
   import  router  from '@/router';
 
@@ -22,12 +22,20 @@
     lastMessage: string;
     timestamp: string;
   }
-  interface Message {
-    id: number;
-    message: string;
-    timestamp: string;
-    sentByMe: boolean;
-  }
+
+interface Message {
+  id: number;
+  sentByMe: boolean;
+  message?: string;
+  timestamp: string;
+
+  isOffer?: boolean;
+  offerId?: number;
+  price?: number;
+  status?: number;
+  senderName?: string;
+
+}
   interface MessageList {
     id: number;
     name: string;
@@ -54,6 +62,16 @@
       console.error(error);
       chats.value = mockChats();
     }
+  }
+
+  function handleCreateOffer(payload: { chatId: number, listingId: number }) {
+    router.push({ 
+      name: 'addOffer', 
+      params: { 
+        id: payload.listingId, 
+        chatId: payload.chatId 
+      }
+    });
   }
 
   onMounted(async () => {
@@ -167,7 +185,32 @@
         };
       }
       const chatData = await fetchConversation(chatId);
-      return chatData;
+      const offers = await fetchOffers(chatId);
+      const mergedMessages = [
+      ...chatData.messages.map(msg => ({
+        ...msg,
+        isOffer: false,
+      })),
+      ...offers.map(offer => ({
+        ...offer,
+        isOffer: true,
+      }))
+    ];
+    mergedMessages.sort((a, b) => {
+      const timestampA = new Date(a.timestamp).getTime();
+      const timestampB = new Date(b.timestamp).getTime();
+      return timestampA - timestampB;
+    });
+    for (let i = 0; i < mergedMessages.length; i++) {
+      console.log('Message:', mergedMessages[i], " with timestamp:", mergedMessages[i].timestamp);
+    }
+
+      return {
+        id: chatId,
+        name: chatData.name,
+        picture: chatData.picture,
+        messages: mergedMessages
+      };
     } catch (error) {
       console.warn('Using mock data due to fetch error');
       console.error(error);

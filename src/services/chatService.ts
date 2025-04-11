@@ -11,9 +11,16 @@ interface Chat {
 }
 interface Message {
   id: number;
-  message: string;
-  timestamp: string;
   sentByMe: boolean;
+  message?: string;
+  timestamp: string;
+
+  isOffer?: boolean;
+  offerId?: number;
+  price?: number;
+  status?: number;
+  senderName?: string;
+
 }
 interface MessageList {
   id: number;
@@ -69,8 +76,30 @@ export async function fetchConversation(chatId: number): Promise<MessageList> {
     throw error;
   }
 }
+export async function fetchOffers(chatId: number): Promise<any[]> {
+  try {
+    const response = await fetchDataWithAuth(`negotiation/offer/getOffers/${chatId}`);
+    console.log("Fetched offers:", response.data);
+    return response.data.map((offer: any) => ({
+      id: offer.id,
+      offerId: offer.id,
+      senderName: offer.createdByUser ? 'Meg' : offer.creatorName,
+      price: offer.currentOffer,
+      status: offer.status,
+      updatedAt: offer.updatedAt,
+      isOffer: true,
+      timestamp: formatTimestamp(offer.updatedAt),
+      sentByMe: offer.createdByUser,
+    }));
+  } catch (error) {
+    console.error('There was a problem fetching offers:', error);
+    throw error;
+  }
+}
 
-function formatTimestamp(datetimeStr: string): string {
+
+export function formatTimestamp(datetimeStr: string): string {
+  console.log("Formatting timestamp:", datetimeStr);
   const date = new Date(datetimeStr);
   return date.toLocaleString('no-NO', {
     day: 'numeric',
@@ -78,6 +107,7 @@ function formatTimestamp(datetimeStr: string): string {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    second: '2-digit',
     hour12: false,
   });
 }
