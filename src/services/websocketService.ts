@@ -32,21 +32,37 @@ export class WebSocketService {
                 console.error("Failed to parse message:", e);
             }
         } 
-        else if (rawData.startsWith("UPDATE STATUS ")) {
-            const updateParts = rawData.substring("UPDATE STATUS ".length).split(" TO ");
-            if (updateParts.length === 2) {
-                const offerId = parseInt(updateParts[0]);
-                const status = parseInt(updateParts[1]);
-                console.log(`Offer ${offerId} status updated to ${status}`);
+        else if (rawData.startsWith("UPDATE OFFER ")) {
+          const updateParts = rawData.substring("UPDATE OFFER ".length).split(" TO ");
+          if (updateParts.length === 2) {
+            const offerId = parseInt(updateParts[0]);
+            const status = parseInt(updateParts[1]);
+            console.log(`Offer ${offerId} status updated to ${status}`);
+           
+            const message = {
+              offerId: offerId,
+              isOffer: true,
+              message: "",
+              timestamp: formatTimestamp(new Date().toISOString()),
+              sentByMe: false,
+              status: status,
+              price: "0",
+              senderName: "System",
+            };
+            this.messages.push(message);
+            if (this.onMessageCallback) {
+              this.onMessageCallback(message);
             }
-        } 
+          }
+        }
+         
         else if (rawData.startsWith("CREATE OFFER ")) {
           const offerString = rawData.substring("CREATE OFFER ".length);
           try {
             const offer = JSON.parse(offerString);
             console.log("Parsed offer:", offer);
             const message = {
-              id: offer.offerId,
+              offerId: offer.offerId,
               isOffer: true,
               message: "",
               timestamp: formatTimestamp(offer.updatedAt),

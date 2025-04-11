@@ -2,7 +2,10 @@
   <div class="messages-list">
     <div class="message-list-header">
       <button v-if="isMobile" class="back-button" @click="$emit('return')"> < </button>
-      <h2 class="message-list-title">{{ name }}</h2>
+      <h2 class="message-list-title">{{ name }}:
+        <span class="message-list-title" v-if="amISeller">For {{ listingName }}</span>
+        <span class="message-list-title" v-else>Selger {{ listingName }}</span>
+      </h2>
     </div>
     <div class="message-list-items" ref="messageList">
       <FadeInComponent
@@ -26,6 +29,7 @@
           :offeredByMe="message.sentByMe"
           :status="message.status"
           :offerId="message.offerId"
+          :amISeller="amISeller"
         />
       </FadeInComponent>
     </div>
@@ -102,7 +106,15 @@ export default defineComponent({
     token: {
       type: String,
       default: ''
-    }
+    },
+    amISeller: {
+      type: Boolean,
+      default: false
+    },
+    listingName: {
+      type: String,
+      default: ''
+    },
   },
 
   emits: ['return', 'create-offer'],
@@ -123,17 +135,30 @@ export default defineComponent({
       await getMyAvatar();
       if (props.chatId !== 0){
         wsService.connect();
-        wsService.onMessage((newMessage: Message) => {
-          allmessages.value.push(newMessage);
+        wsService.onMessage((updatedOffer: Message) => {
+          const index = allmessages.value.findIndex(
+            (message) => message.isOffer && message.offerId === updatedOffer.offerId
+          );
+          if (index !== -1) {
+            allmessages.value[index] = {
+              ...allmessages.value[index], 
+              status: updatedOffer.status,
+              timestamp: updatedOffer.timestamp || allmessages.value[index].timestamp,
+            };
+            allmessages.value = [...allmessages.value];
+          } else {
+            allmessages.value.push(updatedOffer);
+          }
           scrollToBottom();
         });
+
       } else {
         console.warn('No chatId provided, WebSocket connection not established.');
       }
     });
     async function goToCreateOffer() {
       try {
-        const response = await fetchDataWithAuth(`negotiation/chat/getListingId/${props.chatId}`).then(response => {
+        await fetchDataWithAuth(`negotiation/chat/getListingId/${props.chatId}`).then(response => {
         const listingId = response.data;
         emit('create-offer', { chatId: props.chatId, listingId });
       })

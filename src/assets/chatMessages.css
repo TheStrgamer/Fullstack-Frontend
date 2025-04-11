@@ -114,6 +114,10 @@
     font-weight: bold;
     text-align: center;
 }
+.message-list-header .message-list-title span {
+    font-size: 1rem;
+    font-weight: normal;
+}
 
 .message-list-header .back-button {
     position: absolute;

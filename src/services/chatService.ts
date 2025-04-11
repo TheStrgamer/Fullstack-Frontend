@@ -25,6 +25,8 @@ interface Message {
 interface MessageList {
   id: number;
   name: string;
+  amISeller: boolean;
+  listingName: string;
   picture: string;
   messages: Message[];
 }
@@ -64,10 +66,13 @@ export async function fetchConversation(chatId: number): Promise<MessageList> {
       timestamp: formatTimestamp(msg.sendtAt),
       sentByMe: msg.sendtBySelf,
     }));
+    console.log("Formatted messages:", response.data);
 
     return {
       id: chatData.id,
       name: chatData.other_user_name,
+      amISeller: chatData.amISeller,
+      listingName: chatData.listingTitle,
       picture: chatData.other_user_picture || '',
       messages: formattedMessages,
     };
@@ -99,7 +104,6 @@ export async function fetchOffers(chatId: number): Promise<any[]> {
 
 
 export function formatTimestamp(datetimeStr: string): string {
-  console.log("Formatting timestamp:", datetimeStr);
   const date = new Date(datetimeStr);
   return date.toLocaleString('no-NO', {
     day: 'numeric',

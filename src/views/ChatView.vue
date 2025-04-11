@@ -2,7 +2,9 @@
   <Navbar />
   <div class="chat-page">
     <ChatListComponent v-if="renderChatList" :chats="chats" :isMobile="isMobile" @clicked="swapMessages" />
-    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" :avatar="messages.picture" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList"   @create-offer="handleCreateOffer" />
+    <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" 
+      :avatar="messages.picture" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList"   
+      :amISeller="messages.amISeller" :listingName="messages.listingName"  @create-offer="handleCreateOffer" />
   </div>
 </template>
 
@@ -39,6 +41,8 @@ interface Message {
   interface MessageList {
     id: number;
     name: string;
+    amISeller: boolean;
+    listingName: string;
     picture: string;
     messages: Message[];
   }
@@ -46,7 +50,6 @@ interface Message {
   let isOnMessageWindow = ref(false);
 
   let chatId = ref(0);
-
   let chats = ref<Chat[]>([]);
   const isMobile = ref(window.innerWidth <= 850);
   const token = sessionStorage.getItem('jwtToken') || '';
@@ -94,6 +97,8 @@ interface Message {
         chatId.value = 0;
         isOnMessageWindow.value = false;
         messages.value = {
+          amISeller: false,
+          listingName: '',
           id: 0,
           name: 'Messages',
           picture: '',
@@ -107,6 +112,8 @@ interface Message {
 
   const messages = ref<MessageList>({
     id: 0,
+    amISeller: false,
+    listingName: '',
     name: 'Messages',
     picture: '',
     messages: []
@@ -178,6 +185,8 @@ interface Message {
     try {
       if (chatId === 0) {
         return {
+          amISeller: false,
+          listingName: '',
           id: 0,
           name: 'Meldinger',
           picture: '',
@@ -187,29 +196,27 @@ interface Message {
       const chatData = await fetchConversation(chatId);
       const offers = await fetchOffers(chatId);
       const mergedMessages = [
-      ...chatData.messages.map(msg => ({
-        ...msg,
-        isOffer: false,
-      })),
-      ...offers.map(offer => ({
-        ...offer,
-        isOffer: true,
-      }))
-    ];
-    mergedMessages.sort((a, b) => {
-      const timestampA = new Date(a.timestamp).getTime();
-      const timestampB = new Date(b.timestamp).getTime();
-      return timestampA - timestampB;
-    });
-    for (let i = 0; i < mergedMessages.length; i++) {
-      console.log('Message:', mergedMessages[i], " with timestamp:", mergedMessages[i].timestamp);
-    }
-
+        ...chatData.messages.map(msg => ({
+          ...msg,
+          isOffer: false,
+        })),
+        ...offers.map(offer => ({
+          ...offer,
+          isOffer: true,
+        }))
+      ];
+      mergedMessages.sort((a, b) => {
+        const timestampA = new Date(a.timestamp).getTime();
+        const timestampB = new Date(b.timestamp).getTime();
+        return timestampA - timestampB;
+      });
       return {
-        id: chatId,
-        name: chatData.name,
-        picture: chatData.picture,
-        messages: mergedMessages
+          amISeller: chatData.amISeller,
+          listingName: chatData.listingName,
+          id: chatId,
+          name: chatData.name,
+          picture: chatData.picture,
+          messages: mergedMessages
       };
     } catch (error) {
       console.warn('Using mock data due to fetch error');
@@ -220,6 +227,8 @@ interface Message {
 
   function mockMessages(chatId: number): MessageList {
     return {
+      listingName: 'Mock Listing',
+      amISeller: false,
       id: chatId,
       name: 'Mock User',
       picture: '/images/default_user.png',
