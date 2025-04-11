@@ -1,7 +1,7 @@
 <template>
     <div class="my-account-page-container">
         <div class="profile-picture-edit">
-            <h1>Account Information</h1>
+            <h1>Bruker informasjon</h1>
             <img class="profilePicture" :src="profilePictureUrl" alt="No image found" @error="profilePictureUrl = defaultProfileImage">
 
             <v-file-input
@@ -12,7 +12,7 @@
                 @change="handleEditProfilePicture"
             />
             <CustomButton class="profile-edit-btn"
-                title="Edit Profile Image"
+                title="Rediger profilbilde"
                 icon_path=""
                 @clicked="handleEditProfile"
             />
@@ -21,12 +21,12 @@
 
             <div class="information-display" v-if="!editToggle">
                 <div class="label-field">
-                    <label for="firstnameField">First Name:</label>
+                    <label for="firstnameField">Fornavn:</label>
                     <p class="information-display-field" id="firstnameField"> {{ firstName }}</p>
                 </div>
 
                 <div class="label-field">
-                    <label for="lastnameField">Last Name:</label>
+                    <label for="lastnameField">Etternavn:</label>
                     <p class="information-display-field" id="lastnameField"> {{ lastName }}</p>
                 </div>
 
@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="label-field">
-                    <label for="phonenumberField">Phonenumber:</label>
+                    <label for="phonenumberField">Telefonnummer:</label>
                     <p class="information-display-field" id="phonenumberField"> {{  phonenumber }}</p>
                 </div>
             </div>
@@ -46,14 +46,14 @@
                 <form @submit.prevent="onEdit" class = "input-form-flex">
                     <div>
                         <div class="label-field">
-                            <label for="firstName">First Name</label>
+                            <label for="firstName">Fornavn</label>
                             <input v-model="inputFirstName" type="text" id="firstName" name="firstName" />
                         </div>
                         <p class="error-message">{{ firstNameErrorMessage }}</p>
                     </div>
                     <div>
                         <div class="label-field">
-                            <label for="lastname">Last Name</label>
+                            <label for="lastname">Etternavn</label>
                             <input v-model="inputLastName" type="text" id="lastName" name="lastName" />
                         </div>
                         <p class="error-message">{{ lastNameErrorMessage }}</p>
@@ -67,14 +67,14 @@
                     </div>
                     <div>
                         <div class="label-field">
-                            <label for="phonenumber">Phonenumber</label>
+                            <label for="phonenumber">Telefonnummer</label>
                             <input v-model="inputPhonenumber" type="text" id="phonenumber" name="phonenumber" />
                         </div>
                         <p class="error-message">{{ phonenumberErrorMessage }}</p>
                     </div>
                     <div class="form-buttons">
-                        <button type="button" class="cancel-btn" @click="handleEditProfile">Cancel</button>
-                        <button type="submit" class="submit-btn" :disabled="!canSaveChanges">Save Changes</button>
+                        <button type="button" class="cancel-btn" @click="handleEditProfile">Avbryt</button>
+                        <button type="submit" class="submit-btn" :disabled="!canSaveChanges">Lagre endringer</button>
                     </div>
                 </form>
             </div>

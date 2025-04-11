@@ -2,11 +2,11 @@
     <form @submit.prevent="onRegister" class = "input-form-flex">
         <p id="responseMessage">{{ responseMessage }}</p>
         <div>
-            <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="first name" />
+            <input v-model="firstName" type="text" id="firstName" name="firstName" placeholder="fornavn" />
             <p class="error-message">{{ firstNameErrorMessage }}</p>
         </div>
         <div>
-            <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="last name" />
+            <input v-model="lastName" type="text" id="lastName" name="lastName" placeholder="etternavn" />
             <p class="error-message">{{ lastNameErrorMessage }}</p>
         </div>
         <div>
@@ -14,18 +14,18 @@
             <p class="error-message">{{ emailErrorMessage }}</p>
         </div>
         <div>
-            <input v-model="phonenumber" type="text" id="phonenumber" name="phonenumber" placeholder="phonenumber" />
+            <input v-model="phonenumber" type="text" id="phonenumber" name="phonenumber" placeholder="telefonnummer" />
             <p class="error-message">{{ phonenumberErrorMessage }}</p>
         </div>
         <div>
-            <input v-model="password" type="password" id="password" name="password" placeholder="password" />
+            <input v-model="password" type="password" id="password" name="password" placeholder="passord" />
             <p class="error-message">{{ passwordErrorMessage }}</p>
         </div>
         <div>
-            <input v-model="passwordConfirm" type="password" id="passwordConfirm" name="passwordConfirm" placeholder="confirm password" />
+            <input v-model="passwordConfirm" type="password" id="passwordConfirm" name="passwordConfirm" placeholder="bekreft passord" />
         </div>
         <button type="submit" >Register</button>
-        <p>Already have an account? <router-link to="/login">Login</router-link></p>
+        <p>Har du en bruker? <router-link to="/login">Logg inn</router-link></p>
     </form>
   </template>
 

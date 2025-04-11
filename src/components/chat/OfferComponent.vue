@@ -36,8 +36,7 @@
     </div>
   </div>
 </template>
-  
-  
+
 <script lang="ts">
 import { putDataWithAuth, deleteDataWithAuth } from '@/services/httpService';
 

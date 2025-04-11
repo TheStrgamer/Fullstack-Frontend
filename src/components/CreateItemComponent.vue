@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">Create new listing</h1>
+    <h1 class="title">Opprett ny listing</h1>
     <form class="create-item-form" @submit.prevent="handleSubmit">
 
       <div class="form-group">
@@ -8,29 +8,29 @@
       </div>
 
       <div class="form-group">
-        <label for="title">Title</label>
+        <label for="title">Tittel</label>
         <input v-model="listing.title" type="text" id="title" required />
       </div>
 
       <div class="form-group">
-        <label for="brief_description">Brief description</label>
+        <label for="brief_description">Lokketekst</label>
         <textarea v-model="listing.brief_description" id="brief_description" required></textarea>
       </div>
 
       <div class="form-group">
-        <label for="full_description">Long Description</label>
+        <label for="full_description">Beskrivelse</label>
         <textarea v-model="listing.full_description" id="full_description" required></textarea>
       </div>
 
       <div class="form-group">
-        <label for="price">Price</label>
+        <label for="price">Pris</label>
         <input v-model="listing.price" type="number" id="price" step="0.01" required />
       </div>
 
       <div class="form-group">
-        <label for="category">Category</label>
+        <label for="category">Kategori</label>
         <select v-model="listing.category" required>
-          <option value="" disabled>Select a category</option>
+          <option value="" disabled>Velg en kategori</option>
           <option
             v-for="category in categoriesStore.categories"
             :key="category.id"
@@ -42,9 +42,9 @@
       </div>
 
       <div class="form-group">
-        <label for="condition">Condition</label>
+        <label for="condition">Tilstand</label>
         <select v-model="listing.condition" required>
-          <option value="" disabled>Select a condition</option>
+          <option value="" disabled>Velg en tilstand</option>
           <option
             v-for="condition in conditionStore.conditions"
             :key="condition.id"
@@ -56,18 +56,18 @@
       </div>
 
       <div class="form-group">
-        <label for="size">Size (optional)</label>
+        <label for="size">Størrelse (valgfri)</label>
         <input v-model="listing.size" type="text" id="size" />
       </div>
 
       <div class="form-group">
-        <label for="Address">Address</label>
+        <label for="Address">Adresse</label>
         <AutoCompleteAddressSearchComponent
           v-model:address="listing.address"
         />
       </div>
 
-      <button type="submit">Submit</button>
+      <button type="submit">Lagre</button>
     </form>
   </div>
   <br><br>

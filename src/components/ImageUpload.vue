@@ -74,7 +74,7 @@ import { ref, computed, watch } from 'vue';
 <template>
     <div>
       <button @click="triggerFileInput" class="upload-button">
-        📷 Upload Images
+        📷 Last opp bilder
       </button>
   
       <input
@@ -111,7 +111,7 @@ import { ref, computed, watch } from 'vue';
 
   .remove-button {
     background-color: #f5f5f500;
-    color: red;
+    color: var(--invalid);
     border: none;
     border-radius: 4px;
     cursor: pointer;
