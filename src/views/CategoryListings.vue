@@ -3,7 +3,6 @@
     <div class="main-layout">
       <CategoryComponent />
       <div class="main-content">
-        <SearchBarComponent />
             <div class="category-heading">
                 <span class="category-pill">{{ categoryName }}</span>
             </div>
@@ -36,7 +35,6 @@ interface ListingDTO {
   title: string;
   brief_description: string;
   price: number;
-  // legg til mer hvis vi bruker mer
 }
 
 const listings = ref<ListingDTO[]>([])

@@ -59,7 +59,6 @@
         let newquery = query.replace(/\d+/g, '').trim();
         const fallbackResponse = await sendApiRequest(newquery);
 
-          // This adds the removed numbers back to the name
         const patchedResults = fallbackResponse.data.features.map((feature: any) => {
           return {
             ...feature,

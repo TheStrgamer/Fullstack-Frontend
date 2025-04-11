@@ -15,15 +15,13 @@
         price: number
     }
 
-    // store and state
     const userstore = useUserStore();
     const token = userstore.jwtToken;
-    const listings = ref<ListingDTO[]>([]); // Store the fetched listings
+    const listings = ref<ListingDTO[]>([]);
 
     onMounted(getListings);
     onActivated(getListings);
 
-    // helper
     async function getListings() {
         try {
             const response = await axios.get('http://localhost:8080/api/listings/getMyListings', {
@@ -32,7 +30,6 @@
                 }
             });
             listings.value = response.data;
-            console.log('Listings for user:', listings.value);
         } catch (error) {
             console.error('Error fetching listings:', error);
         }

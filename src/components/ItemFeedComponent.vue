@@ -31,12 +31,11 @@ import { fetchDataWithoutAuth } from '@/services/httpService'
 import debounce from 'lodash/debounce';
 
 const props = defineProps<{
-  searchQuery: string
+  searchQuery?: string
 }>()
 
 const listings = ref([])
 
-// Define an interface for feed items
 interface FeedItem {
   id: string | number;
 }
@@ -95,13 +94,16 @@ const debouncedSearch = debounce(async (query: string) => {
 }, 400)
 
 watch(() => props.searchQuery, (newQuery) => {
-  debouncedSearch(newQuery)
-})
+  if (newQuery !== undefined) {
+    debouncedSearch(newQuery);
+  }
+});
 
 onMounted(() => {
-  fetchListings(props.searchQuery)
-})
-
+  if (props.searchQuery !== undefined) {
+    fetchListings(props.searchQuery);
+  }
+});
 onMounted(async () => {
   updateItemsPerPage();
   window.addEventListener('resize', updateItemsPerPage);
