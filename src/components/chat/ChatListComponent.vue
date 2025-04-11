@@ -1,7 +1,7 @@
 <template>
     <div class="chat-list" :class="{ 'take-whole-width': isMobile }" data-cy="chat-list">
         <div class="chat-list-header">
-            <h2 class="chat-list-title">Your chats</h2>
+            <h2 class="chat-list-title">Dine samtaler</h2>
         </div>
         <ChatListItem
           v-for="chat in chats"
@@ -12,7 +12,7 @@
           @click="onChatClick(chat.id)"
           data-cy="chat-item"
         />
-        <h2 class="chat-list-title" v-if="chats.length === 0" data-cy="empty-chat-message">You have no active chats</h2>
+        <h2 class="chat-list-title" v-if="chats.length === 0" data-cy="empty-chat-message">Du har ingen aktive samtaler</h2>
     </div>
 </template>
 

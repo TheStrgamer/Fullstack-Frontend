@@ -126,6 +126,19 @@
   .item-location {
     font-size: 0.95rem;
   }
+  .negotiate-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 16px;
+  }
+  .negotiate-buttons button {
+    flex:5;
+  }
+  .negotiate-buttons .navtext  {
+    flex:1;
+    text-align: center;
+  }
 
   .item-dates {
     display: flex;

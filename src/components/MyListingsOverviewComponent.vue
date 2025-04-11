@@ -40,7 +40,7 @@
 <template>
     <div class="mu-listings-page">
         <div class="my-listsings-topbar">
-            <h1>My Listings</h1>
+            <h1>Mine produkter</h1>
            
             <router-link to="/createlisting">New</router-link>
         </div>

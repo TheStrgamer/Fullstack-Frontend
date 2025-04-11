@@ -1,7 +1,7 @@
 <template>
   <div class="message-container" :class="{ 'sent-by-me': user.sentByMe }">
         <div class="message-list-item-content">
-            <img v-if="avatar!=''" :src="avatar" alt="User Avatar" class="avatar" />
+            <img v-if="avatar!=''" :src="avatar" alt="Profilbilde" class="avatar" />
             <img  v-else src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieyaZb-hSOtWnc6wha3QQlMLL8_cfvr2WIQ&s" alt="Default Avatar" class="avatar"/>
             <div class="message-list-item-text">
                 <h3>{{ name }}

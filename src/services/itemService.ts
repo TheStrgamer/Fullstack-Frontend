@@ -17,6 +17,7 @@ export function itemServices() {
 
   async function fetchCategoriesFromAPI() {
     const response = await fetchDataWithoutAuth("listings/categories");
+    console.log("Fetched categories:", response.data);
     return response.data;
   }
 
