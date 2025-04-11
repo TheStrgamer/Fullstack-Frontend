@@ -97,7 +97,6 @@ const userStore = useUserStore();
 
 const selectedImages = ref<File[]>([]);
 
-// Form Data
 const listing = reactive({
   title: '',
   brief_description: '',
@@ -128,11 +127,8 @@ onMounted(async () => {
 
 
 
-// Handle form submission
 const handleSubmit = async () => {
 
-  // const category = categoriesStore.categories.find(cat => cat.id.toString() === category.value);
-  // const condition = conditionStore.conditions.find(cond => cond.id.toString() === condition.value);
   const geoData = await addressToCoords(listing.address);
 
   const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
@@ -165,7 +161,6 @@ const handleSubmit = async () => {
       throw new Error("No listing ID returned from server");
     }
     
-    // Build FormData for image upload
     const formData = new FormData();
     formData.append("id", createdListing.id);
 
@@ -173,13 +168,8 @@ const handleSubmit = async () => {
       formData.append("images", file);
     });
 
-    // upload new images
-    console.log("Sending formatted images to server:", formData);
     const response = await postImages("images/uploadListing", formData);
 
-    console.log("Images uploaded:", response.data);
-
-    console.log("Successfully created listing");
     await router.push("/pofile");
   } catch (error) {
     console.error("Error creating item and/or uploading images:", error);

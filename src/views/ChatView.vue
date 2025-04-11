@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  <div class="chat-page">
+  <div class="chat-page" data-cy="chat-page">
     <ChatListComponent v-if="renderChatList" :chats="chats" :isMobile="isMobile" @clicked="swapMessages" />
     <MessageListComponent v-if="renderMessages" :key="chatId" :messages="messages.messages" :name="messages.name" 
       :avatar="messages.picture" :chatId="chatId" :token="token" :isMobile="isMobile" @return="openChatList"   

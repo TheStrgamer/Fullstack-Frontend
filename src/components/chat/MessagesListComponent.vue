@@ -1,13 +1,13 @@
 <template>
-  <div class="messages-list">
+  <div class="messages-list" data-cy="message-list">
     <div class="message-list-header">
-      <button v-if="isMobile" class="back-button" @click="$emit('return')"> < </button>
+      <button v-if="isMobile" class="back-button" @click="$emit('return')" data-cy = "return-button"> < </button>
       <h2 class="message-list-title">{{ name }}:
         <span class="message-list-title" v-if="amISeller">For {{ listingName }}</span>
         <span class="message-list-title" v-else>Selger {{ listingName }}</span>
       </h2>
     </div>
-    <div class="message-list-items" ref="messageList">
+    <div class="message-list-items" ref="messageList" data-cy="message-list-items">
       <FadeInComponent
         v-for="(message, index) in allmessages"
         :key="message.id"
@@ -18,7 +18,7 @@
           :user="message"
           :message="message.message"
           :timestamp="message.timestamp"
-          :avatar="message.sentByMe ? myAvatar : (avatar.slice(1) === '' ? '' : getUrlFromEndpoint(avatar.slice(1)))"
+          :avatar="message.sentByMe ? myAvatar : (avatar.slice(1) === '' ? '' : getUrlFromEndpoint(getUrlFromEndpoint(avatar.slice(1)).slice(1)))"
           :name="message.sentByMe ? 'Deg' : name"
         /> 
         <OfferComponent v-else
@@ -31,10 +31,11 @@
           :offerId="message.offerId"
           :amISeller="amISeller"
           :chatClosed="isClosed"
+          data-cy="chat-message"
         />
       </FadeInComponent>
     </div>
-    <div class="message-list-footer" v-if ="chatId !== 0 && !isClosed">
+    <div class="message-list-footer" v-if ="chatId !== 0 && !isClosed" data-cy="message-input-area">
       <button class="offer-button" @click="goToCreateOffer">Gi bud</button>
       <input
         type="text"
@@ -42,6 +43,7 @@
         class="message-input"
         v-model="messageInput"
         @keyup.enter="sendMessage"
+        data-cy="message-input"
       />
       <button class="send-button" @click="sendMessage">Send</button>
     </div>

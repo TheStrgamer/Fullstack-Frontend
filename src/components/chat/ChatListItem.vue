@@ -1,5 +1,5 @@
 <template>
-    <div class="chat-list-item-content" @click="$emit('click')">
+    <div class="chat-list-item-content" data-cy = "chat-item" @click="$emit('click')">
         <img :src="getUrlFromEndpoint(user.avatar.slice(1))" alt="User Avatar" class="avatar" v-if="user.avatar!=''" />
         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSieyaZb-hSOtWnc6wha3QQlMLL8_cfvr2WIQ&s" alt="Default Avatar" class="avatar" v-else />
         <div class="chat-list-item-text">

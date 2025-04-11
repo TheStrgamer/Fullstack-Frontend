@@ -80,11 +80,11 @@
     border: none;
     font-size: 1.4rem;
     cursor: pointer;
-    color: #c44; /* standard outline */
+    color: var(--primary); /* standard outline */
   }
 
   .favorite-btn.active {
-    color: #e63946; /* fylt hjerte */
+    color: var(--primary); /* fylt hjerte */
   }
 
   @media (min-width: 768px) {

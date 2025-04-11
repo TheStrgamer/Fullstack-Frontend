@@ -2,7 +2,6 @@
   <FadeInComponent :duration="400" :direction="'bottom'">
     <router-link :to="{ path: routePath, query: { id: item.id } }" class="no-link-style">
       <div class="item-card-minimized">
-        <!-- Topp-rad med hjerteknapp -->
         <div class="top-bar">
           <button
           v-if="isLoggedIn && isFavoriteable"
@@ -62,21 +61,19 @@ const props = defineProps({
     default: true
   }
 });
-const isFavorite = ref(!!props.item.isFavorited); // startverdi, og så lar vi den leve
+const isFavorite = ref(!!props.item.isFavorited);
 
 
 async function toggleFavoriteStatus(event: MouseEvent) {
   event.preventDefault();
   try {
     const newStatus = await toggleFavorite(props.item.id);
-    isFavorite.value = !!newStatus; // defensivt
-    console.log("Ny favorittstatus mottatt fra server:", newStatus);
+    isFavorite.value = !!newStatus;
   } catch (err) {
     console.error("Kunne ikke oppdatere favoritt:", err);
   }
 }
 
-// Genererer full URL til bildet
 function getImageUrl(imagePath: string) {
   if (!imagePath || imagePath == null) return '/default-image.png';
   const cleanPath = imagePath.replace(/^\/+/, '');

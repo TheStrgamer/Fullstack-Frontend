@@ -1,5 +1,5 @@
 <template>
-  <button @click="emit('clicked')">
+  <button class="custom-button" @click="emit('clicked')">
     <img v-if="icon_path" :src="icon_path" alt="" />
     {{ title }}
   </button>

@@ -1,11 +1,16 @@
 <script setup lang="ts">
   import { convertTypeAcquisitionFromJson } from 'typescript';
-import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch } from 'vue';
 
   
-  const props = defineProps<{
-    existingImageUrls?: string[]; // makes the prop opational
-  }>();
+  const props = withDefaults(defineProps<{
+    existingImageUrls?: string[];
+    multiple?: boolean;
+    display?: boolean;
+  }>(), {
+    multiple: true,
+    display: true
+  });
 
   const emit = defineEmits<{
     (e: 'update:images', files: File[]): void;
@@ -22,12 +27,11 @@ import { ref, computed, watch } from 'vue';
     (newUrls) => {
       existingImages.value = [...(newUrls ?? [])];
     },
-    { immediate: true } // ensures run on mount
+    { immediate: true }
   );
 
 
 
-  // Combine new and existing previews into one array with a flag
   const allPreviewImages = computed(() =>
     [
       ...existingImages.value.map((url) => ({ url, isNew: false })),
@@ -81,7 +85,7 @@ import { ref, computed, watch } from 'vue';
         ref="fileInput"
         type = file
         accept="image/*"
-        multiple
+        :multiple="multiple"
         style="display: none"
         @change="handleFileChange"
       />

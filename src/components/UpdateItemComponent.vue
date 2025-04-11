@@ -108,7 +108,6 @@
   const existingImageUrls = ref<string[]>([]);
 
 
-// Form Fields
 const listing = reactive({
   id: '',
   title: '',
@@ -119,14 +118,11 @@ const listing = reactive({
   condition: '',
   size: '',
   address: '',
-  // not inlcuded in form
   createdAt: '',
   imageUrls: [] as String[]
 })
 
 
-console.log("Categories: ", categoriesStore.categories);
-console.log("Conditions: ", conditionStore.conditions);
 
 onMounted(async () => {
   await categoriesStore.fetchCategories();
@@ -136,9 +132,7 @@ onMounted(async () => {
   try {
     const response = await fetchDataWithAuth(`listings/id/${item_id}`)
     
-    console.log(response.data);
     const data = response.data;
-      // data for item with id
     Object.assign(listing, {
       id: item_id,
       title: data.title,
@@ -166,11 +160,8 @@ onMounted(async () => {
 
 
 
-// Handle form submission
 const handleSubmit = async () => {
 
-  // const category = categoriesStore.categories.find(cat => cat.id.toString() === category.value);
-  // const condition = conditionStore.conditions.find(cond => cond.id.toString() === condition.value);
   const geoData = await addressToCoords(listing.address);
 
   const lat = geoData?.latitude ? parseFloat(geoData.latitude) : 0;
@@ -184,9 +175,6 @@ const handleSubmit = async () => {
     (cond) => cond.id.toString() === listing.condition
   )
 
-  // images
-  console.log("Remaining existing images", existingImageUrls.value);
-  console.log("new images", selectedImages.value);
 
   const itemData = {
     id: listing.id,
@@ -200,13 +188,12 @@ const handleSubmit = async () => {
     sale_status: 'available',
     latitude: lat,
     longitude: long,
-    imageUrls: existingImageUrls.value, // remaining original images
+    imageUrls: existingImageUrls.value,
   };
 
   try {
     itemStore.updateItemListing(itemData);
 
-    // Build FormData for image upload
     if (selectedImages.value.length != 0) {
       const formData = new FormData();
       formData.append("id", listing.id);
@@ -215,16 +202,12 @@ const handleSubmit = async () => {
         formData.append("images", file);
       });
 
-      // upload new images
-      console.log("Sending formatted images to server:", formData);
       const response = await postImages("images/uploadListing", formData);
 
-      console.log("Images uploaded:", response.data);
     }
     
     await router.push('/profile/my_listings');
 
-    // form.reset();
   } catch (error) {
     console.error('Failed to update item:', error);
   }

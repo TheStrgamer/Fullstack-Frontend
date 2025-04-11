@@ -13,7 +13,6 @@
           </button>
         </div>
 
-    <!-- Bildekarusell -->
     <div class="image-carousel" v-if="images.length > 0">
       <button class="carousel-btn left" @click="prevImage" v-if="images.length > 1">&#10094;</button>
 
@@ -25,7 +24,6 @@
         Bilde {{ currentImageIndex + 1 }} av {{ images.length }}
       </div>
     </div>
-        <!-- Tittel + Pris -->
     <div class="item-info-row price-row">
       <span :class="['item-status', statusClass]">
         {{ getSaleStatusText(itemStore.sale_status) }}
@@ -33,30 +31,25 @@
       <span class="item-price-pill">{{ itemStore.price }} kr</span>
     </div>
 
-    <!-- Kategori + Salgsstatus -->
     <div class="category-row">
       <span class="item-category"><strong>Kategori:</strong> {{ itemStore.categoryName }}</span>
     </div>
 
-    <!-- Tilstand + Størrelse -->
     <div class="item-info-row">
       <p class="item-subinfo"><strong>Tilstand:</strong> {{ itemStore.conditionName }}</p>
       <p class="item-subinfo" v-if="itemStore.size"><strong>Størrelse:</strong> {{ itemStore.size }}</p>
     </div>
 
-    <!-- Beskrivelse -->
     <div class="description">
       <h3 class="section-title">Beskrivelse</h3>
       <p class="item-description">{{ itemStore.full_description }}</p>
     </div>
 
-    <!-- Lokasjon -->
     <div class="location">
       <h3 class="section-title">Lokasjon</h3>
       <PositionElementsComponent :latitude="itemStore.latitude" :longitude="itemStore.longitude"></PositionElementsComponent>
     </div>
 
-    <!-- Selger -->
      <h3 class="section-title">Selger</h3>
     <ContactInfoComponent :userId="itemStore.creatorId" />
 
@@ -107,7 +100,6 @@ const userStore = useUserStore()
 const itemLoaded = ref(false)
 const isFavorite = ref(false);
 
-// Bildekarusell
 const images = ref<string[]>([])
 const currentImageIndex = ref(0)
 
