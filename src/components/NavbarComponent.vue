@@ -1,6 +1,7 @@
 <template>
   <header :class="['navbar', { open: isMenuOpen }]">
-    <router-link to="/" class="logo-container">
+    <router-link to="/" class="logo-container" @click.native="handleLogoClick">
+      <!-- Logo -->
     <img src="/Logo-ferdig.png" alt="Logo" class="logo-icon" />
     <img src="/Grønttorget-ferdig.png" alt="Grønttorget" class="logo-text" />
     </router-link>
@@ -35,13 +36,21 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { useUserStore } from '@/stores/UserStore';
+import { useRouter, useRoute } from 'vue-router'
 
+const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore();
 const isLoggedIn = computed(() => userStore.isAuthenticated());
 const isAdmin = computed(() => userStore.isUserAdmin());
 
 const isMenuOpen = ref(false);
 
+function handleLogoClick(event: MouseEvent) {
+  if (route.path === '/') {
+    window.location.reload()
+  }
+}
 function toggleMenu() {
   isMenuOpen.value = !isMenuOpen.value;
 }
