@@ -1,4 +1,3 @@
-
 // api documentation: https://nominatim.org/release-docs/develop/api/Overview/
 import axios from 'axios';
 
@@ -32,13 +31,11 @@ export async function addressToCoords(address: string): Promise<GeocodeResult | 
       const result = response.data[0];
       return unpackAddressComponents(result);
     } else {
-      alert('No results found.');
-      return null;
+      throw new Error('No results found.');
     }
   } catch (error) {
     console.error('Error fetching coordinates:', error);
-    alert('Failed to fetch coordinates.');
-    return null;
+    throw new Error('Failed to fetch coordinates.');
   }
 }
 
@@ -61,13 +58,11 @@ export async function coordsToAddress(latitude: string, longitude: string): Prom
     if (response.data) {
       return unpackAddressComponents(response.data);
     } else {
-      alert('No results found.');
-      return null;
+      throw new Error('No results found.');
     }
   } catch (error) {
     console.error('Error fetching address:', error);
-    alert('Failed to fetch address.');
-    return null;
+    throw new Error('Failed to fetch address.');
   }
 }
 

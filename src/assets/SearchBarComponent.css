@@ -6,7 +6,7 @@
     box-sizing: border-box;
     justify-content: center;
   }
-  
+
   .search-input {
     flex: 1;
     max-width: 400px;
@@ -15,7 +15,7 @@
     border-radius: 8px;
     font-size: 1rem;
   }
-  
+
   .search-button {
     background-color: var(--button);
     color: var(--button-text);

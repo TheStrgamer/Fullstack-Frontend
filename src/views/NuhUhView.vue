@@ -1,6 +1,6 @@
 <template>
     <div class="nuh">
-        <Button @click="$router.push('/')">Return</Button> 
+        <Button @click="$router.push('/')">Return</Button>
         <img src="../assets/universal/images/nuhuh.gif" alt="Nuh Uh" class="nuhuh-image" />
     </div>
 </template>

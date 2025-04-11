@@ -11,8 +11,8 @@
                 label="Image"
                 @change="handleEditProfilePicture"
             />
-            <CustomButton class="profile-edit-btn" 
-                title="Edit Profile Image" 
+            <CustomButton class="profile-edit-btn"
+                title="Edit Profile Image"
                 icon_path=""
                 @clicked="handleEditProfile"
             />
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            
+
             <div v-if="editToggle">
                 <form @submit.prevent="onEdit" class = "input-form-flex">
                     <div>
@@ -80,7 +80,7 @@
             </div>
 
             <CustomButton class="profile-edit-btn" v-if="!editToggle"
-                title="Edit Profile" 
+                title="Edit Profile"
                 icon_path=""
                 @clicked="handleEditProfile"
             />

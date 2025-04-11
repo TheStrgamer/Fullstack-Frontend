@@ -2,6 +2,7 @@ import axios from "axios";
 import { useUserStore } from "../stores/UserStore";
 
 const backendUrl = "http://localhost:8080/";
+const imageRUL = `${backendUrl}uploads/`
 const apiUrl = `${backendUrl}api/`;
 
 export async function fetchDataWithAuth(endpoint: string, json: boolean = false) {
@@ -69,6 +70,48 @@ export async function postDataWithAuth(endpoint: string, data: any) {
   }
 }
 
+export async function postImages(endpoint: string, data: any) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sedning post request to:", apiUrl + endpoint);
+    const response = await axios.post(apiUrl + endpoint, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data'
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    logoutIfTokenInvalid()
+    throw error;
+  }
+}
+
+export async function putDataWithAuth(endpoint: string, data: any) {
+  try {
+    let token = sessionStorage.getItem("jwtToken") || "";
+    if (!token) {
+      throw new Error("No token found");
+    }
+    console.log("Sending put request to: ", apiUrl + endpoint);
+    const response = await axios.put(apiUrl + endpoint, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error("Error putting data", error);
+    logoutIfTokenInvalid()
+    throw error;
+  }
+}
+
 export async function postDataWithoutAuth(endpoint: string, data: any) {
   try {
     console.log("Sedning post request to:", apiUrl + endpoint);
@@ -103,29 +146,12 @@ export async function deleteDataWithAuth(endpoint: string) {
   }
 }
 
-export async function putDataWithAuth(endpoint: string, data: any) {
-    try {
-      let token = sessionStorage.getItem("jwtToken") || "";
-      if (!token) {
-        throw new Error("No token found");
-      }
-      console.log("Sending PUT request to:", apiUrl + endpoint);
-      const response = await axios.put(apiUrl + endpoint, data, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response;
-    } catch (error) {
-      console.error("Error putting data:", error);
-      logoutIfTokenInvalid();
-      throw error;
-    }
-  }
-
 export function getUrlFromEndpoint(endpoint: string) {
   return backendUrl + endpoint;
+}
+
+export function getImageUrlFromEndpoint(endpoint: string) {
+  return imageRUL + endpoint;
 }
 
 async function validateUserToken() {
@@ -163,5 +189,33 @@ export async function isUserAdmin() {
   } catch (error) {
     sessionStorage.setItem("isAdmin", "false");
     return false;
+  }
+}
+
+// Hent alle kategorinavn (uten auth)
+export async function getAllCategoryNames(): Promise<string[]> {
+  try {
+    const response = await fetchDataWithoutAuth("categories");
+    return response.data;
+  } catch (error) {
+    console.error("Kunne ikke hente kategorier:", error);
+    return [];
+  }
+}
+
+// Hent alle listings i gitt kategori (med eller uten auth)
+export async function getListingsByCategory(categoryName: string): Promise<any[]> {
+  try {
+    const userStore = useUserStore()
+    const endpoint = `categories/category/${encodeURIComponent(categoryName)}`
+
+    const response = userStore.isAuthenticated()
+      ? await fetchDataWithAuth(endpoint)
+      : await fetchDataWithoutAuth(endpoint)
+
+    return response.data
+  } catch (error) {
+    console.error(`Feil ved henting av annonser for kategori ${categoryName}:`, error)
+    return []
   }
 }

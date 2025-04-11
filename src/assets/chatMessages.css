@@ -33,25 +33,25 @@
     margin: 10px 0;
     flex-direction: column;
 }
-  
+
 .message-container.sent-by-me {
     align-items: flex-end;
 }
-  
+
 .message-container:not(.sent-by-me) {
     align-items: flex-start;
 }
-  
+
 .message-list-item-text {
     color: var(--text);
 }
- 
+
 .message-list-item-text h3 {
     font-size: 16px;
     font-weight: bold;
     margin: 0;
 }
-  
+
 .message-list-item-text p {
     font-size: 14px;
     color: var(--secondary);
@@ -61,11 +61,11 @@
 .message-list-item:hover {
     background-color: var(--accent);
 }
-  
+
 .message-list-item:hover .message-list-item-text h3 {
     color: var(--primary);
 }
-  
+
 .message-list-item:hover .timestamp {
     color: var(--primary);
 }
@@ -105,13 +105,13 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
     height: 50px;
 }
-  
+
 .message-list-header .message-list-title {
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
 }
-  
+
 .message-list-header .back-button {
     position: absolute;
     left: 10px;

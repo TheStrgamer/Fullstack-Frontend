@@ -8,12 +8,12 @@
 .chat-list.take-whole-width {
     flex-grow: 1;
 }
-  
+
 .chat-list:not(.take-whole-width) {
     max-width: 400px;
 }
 
-  
+
 .chat-list-item-content {
     display: flex;
     margin: 8px 0;
@@ -32,27 +32,27 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
     height: 50px;
 }
-  
+
 .chat-list-item-text {
     color: var(--text);
 }
-  
+
 .chat-list-item-text h3 {
     font-size: 16px;
     font-weight: bold;
     margin: 0;
 }
-  
+
 .chat-list-item-text p {
     font-size: 14px;
     color: var(--text);
     margin: 4px 0 0 0;
 }
-  
+
 .chat-list-item-content:hover {
     background-color: var(--white);
 }
-  
+
 .chat-list-item.content:hover .timestamp {
     color: var(--primary);
 }

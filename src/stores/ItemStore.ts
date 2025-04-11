@@ -19,6 +19,7 @@ export const useItemStore = defineStore("item", {
     updated_at: "",
     latitude: 0.0,
     longitude: 0.0,
+    creatorId: "",
   }),
   actions: {
     // Setters
@@ -81,6 +82,7 @@ export const useItemStore = defineStore("item", {
       this.updated_at = "";
       this.latitude = 0.0;
       this.longitude = 0.0;
+      this.creatorId = "";
     },
 
     // Set all item properties at once
@@ -98,7 +100,8 @@ export const useItemStore = defineStore("item", {
       this.updated_at = item.updated_at ?? item.updatedAt ?? "";
       this.latitude = item.latitude ?? 0;
       this.longitude = item.longitude ?? 0;
-    
+      this.creatorId = item.creatorId ?? 0;
+
       console.log(" Fikk imageUrls fra item:", item.imageUrls);
 
       if (Array.isArray(item.imageUrls)) {
@@ -109,7 +112,7 @@ export const useItemStore = defineStore("item", {
         this.imageUrls = [];
       }
 
-console.log(" Lagret imageUrls i store:", this.imageUrls);
+      console.log(" Lagret imageUrls i store:", this.imageUrls);
 
     },
 
@@ -118,8 +121,29 @@ console.log(" Lagret imageUrls i store:", this.imageUrls);
       try {
         const response = await itemServices().createItem(item);
         console.log("Item created successfully:", response);
+        return response;
       } catch (error) {
         console.error("Error creating item:", error);
+      }
+    },
+
+    // Update an Item
+    async updateItemListing(item: any) {
+      try {
+        const response = await itemServices().updateItem(item);
+        console.log("Item updated successfully:", response);
+      } catch (error) {
+        console.error("Error updating item:", error);
+      }
+    },
+
+    async deleteItem(itemId: string) {
+      try {
+        const response = await itemServices().deleteItem(itemId);
+        console.log("Backend response:", response);
+        return response;
+      } catch (error) {
+        console.error("Error deleting item from store:", error);
       }
     },
 

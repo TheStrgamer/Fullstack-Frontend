@@ -1,20 +1,10 @@
 @import './base.css';
 
-.profilePicture {
-    width: 180px;
-    height: 180px;
-    border-radius: 50%;
-
+.profile h1 {
+    margin: 0 10%;
+    
 }
-.profile_content_box {
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    /* transform: translateX(-200px); */
-    align-items: baseline;
-
-    flex-wrap: wrap;
-}
+/* Profile link cards */
 
 .profile-link-card {
     border: solid var(--primary) 2px;
@@ -32,18 +22,37 @@
 
     background: var(--primary);
 
-    text-decoration: none;   
-    color: inherit;          
+    text-decoration: none;
+    color: inherit;
     display: block;
 }
 
-.profile-link-card .card-content {
+.profile-link-card:hover {
+    scale: 1.1;
+}
 
+.profile-link-card .card-content {
+    padding: 10px;
 }
 
 
+/* Profile Picture */
 
+.profilePicture {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
 
+}
+.profile_content_box {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+
+    max-width: 1300px;
+}
 
 .my-account-page-container {
     margin: 0 auto;
@@ -66,7 +75,7 @@
 
 
 
-
+/* Forms */
 
 .form-buttons .submit-btn {
     background-color: var(--primary);
@@ -87,13 +96,51 @@
 }
 
 
+/* My listings */
+.my-listsings-topbar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
+    align-items: center;
 
+    /* justify-content: space-between; */
+}
 
+.my-listsings-topbar button {
+    color: var(--button-text);
+    /* padding: 10px; */
+    /* /* text-align: center; */
+    align-content: center;
+    min-height: 38.5px;
+    width: 93%;
+}
+
+.my-listsings-topbar router-link {
+    background-color: var(--button);
+    color: var(--button-text);
+    padding: 0;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+
+}
+
+.my-listsings-topbar router-link {
+    color: var(--button-text);
+    text-decoration: none;
+    padding: 10px;
+    background-color: var(--button);
+    border-radius: 8px;
+    min-width: 100px;
+    text-align: center;
+    display: block;
+}
 
 @media (min-width: 768px) {
     .profile_content_box {
         flex-direction: row;
+        flex-wrap: wrap;
         margin: 0 auto;
     }
 
@@ -106,13 +153,13 @@
         width: 100%;
         max-width: 500px;
     }
-      
+
     .information-edit label {
     flex: 1;
     text-align: left;
     padding-right: 1rem;
     }
-      
+
     .information-edit input {
         flex: 2;
         padding: 0.5rem;
@@ -124,12 +171,45 @@
         flex-direction: row;
         flex-wrap: wrap;
     }
-      
+
     .form-buttons button {
         width: 50%;
         border: none;
         border-radius: 6px;
         color: white;
         cursor: pointer;
-    }      
+    }
+
+
+    .my-listsings-topbar button {
+        color: var(--button-text);
+        /* padding: 10px; */
+        text-align: center;
+        align-content: center;
+        min-height: 38.5px;
+        max-width: 100px;
+    }
+
+    .my-listsings-topbar {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .my-listings-content {
+        display: flex;
+
+        flex-direction: row;
+    }
+
+    .my-listsings-topbar router-link {
+        background-color: var(--button);
+        color: var(--button-text);
+        text-decoration: none;
+        padding: 10px;
+        border-radius: 8px;
+        min-width: 100px;
+        text-align: center;
+    }
+    
 }

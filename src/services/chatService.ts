@@ -29,7 +29,7 @@ export async function fetchActiveChats(): Promise<Chat[]> {
     return response.data.map((item: any) => ({
       id: item.id,
       name: item.other_user_name,
-      avatar: item.other_user_picture?.filepath_to_image || '',
+      avatar: item.other_user_picture || '',
       lastMessage: item.last_message,
       timestamp: new Date(item.last_update).toLocaleString('nb-NO', {
         year: 'numeric',

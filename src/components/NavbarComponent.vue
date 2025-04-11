@@ -6,7 +6,7 @@
     </router-link>
 
     <!-- Hamburger toggle (hidden on larger screens) -->
-    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu"> 
+    <button class="menu-toggle" @click="toggleMenu" aria-label="Toggle menu">
       <span></span>
     </button>
 
@@ -14,7 +14,6 @@
     <nav class="mobile-menu">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
       <router-link to="/example" @click="isMenuOpen = false">Example</router-link>
-      <router-link to="/createlisting" @click="isMenuOpen = false">Create listing</router-link>
       <router-link to="/profile" @click="isMenuOpen = false">Profile</router-link>
       <router-link to="/chats" @click="isMenuOpen = false">Chat</router-link>
       <router-link v-if="!isLoggedIn" to="/login" @click="isMenuOpen = false">Login</router-link>
@@ -25,7 +24,6 @@
     <nav class="nav-links">
       <router-link v-if="isAdmin" to="/admin">Admin</router-link>
       <router-link to="/example">Example</router-link>
-      <router-link to="/createlisting">Create Listing</router-link>
       <router-link to="/profile">Profile</router-link>
       <router-link to="/chats">Chat</router-link>
       <router-link v-if="!isLoggedIn" to="/login">Login</router-link>

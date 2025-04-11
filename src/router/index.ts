@@ -9,6 +9,8 @@ import MyAccount from '../views/MyAccount.vue'
 import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
+import MyListings from '@/views/MyListings.vue'
+import UpdateListing from '@/views/UpdateListing.vue'
 import AdminPanelView from '@/views/AdminPanelView.vue'
 import AdminCreateView from '@/views/AdminCreateCategoryView.vue'
 import UserAdminComponent from '@/components/admin/UserAdminComponent.vue'
@@ -18,6 +20,8 @@ import ConfirmDeleteAdminView from '@/views/ConfirmDeleteAdminView.vue'
 import AdminUpdateCategoryView from '@/views/AdminUpdateCategoryView.vue'
 import AdminUpdateUserView from '@/views/AdminUpdateUserView.vue'
 import NuhUhView from '@/views/NuhUhView.vue'
+import CategoryListings from '@/views/CategoryListings.vue'
+import TestFadeInView from '@/views/TestFadeInView.vue';
 import { useUserStore } from '../stores/UserStore.ts'
 import { isUserAdmin } from '../services/httpService.ts'
 
@@ -38,7 +42,7 @@ const router = createRouter({
       path: "/geocoding",
       name: "geocoding",
       component: GeoCoding,
-      
+
     },
     {
       path: "/logout",
@@ -56,19 +60,30 @@ const router = createRouter({
     {
       path: "/profile",
       component: Profile,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/profile/my_account",
       component: MyAccount,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
+    },
+    {
+      path: "/profile/my_listings",
+      component: MyListings,
+      meta: { requiresLogin: true }
+    },
+
+    {
+      path: "/profile/item/update",
+      component: UpdateListing,
+      meta: { requiresLogin: true}
     },
 
     { //TODO This is only to test if requiresLogin works, remove it later
       // If any route requires login, implement it the same way as this please
-      path: "/requirelogin", 
-      component: HomeView, 
-      meta: { requiresLogin: true } 
+      path: "/requirelogin",
+      component: HomeView,
+      meta: { requiresLogin: true }
     },
     {
       path: "/Item",
@@ -91,14 +106,14 @@ const router = createRouter({
       path: "/createlisting",
       name: "CreateListing",
       component: CreateItem,
-      meta: { requiresLogin: true } 
+      meta: { requiresLogin: true }
     },
     {
       path: "/admin",
       name: "admin",
       component: AdminPanelView,
       meta: { requiresAdmin: true },
-      children: [      
+      children: [
         {
           path: '',
           name: 'admin-home',
@@ -154,8 +169,23 @@ const router = createRouter({
       meta: { requiresLogin: true }
     },
     {
-      path: "/:pathMatch(.*)*", 
-      component: NotFound 
+      path: "/category/:categoryName",
+      name: "CategoryListings",
+      component: CategoryListings,
+    },
+    {
+      path: '/custom-button-test',
+      name: 'CustomButtonTest',
+      component: () => import('@/views/CustomButtonTest.vue'),
+    },
+    {
+      path: '/test-fadein',
+      name: 'TestFadeIn',
+      component: TestFadeInView,
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      component: NotFound
     }
   ],
 })
