@@ -10,6 +10,7 @@ import ItemMaximized from '../views/ItemMaximized.vue'
 import CreateItem from '@/views/CreateItem.vue'
 import ChatView from '@/views/ChatView.vue'
 import MyListings from '@/views/MyListings.vue'
+import FavoritesView from '@/views/FavoritesView.vue'
 import UpdateListing from '@/views/UpdateListing.vue'
 import AdminPanelView from '@/views/AdminPanelView.vue'
 import AdminCreateView from '@/views/AdminCreateCategoryView.vue'
@@ -71,6 +72,12 @@ const router = createRouter({
       path: "/profile/my_listings",
       component: MyListings,
       meta: { requiresLogin: true }
+    },
+
+    {
+      path: "/profile/my_favorites",
+      component: FavoritesView,
+      meta: { requireLogin: true}
     },
 
     {

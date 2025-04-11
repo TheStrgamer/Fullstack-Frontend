@@ -1,11 +1,11 @@
 <script setup lang="ts">
-    import { useUserStore } from '@/stores/UserStore';
     import ItemCardMinimized from './ItemCardMinimized.vue';
     import FadeInComponent from './FadeInComponent.vue';
 
 
-    import axios from 'axios';
     import { ref, onMounted, onActivated } from 'vue';
+
+    import { fetchDataWithAuth } from '@/services/httpService';
 
 
     interface ListingDTO {
@@ -15,8 +15,6 @@
         price: number
     }
 
-    const userstore = useUserStore();
-    const token = userstore.jwtToken;
     const listings = ref<ListingDTO[]>([]);
 
     onMounted(getListings);
@@ -24,12 +22,9 @@
 
     async function getListings() {
         try {
-            const response = await axios.get('http://localhost:8080/api/listings/getMyListings', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            const response = await fetchDataWithAuth("listings/favorites");
             listings.value = response.data;
+            // console.log(response);
         } catch (error) {
             console.error('Error fetching listings:', error);
         }
@@ -38,11 +33,9 @@
 
 
 <template>
-    <div class="my-listings-page">
+    <div class="mu-listings-page">
         <div class="my-listsings-topbar">
-            <h1>Mine ansonser</h1>
-           
-            <router-link to="/createlisting">Legg til ny</router-link>
+            <h1>Mine favoritter</h1>
         </div>
 
 
@@ -58,7 +51,6 @@
                 <ItemCardMinimized
                     :item="item"
                     :key="item.id"
-                    route-path="item/update"
                 ></ItemCardMinimized>   
             </FadeInComponent>
         </div>  
