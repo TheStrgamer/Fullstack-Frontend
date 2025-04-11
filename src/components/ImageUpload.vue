@@ -1,11 +1,16 @@
 <script setup lang="ts">
   import { convertTypeAcquisitionFromJson } from 'typescript';
-import { ref, computed, watch } from 'vue';
+  import { ref, computed, watch } from 'vue';
 
   
-  const props = defineProps<{
+  const props = withDefaults(defineProps<{
     existingImageUrls?: string[]; // makes the prop opational
-  }>();
+    multiple?: boolean;
+    display?: boolean;
+  }>(), {
+    multiple: true,
+    display: true
+  });
 
   const emit = defineEmits<{
     (e: 'update:images', files: File[]): void;
@@ -81,7 +86,7 @@ import { ref, computed, watch } from 'vue';
         ref="fileInput"
         type = file
         accept="image/*"
-        multiple
+        :multiple="multiple"
         style="display: none"
         @change="handleFileChange"
       />

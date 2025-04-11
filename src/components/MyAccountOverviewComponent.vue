@@ -3,19 +3,16 @@
         <div class="profile-picture-edit">
             <h1>Account Information</h1>
             <img class="profilePicture" :src="profilePictureUrl" alt="No image found" @error="profilePictureUrl = defaultProfileImage">
-
-            <v-file-input
-                v-model="imgFile"
-                chips
-                accept="image/*"
-                label="Image"
-                @change="handleEditProfilePicture"
-            />
-            <CustomButton class="profile-edit-btn"
-                title="Edit Profile Image"
-                icon_path=""
-                @clicked="handleEditProfile"
-            />
+            <!-- <button @click="triggerFileInput" class="upload-button" v-if="editToggle">
+                📷 Upload Image
+            </button> -->
+            <div v-if="editToggle">
+                <ImageUpload
+                    :multiple="false"
+                    @update:images="selectedProfileImage = $event"
+                />
+            </div>  
+            
         </div>
         <div class="information-edit">
 
@@ -91,14 +88,19 @@
 <script setup lang="ts">
     import { ref, onMounted, computed } from 'vue';
     import CustomButton from './CustomButton.vue';
-    import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint } from '@/services/httpService';
+    import { fetchDataWithAuth, postDataWithAuth, getUrlFromEndpoint, postImages, putDataWithAuth } from '@/services/httpService';
 
     import defaultProfileImage from '@/assets/universal/images/defaultImage.jpg';
+
+    import ImageUpload from './ImageUpload.vue';
+import { useUserStore } from '@/stores/UserStore';
 
 
     // edit toggle
     const editToggle = ref(false);
     // const editToggle = ref(true);
+
+    const selectedImages = ref<File[]>([]);
 
     // user values
     const imgFile = ref('');
@@ -120,6 +122,26 @@
     const lastNameErrorMessage = ref('');
     const emailErrorMessage = ref('');
     const phonenumberErrorMessage = ref('');
+
+
+    const fileInput = ref<HTMLInputElement | null>(null);
+    const selectedProfileImage = ref<File[]>([]);
+
+
+    function triggerFileInput() {
+    fileInput.value?.click();
+    }
+
+    function onFileSelected(event: Event) {
+        const target = event.target as HTMLInputElement;
+        if (!target.files || target.files.length === 0) return;
+
+        const files = Array.from(target.files);
+        selectedProfileImage.value = files;
+
+        // Optional: Preview the first selected image
+        profilePictureUrl.value = URL.createObjectURL(files[0]);
+    }
 
 
 
@@ -160,24 +182,6 @@
         }
     }
 
-    async function handleEditProfilePicture() {
-        if (!imgFile.value) return;
-
-        const formData = new FormData();
-        formData.append('image', imgFile.value);
-
-        try {
-            const response = await postDataWithAuth("users/upload-profile-image", formData);
-            if (response.status === 200) {
-            console.log('Image uploaded successfully');
-            // Optional: update profile picture preview
-            await setUserValueFields(); // or update image URL directly
-            }
-        } catch (error) {
-            console.error('Error uploading image:', error);
-        }
-    }
-
 
     async function getProfileInfo() {
         try {
@@ -211,18 +215,37 @@
 
     async function onEdit() {
         try {
-            console.log("Editing profile");
+            let profileImagePath = null;
+
+                if (selectedProfileImage.value.length > 0) {
+
+                    const imageFormData = new FormData();
+
+                    imageFormData.append("images", selectedProfileImage.value[0]); // Grab first file
+                    imageFormData.append("email", email.value);
+
+                    console.log("Sending form: ", imageFormData);
+
+                    const response = await postImages("images/upload/profile/image", imageFormData);
+                    if (response.status === 200) {
+                        profileImagePath = response.data;
+                        selectedProfileImage.value = []; // Reset after upload
+                    }
+                };
+            
             const payload = {
-            firstname: inputFirstName.value,
-            surname: inputLastName.value,
-            email: inputEmail.value,
-            phonenumber: inputPhonenumber.value
+                firstname: inputFirstName.value,
+                surname: inputLastName.value,
+                email: inputEmail.value,
+                phonenumber: inputPhonenumber.value,
+                profile_picture: profileImagePath, // String path to image
             };
 
-            const response = await postDataWithAuth("users/update", payload);
-            if (response.status == 200) {
-                console.log("Updated user succesfully");
-                setUserValueFields();
+            const response = await putDataWithAuth("users/update", payload);
+
+            if (response.status === 200) {
+                console.log("Updated user successfully");
+                await setUserValueFields();
                 handleEditProfile();
             }
 
@@ -230,6 +253,7 @@
             console.error("Error editing profile: ", error);
         }
     }
+
 
     function getImageUrl(imagePath: string) {
         if (!imagePath) return defaultProfileImage;
