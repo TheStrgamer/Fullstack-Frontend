@@ -1,10 +1,10 @@
 <template>
-  <div class="messages-list">
+  <div class="messages-list" data-cy="message-list">
     <div class="message-list-header">
-      <button v-if="isMobile" class="back-button" @click="$emit('return')"> < </button>
+      <button v-if="isMobile" class="back-button" @click="$emit('return')" data-cy = "return-button"> < </button>
       <h2 class="message-list-title">{{ name }}</h2>
     </div>
-    <div class="message-list-items" ref="messageList">
+    <div class="message-list-items" ref="messageList" data-cy="message-list-items">
       <FadeInComponent
         v-for="(message, index) in allmessages"
         :key="message.id"
@@ -16,18 +16,20 @@
           :user="message"
           :message="message.message"
           :timestamp="message.timestamp"
-          :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(avatar.slice(1))"
+          :avatar="message.sentByMe ? myAvatar : getUrlFromEndpoint(getUrlFromEndpoint(avatar.slice(1)).slice(1))"
           :name="message.sentByMe ? 'You' : name"
+          data-cy="chat-message"
         />
       </FadeInComponent>
     </div>
-    <div class="message-list-footer" v-if ="chatId !== 0">
+    <div class="message-list-footer" v-if ="chatId !== 0" data-cy="message-input-area">
       <input
         type="text"
         placeholder="Type a message..."
         class="message-input"
         v-model="messageInput"
         @keyup.enter="sendMessage"
+        data-cy="message-input"
       />
       <button class="send-button" @click="sendMessage">Send</button>
     </div>
@@ -38,6 +40,7 @@
 import { defineComponent, ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import ChatMessage from '@/components/chat/Message.vue';
 import { WebSocketService } from '@/services/websocketService';
+import { getUrlFromEndpoint } from '@/services/httpService';
 import { getUrlFromEndpoint } from '@/services/httpService';
 import FadeInComponent from '@/components/FadeInComponent.vue';
 
